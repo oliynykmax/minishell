@@ -6,7 +6,7 @@
 #    By: maoliiny <maoliiny@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/15 11:05:26 by maoliiny          #+#    #+#              #
-#    Updated: 2025/06/03 15:40:04 by maoliiny         ###   ########.fr        #
+#    Updated: 2025/06/03 18:07:59 by maoliiny         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,13 +21,12 @@ SRCS = ft_atoi.c ft_isalpha.c ft_itoa.c ft_memmove.c ft_putnbr_fd.c  ft_strdup.c
 	   ft_lstsize_bonus.c ft_lstlast_bonus.c ft_lstadd_back_bonus.c ft_lstdelone_bonus.c \
 	   ft_lstclear_bonus.c ft_lstiter_bonus.c ft_lstmap_bonus.c ft_strtod.c ft_strcmp.c
 
-OBJDIR = obj
+OBJDIR = objs
 OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)
 .SECONDARY : $(OBJS)
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 RM = rm -f
-#.SILENT : $(OBJS) $(NAME) clean re fclean
 .PHONY: all clean fclean re
 
 all: $(NAME)
@@ -35,11 +34,14 @@ all: $(NAME)
 $(OBJDIR)/%.o: %.c | $(OBJDIR)
 	@$(CC) $(CFLAGS) -I. -c $< -o $@
 
+$(OBJDIR):
+	mkdir -p objs
+
 $(NAME): $(OBJS) libft.h
 	@ar rcs $(NAME) $(OBJS)
 
 clean:
-	@$(RM) $(OBJS)
+	@$(RM) -rf $(OBJ_DIR)
 
 fclean: clean
 	@$(RM) $(NAME)

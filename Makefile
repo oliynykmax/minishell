@@ -6,7 +6,7 @@
 #    By: maoliiny <maoliiny@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/17 16:00:00 by maoliiny          #+#    #+#              #
-#    Updated: 2025/06/03 16:50:33 by maoliiny         ###   ########.fr        #
+#    Updated: 2025/06/03 18:05:22 by maoliiny         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,8 +37,10 @@ $(LIBFT_A):
 	@$(MAKE) --no-print-directory -C $(LIBFT_DIR)
 	@echo "make libft"
 
+objs :
+	@mkdir -p objs
 clean:
-	rm -f $(OBJS)
+	rm -rf objs
 	@$(MAKE) --no-print-directory -C $(LIBFT_DIR) clean
 	@echo "clean libft"
 
