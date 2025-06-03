@@ -82,6 +82,7 @@ int					write_reverse(const char *buffer, int len);
 int					ft_printf_pnum(unsigned long long un, char *base);
 int					ft_printf(const char *s, ...);
 int					ft_printf_p(void *ptr);
+int					ft_strcmp(const char *s1, const char *s2);
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 32
