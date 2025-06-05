@@ -6,11 +6,11 @@
 #    By: maoliiny <maoliiny@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/17 16:00:00 by maoliiny          #+#    #+#              #
-#    Updated: 2025/05/22 15:36:59 by maoliiny         ###   ########.fr        #
+#    Updated: 2025/06/03 18:05:22 by maoliiny         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME    := pipex
+NAME    := minishell
 
 CC      := cc
 CFLAGS  := -Wall -Wextra -Werror
@@ -28,17 +28,19 @@ LIBFT_A   := $(LIBFT_DIR)/libft.a
 all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT_A)
-	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBFT_A) -o $(NAME)
+	$(CC) $(CFLAGS) -lreadline -ltinfo $(INCLUDES) $(OBJS) $(LIBFT_A) -o $(NAME)
 
-objs/%.o: srcs/%.c incl/pipex.h | objs
+objs/%.o: srcs/%.c incl/minishell.h | objs
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(LIBFT_A):
 	@$(MAKE) --no-print-directory -C $(LIBFT_DIR)
 	@echo "make libft"
 
+objs :
+	@mkdir -p objs
 clean:
-	rm -f $(OBJS)
+	rm -rf objs
 	@$(MAKE) --no-print-directory -C $(LIBFT_DIR) clean
 	@echo "clean libft"
 
