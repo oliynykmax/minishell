@@ -6,7 +6,7 @@
 static void	print_tokens(t_token *token)
 {
 	static const char *const	names[] = {
-		"|", "&", "||", "&&", "<", "<<", ">", ">>", "word", "word"
+		"|", "&", "||", "&&", "<", "<<", ">", ">>", "(", ")", "word", "word"
 	};
 
 	while (token->type != TOKEN_END)
