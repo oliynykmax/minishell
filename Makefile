@@ -28,7 +28,7 @@ LIBFT_A   := $(LIBFT_DIR)/libft.a
 all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT_A)
-	$(CC) $(CFLAGS) -lreadline -ltinfo $(INCLUDES) $(OBJS) $(LIBFT_A) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) -lreadline -ltinfo $(LIBFT_A) -o $(NAME)
 
 objs/%.o: srcs/%.c incl/minishell.h | objs
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
