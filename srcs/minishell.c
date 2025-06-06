@@ -6,7 +6,7 @@ int	main(void)
 
 	while (1)
 	{
-		rl = readline("macroshell> ");
+		rl = readline("🐚> ");
 		if (ft_strcmp(rl, "exit") == 0)
 			return (0);
 	}
