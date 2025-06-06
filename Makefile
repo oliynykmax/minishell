@@ -6,7 +6,7 @@
 #    By: maoliiny <maoliiny@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/17 16:00:00 by maoliiny          #+#    #+#              #
-#    Updated: 2025/06/03 18:05:22 by maoliiny         ###   ########.fr        #
+#    Updated: 2025/06/06 16:10:05 by abostrom         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,11 @@ CFLAGS  := -Wall -Wextra -Werror
 
 INCLUDES := -Iincl -Ilibft
 
-SRCS    := srcs/minishell.c
+SRCS    := \
+	srcs/minishell.c \
+	srcs/tokenize.c \
+	srcs/token_types.c \
+
 OBJS    := $(SRCS:srcs/%.c=objs/%.o)
 
 LIBFT_DIR := libft
