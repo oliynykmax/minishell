@@ -1,14 +1,39 @@
-#include "../incl/minishell.h"
+#include <stdio.h>
+
+#include "minishell.h"
+#include "tokenize.h"
+
+static void	print_tokens(t_token *token)
+{
+	static const char *const	names[] = {
+		"|", "&", "||", "&&", "<", "<<", ">", ">>", "word", "word"
+	};
+
+	while (token->type != TOKEN_END)
+	{
+		if (token->data == NULL)
+			printf("operator(\"%s\") ", names[token->type]);
+		else
+			printf("%s(\"%s\") ", names[token->type], token->data);
+		token++;
+	}
+	printf("\n");
+}
 
 int	main(void)
 {
-	char	*rl;
+	char	*input;
+	t_token	*tokens;
 
 	while (1)
 	{
-		rl = readline("🐚> ");
-		if (ft_strcmp(rl, "exit") == 0)
+		input = readline("🐚> ");
+		tokens = tokenize(input);
+		print_tokens(tokens);
+		if (ft_strcmp(tokens[0].data, "exit") == 0)
 			return (0);
+		free(tokens);
+		free(input);
 	}
 	return (0);
 }

@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: maoliiny <maoliiny@student.hive.fi>        +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/05/17 16:00:00 by maoliiny          #+#    #+#              #
-#    Updated: 2025/06/03 18:05:22 by maoliiny         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 NAME    := minishell
 
 CC      := cc
@@ -17,13 +5,17 @@ CFLAGS  := -Wall -Wextra -Werror
 
 INCLUDES := -Iincl -Ilibft
 
-SRCS    := srcs/minishell.c
+SRCS    := \
+	srcs/minishell.c \
+	srcs/tokenize.c \
+	srcs/token_types.c \
+
 OBJS    := $(SRCS:srcs/%.c=objs/%.o)
 
 LIBFT_DIR := libft
 LIBFT_A   := $(LIBFT_DIR)/libft.a
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re norm
 .SECONDARY : $(OBJS)
 all: $(NAME)
 
@@ -52,3 +44,6 @@ fclean: clean
 re:
 	@$(MAKE) --no-print-directory fclean
 	@$(MAKE) --no-print-directory all
+
+norm:
+	@norminette | grep "^Error:" | grep -v "INVALID_HEADER" || true
