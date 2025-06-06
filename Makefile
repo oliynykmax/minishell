@@ -37,7 +37,7 @@ $(LIBFT_A):
 	@$(MAKE) --no-print-directory -C $(LIBFT_DIR)
 	@echo "make libft"
 
-objs :
+objs:
 	@mkdir -p objs
 clean:
 	rm -rf objs
