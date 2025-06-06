@@ -21,7 +21,6 @@ static t_token	*new_token(t_tokenizer *t)
 
 static char	*tokenize_meta(t_token *t, char *input)
 {
-	t->data = NULL;
 	if (input[0] == input[1])
 	{
 		if (*input == '<')
@@ -42,6 +41,10 @@ static char	*tokenize_meta(t_token *t, char *input)
 		t->type = TOKEN_INPUT;
 	if (*input == '>')
 		t->type = TOKEN_OUTPUT;
+	if (*input == '(')
+		t->type = TOKEN_LPAREN;
+	if (*input == ')')
+		t->type = TOKEN_RPAREN;
 	return (input + 1);
 }
 

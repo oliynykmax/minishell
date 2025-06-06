@@ -13,6 +13,8 @@ typedef enum e_token_type
 	TOKEN_HEREDOC,	/* << operator */
 	TOKEN_OUTPUT,	/* > operator */
 	TOKEN_APPEND,	/* >> operator */
+	TOKEN_LPAREN,	/* ( operator */
+	TOKEN_RPAREN,	/* ) operator */
 	TOKEN_WORD,		/* Non-double-quoted words */
 	TOKEN_QUOTED,	/* Double-quoted words */
 	TOKEN_END,		/* End of input */
