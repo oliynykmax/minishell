@@ -46,4 +46,11 @@ re:
 	@$(MAKE) --no-print-directory all
 
 norm:
-	@norminette | grep "^Error:" | grep -v "INVALID_HEADER" || true
+	@norminette | awk '\
+		/^.*: Error!/ { file = $$1; seen = 0; next } \
+		/Error:/ && $$0 !~ /INVALID_HEADER/ { \
+			if (!seen) { print file ": Error!"; seen = 1 } \
+			print \
+		} \
+	'
+
