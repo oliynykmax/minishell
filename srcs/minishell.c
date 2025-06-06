@@ -30,7 +30,7 @@ int	main(void)
 		input = readline("🐚> ");
 		tokens = tokenize(input);
 		print_tokens(tokens);
-		if (tokens[0].type == TOKEN_WORD && strcmp(tokens[0].data, "exit") == 0)
+		if (ft_strcmp(tokens[0].data, "exit") == 0)
 			return (0);
 		free(tokens);
 		free(input);
