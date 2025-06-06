@@ -15,7 +15,7 @@ OBJS    := $(SRCS:srcs/%.c=objs/%.o)
 LIBFT_DIR := libft
 LIBFT_A   := $(LIBFT_DIR)/libft.a
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re norm
 .SECONDARY : $(OBJS)
 all: $(NAME)
 
@@ -44,3 +44,6 @@ fclean: clean
 re:
 	@$(MAKE) --no-print-directory fclean
 	@$(MAKE) --no-print-directory all
+
+norm:
+	@norminette | grep "^Error:" | grep -v "INVALID_HEADER" || true
