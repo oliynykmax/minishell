@@ -1,4 +1,4 @@
-#include "tokenize.h"
+#include "../incl/tokenize.h"
 
 int	is_blank(char c)
 {

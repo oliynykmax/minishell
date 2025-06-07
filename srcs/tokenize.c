@@ -1,5 +1,4 @@
-#include "libft.h"
-#include "tokenize.h"
+#include "../incl/tokenize.h"
 
 static t_token	*new_token(t_tokenizer *t)
 {
