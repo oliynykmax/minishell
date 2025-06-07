@@ -37,9 +37,5 @@ typedef enum e_shell_status
 extern volatile sig_atomic_t	g_signal;
 
 void							handle_signals(int signum);
-void							print_tokens(t_token *tokens);
-int								ft_strcmp(const char *s1, const char *s2);
-void							handle_signals(int signum);
-void							free_tokens(t_token *tokens);
 
 #endif

@@ -3,7 +3,7 @@
 
 volatile sig_atomic_t	g_signal = 0;
 
-void	print_tokens(t_token *token)
+static void	print_tokens(t_token *token)
 {
 	static const char *const	names[] = {"|", "&", "||", "&&", "<", "<<", ">",
 		">>", "(", ")", "word", "word"};
@@ -19,7 +19,7 @@ void	print_tokens(t_token *token)
 	printf("\n");
 }
 
-void	free_tokens(t_token *tokens)
+static void	free_tokens(t_token *tokens)
 {
 	if (tokens == NULL)
 		return ;
