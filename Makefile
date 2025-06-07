@@ -9,6 +9,7 @@ SRCS    := \
 	srcs/minishell.c \
 	srcs/tokenize.c \
 	srcs/token_types.c \
+	srcs/signals.c
 
 OBJS    := $(SRCS:srcs/%.c=objs/%.o)
 
@@ -54,3 +55,5 @@ norm:
 		} \
 	'
 
+valgrind:
+	valgrind --leak-check=full --show-leak-kinds=all --suppressions=mini.supp ./minishell
