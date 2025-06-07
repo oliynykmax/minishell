@@ -2,6 +2,7 @@
 # define TOKENIZE_H
 
 # include <stddef.h>
+# include "../libft/libft.h"
 
 typedef enum e_token_type
 {
