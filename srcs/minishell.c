@@ -60,7 +60,7 @@ void	shell_exit(t_shell *s, int exit_status, const char *message)
 
 void	shell_new_prompt(t_shell *s)
 {
-	t_vector *const	old_envp = s->envp;
+	t_vec *const	old_envp = s->envp;
 	size_t			i;
 
 	s->prompt_count++;
