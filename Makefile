@@ -12,7 +12,6 @@ SRCS    := \
 	srcs/pwd.c \
 	srcs/signals.c \
 	srcs/string.c \
-	srcs/token_types.c \
 	srcs/tokenize.c \
 	srcs/vector.c
 
