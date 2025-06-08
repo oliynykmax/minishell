@@ -4,8 +4,6 @@
 # include "../libft/libft.h"
 # include <dirent.h>
 # include <fcntl.h>
-# include <readline/history.h>
-# include <readline/readline.h>
 # include <signal.h>
 # include <stdatomic.h>
 # include <stdio.h>
@@ -18,6 +16,8 @@
 # include <term.h>
 # include <termios.h>
 # include <unistd.h>
+# include <readline/history.h>
+# include <readline/readline.h>
 
 # define ARENA_SIZE 10000 // Default size for new memory arenas.
 
