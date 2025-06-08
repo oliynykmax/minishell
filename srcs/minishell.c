@@ -21,22 +21,19 @@ static void	print_tokens(t_token *token)
 	printf("\n");
 }
 
-static void	free_tokens(t_token *tokens)
+void	shell_init(t_shell *s, char **envp)
 {
-	if (tokens == NULL)
-		return ;
-	free(tokens);
-}
-
-static void	init_shell(t_shell *shell)
-{
-	shell->input = NULL;
-	shell->tokens = NULL;
-	shell->cwd = NULL;
-	shell->sa.sa_handler = handle_signals;
-	sigemptyset(&shell->sa.sa_mask);
-	shell->sa.sa_flags = SA_RESTART;
-	if (sigaction(SIGINT, &shell->sa, NULL) == -1)
+	ft_bzero(s, sizeof(t_shell));
+	s->arenas[0] = arena_new(s, ARENA_SIZE);
+	s->arenas[1] = arena_new(s, ARENA_SIZE);
+	shell_new_prompt(s);
+	s->envp = vector_new(s, 0);
+	while (*envp != NULL)
+		vector_push(s->envp, string_new(s, *envp++));
+	s->sa.sa_handler = handle_signals;
+	sigemptyset(&s->sa.sa_mask);
+	s->sa.sa_flags = SA_RESTART;
+	if (sigaction(SIGINT, &s->sa, NULL) == -1)
 	{
 		perror("sigaction for SIGINT failed");
 		exit(EXIT_FAILURE);
@@ -44,84 +41,93 @@ static void	init_shell(t_shell *shell)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-static void	cleanup_cycle_resources(t_shell *shell)
+// Clean up all resources and exit the shell, with an optional error message.
+
+void	shell_exit(t_shell *s, int exit_status, const char *message)
 {
-	if (shell->tokens)
+	free(s->cwd);
+	free(s->input);
+	arena_free(s->arenas[0]);
+	arena_free(s->arenas[1]);
+	if (message != NULL)
+		printf("error: %s\n", message);
+	exit(exit_status);
+}
+
+// Begin a new prompt, starting over with a new, empty memory arena. Environment
+// variables are copied into the new arena so that they are preserved across
+// prompts.
+
+void	shell_new_prompt(t_shell *s)
+{
+	t_vector *const	old_envp = s->envp;
+	size_t			i;
+
+	s->prompt_count++;
+	s->arena = s->arenas[s->prompt_count % 2];
+	arena_reset(s->arena);
+	if (old_envp != NULL)
 	{
-		free_tokens(shell->tokens);
-		shell->tokens = NULL;
-	}
-	if (shell->input)
-	{
-		free(shell->input);
-		shell->input = NULL;
+		s->envp = vector_new(s, old_envp->capacity);
+		i = 0;
+		while (i < old_envp->size)
+			vector_push(s->envp, string_new(s, old_envp->data[i++]));
 	}
 }
 
-static void	cleanup_shell(t_shell *shell)
-{
-	if (shell->cwd)
-	{
-		free(shell->cwd);
-		shell->cwd = NULL;
-	}
-	cleanup_cycle_resources(shell);
-}
-
-static t_sstatus	process_command_line(t_shell *shell, char *input)
+static t_sstatus	process_command_line(t_shell *s, char *input)
 {
 	t_sstatus	status;
 
 	status = SHELL_CONTINUE;
-	shell->input = input;
-	add_history(shell->input);
-	shell->tokens = tokenize(shell->input);
-	if (shell->tokens == NULL)
+	s->input = input;
+	add_history(s->input);
+	s->tokens = tokenize(s->input);
+	if (s->tokens == NULL)
 	{
 		fprintf(stderr, "shell: tokenization failed\n");
-		cleanup_cycle_resources(shell);
 		return (SHELL_CONTINUE);
 	}
-	print_tokens(shell->tokens);
-	if (shell->tokens[0].data && ft_strcmp(shell->tokens[0].data, "exit") == 0)
+	print_tokens(s->tokens);
+	if (s->tokens[0].data && ft_strcmp(s->tokens[0].data, "exit") == 0)
 		status = SHELL_EXIT;
 	/* 	else
 		{
 			// TODO:
 		} */
-	cleanup_cycle_resources(shell);
 	return (status);
 }
 
-static void	create_prompt(t_shell *shell)
+static void	create_prompt(t_shell *s)
 {
-	if (shell->cwd)
-		free(shell->cwd);
-	shell->cwd = malloc(PATH_MAX);
-	if (shell->cwd == NULL)
+	if (s->cwd)
+		free(s->cwd);
+	s->cwd = malloc(PATH_MAX);
+	if (s->cwd == NULL)
 	{
 		perror("malloc failed");
 		exit(EXIT_FAILURE);
 	}
-	if (getcwd(shell->cwd, PATH_MAX) == NULL)
+	if (getcwd(s->cwd, PATH_MAX) == NULL)
 	{
 		perror("getcwd failed");
-		free(shell->cwd);
-		shell->cwd = NULL;
+		free(s->cwd);
+		s->cwd = NULL;
 	}
 	else
-		ft_strlcat(shell->cwd, "\n🐚> ", PATH_MAX);
+		ft_strlcat(s->cwd, "\n🐚> ", PATH_MAX);
 }
 
-static void	shell_loop(t_shell *shell)
+static void	shell_loop(t_shell *s)
 {
 	char	*current_input;
 
 	while (1)
 	{
-		create_prompt(shell);
+		shell_new_prompt(s);
+		create_prompt(s);
 		g_signal = 0;
-		current_input = readline(shell->cwd);
+		current_input = readline(s->cwd);
 		if (current_input == NULL)
 		{
 			printf("exit\n");
@@ -132,7 +138,7 @@ static void	shell_loop(t_shell *shell)
 			free(current_input);
 			continue ;
 		}
-		if (process_command_line(shell, current_input) == SHELL_EXIT)
+		if (process_command_line(s, current_input) == SHELL_EXIT)
 		{
 			free(current_input);
 			break ;
@@ -140,13 +146,14 @@ static void	shell_loop(t_shell *shell)
 	}
 }
 
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;
 
-	init_shell(&shell);
+	(void) argc;
+	(void) argv;
+	shell_init(&shell, envp);
 	shell_loop(&shell);
-	cleanup_shell(&shell);
 	rl_clear_history();
-	return (0);
+	shell_exit(&shell, 0, NULL);
 }
