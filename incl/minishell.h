@@ -2,7 +2,6 @@
 # define MINISHELL_H
 
 # include "../libft/libft.h"
-# include "tokenize.h"
 # include <dirent.h>
 # include <fcntl.h>
 # include <readline/history.h>
@@ -24,13 +23,13 @@
 
 typedef volatile sig_atomic_t	t_signal;
 typedef struct s_arena			t_arena;
-typedef struct s_vector			t_vec;
+typedef struct s_vec			t_vec;
 typedef struct s_shell			t_shell;
 
 struct s_shell
 {
 	char						*input;
-	t_token						*tokens;
+	t_vec						*tokens;
 	struct sigaction			sa;
 	char						*cwd;
 	t_arena						*arena;
@@ -47,7 +46,7 @@ struct s_arena
 	char	data[];		// Storage used for allocations.
 };
 
-struct s_vector
+struct s_vec
 {
 	t_shell	*shell;		// The shell that created the vector.
 	size_t	size;		// The number of elements in the vector.
@@ -80,6 +79,9 @@ void	vector_insert(t_vec *v, size_t index, void *value);
 void	vector_delete(t_vec *v, size_t index);
 
 char	*string_new(t_shell *s, const char *string);
+char	*string_sub(t_shell *s, const char *string, size_t length);
 char	*string_join(t_shell *s, const char *a, const char *b);
+
+t_vec	*tokenize(t_shell *s, char *input);
 
 #endif
