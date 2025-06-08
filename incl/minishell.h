@@ -20,11 +20,11 @@
 # include <termios.h>
 # include <unistd.h>
 
-#define ARENA_SIZE 10000 // Default size for new memory arenas.
+# define ARENA_SIZE 10000 // Default size for new memory arenas.
 
 typedef volatile sig_atomic_t	t_signal;
 typedef struct s_arena			t_arena;
-typedef struct s_vector			t_vector;
+typedef struct s_vector			t_vec;
 typedef struct s_shell			t_shell;
 
 struct s_shell
@@ -35,7 +35,7 @@ struct s_shell
 	char						*cwd;
 	t_arena						*arena;
 	t_arena						*arenas[2];
-	t_vector					*envp;
+	t_vec						*envp;
 	size_t						prompt_count;
 };
 
@@ -61,7 +61,7 @@ typedef enum e_shell_status
 	SHELL_EXIT
 }								t_sstatus;
 
-extern t_signal	g_signal;
+extern t_signal					g_signal;
 
 void	handle_signals(int signum);
 
@@ -74,10 +74,10 @@ t_arena	*arena_new(t_shell *s, size_t capacity);
 void	arena_reset(t_arena *arena);
 void	arena_free(t_arena *arena);
 
-t_vector	*vector_new(t_shell *s, size_t capacity);
-void	vector_push(t_vector *v, void *value);
-void	vector_insert(t_vector *v, size_t index, void *value);
-void	vector_delete(t_vector *v, size_t index);
+t_vec	*vector_new(t_shell *s, size_t capacity);
+void	vector_push(t_vec *v, void *value);
+void	vector_insert(t_vec *v, size_t index, void *value);
+void	vector_delete(t_vec *v, size_t index);
 
 char	*string_new(t_shell *s, const char *string);
 char	*string_join(t_shell *s, const char *a, const char *b);
