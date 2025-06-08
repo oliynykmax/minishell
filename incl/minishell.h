@@ -84,4 +84,8 @@ char	*string_join(t_shell *s, const char *a, const char *b);
 
 t_vec	*tokenize(t_shell *s, char *input);
 
+/*------------------builtins----------------------------------------*/
+int		pwd(char **argv);
+int		env(char **envp);
+
 #endif

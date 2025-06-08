@@ -58,7 +58,7 @@ void	export_sort_and_print(char **envp)
 	free(sorted_envp);
 }
 
-int	main(int argc, char **argv, char **envp)
+int export(int argc, char **argv, char **envp)
 {
 	if (!envp)
 		return (EXIT_FAILURE);
