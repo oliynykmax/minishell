@@ -1,7 +1,6 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# pragma once
 # include "../libft/libft.h"
 # include "tokenize.h"
 # include <dirent.h>
@@ -26,6 +25,7 @@ typedef struct shell
 	char						*input;
 	t_token						*tokens;
 	struct sigaction			sa;
+	char						*cwd;
 }								t_shell;
 
 typedef enum e_shell_status
