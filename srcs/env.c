@@ -1,6 +1,6 @@
 #include "../incl/minishell.h"
 
-int	env(char **envp)
+int	env(char **envp, int fd)
 {
 	int	i;
 
@@ -11,7 +11,8 @@ int	env(char **envp)
 	{
 		while (envp[i])
 		{
-			ft_printf("%s\n", envp[i]);
+			ft_putstr_fd(envp[i], fd);
+			ft_putstr_fd("\n", fd);
 			i++;
 		}
 		return (0);

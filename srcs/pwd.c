@@ -1,6 +1,6 @@
 #include "../incl/minishell.h"
 
-int	pwd(char **argv)
+int	pwd(char **argv, int fd)
 {
 	char	*cwd;
 	int		i;
@@ -21,7 +21,8 @@ int	pwd(char **argv)
 		perror("pwd");
 		return (1);
 	}
-	ft_printf("%s\n", cwd);
+	ft_putstr_fd(cwd, fd);
+	ft_putchar_fd('\n', fd);
 	free(cwd);
 	return (0);
 }

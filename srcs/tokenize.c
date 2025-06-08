@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../incl/minishell.h"
 
 static int	is_blank(char c)
 {
