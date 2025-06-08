@@ -82,4 +82,8 @@ void	vector_delete(t_vec *v, size_t index);
 char	*string_new(t_shell *s, const char *string);
 char	*string_join(t_shell *s, const char *a, const char *b);
 
+/*------------------builtins----------------------------------------*/
+int		pwd(char **argv);
+int		env(char **envp);
+
 #endif
