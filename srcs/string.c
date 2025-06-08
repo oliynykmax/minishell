@@ -7,7 +7,8 @@ char	*string_new(t_shell *s, const char *string)
 
 char	*string_sub(t_shell *s, const char *string, size_t length)
 {
-	char *const result = shell_malloc(s, length + 1);
+	char *const	result = shell_malloc(s, length + 1);
+
 	return (ft_memcpy(result, string, length));
 }
 
