@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../incl/minishell.h"
 
 // Create a new arena with a given capacity. If memory allocation fails, cleans
 // up all resources and exits with an error message.
@@ -6,6 +6,7 @@
 t_arena	*arena_new(t_shell *s, size_t capacity)
 {
 	t_arena *const	arena = ft_calloc(1, sizeof(t_arena) + capacity);
+
 	if (arena == NULL)
 		shell_exit(s, EXIT_FAILURE, "out of memory");
 	arena->capacity = capacity;
