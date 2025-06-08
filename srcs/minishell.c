@@ -1,5 +1,7 @@
 #include "../incl/minishell.h"
 #include "../incl/tokenize.h"
+#include <linux/limits.h>
+#include <stddef.h>
 
 volatile sig_atomic_t	g_signal = 0;
 
@@ -30,6 +32,7 @@ static void	init_shell(t_shell *shell)
 {
 	shell->input = NULL;
 	shell->tokens = NULL;
+	shell->cwd = NULL;
 	shell->sa.sa_handler = handle_signals;
 	sigemptyset(&shell->sa.sa_mask);
 	shell->sa.sa_flags = SA_RESTART;
@@ -53,6 +56,16 @@ static void	cleanup_cycle_resources(t_shell *shell)
 		free(shell->input);
 		shell->input = NULL;
 	}
+}
+
+static void	cleanup_shell(t_shell *shell)
+{
+	if (shell->cwd)
+	{
+		free(shell->cwd);
+		shell->cwd = NULL;
+	}
+	cleanup_cycle_resources(shell);
 }
 
 static t_sstatus	process_command_line(t_shell *shell, char *input)
@@ -80,14 +93,35 @@ static t_sstatus	process_command_line(t_shell *shell, char *input)
 	return (status);
 }
 
+static void	create_prompt(t_shell *shell)
+{
+	if (shell->cwd)
+		free(shell->cwd);
+	shell->cwd = malloc(PATH_MAX);
+	if (shell->cwd == NULL)
+	{
+		perror("malloc failed");
+		exit(EXIT_FAILURE);
+	}
+	if (getcwd(shell->cwd, PATH_MAX) == NULL)
+	{
+		perror("getcwd failed");
+		free(shell->cwd);
+		shell->cwd = NULL;
+	}
+	else
+		ft_strlcat(shell->cwd, "\n🐚> ", PATH_MAX);
+}
+
 static void	shell_loop(t_shell *shell)
 {
 	char	*current_input;
 
 	while (1)
 	{
+		create_prompt(shell);
 		g_signal = 0;
-		current_input = readline("🐚> ");
+		current_input = readline(shell->cwd);
 		if (current_input == NULL)
 		{
 			printf("exit\n");
@@ -100,6 +134,7 @@ static void	shell_loop(t_shell *shell)
 		}
 		if (process_command_line(shell, current_input) == SHELL_EXIT)
 		{
+			free(current_input);
 			break ;
 		}
 	}
@@ -111,6 +146,7 @@ int	main(void)
 
 	init_shell(&shell);
 	shell_loop(&shell);
+	cleanup_shell(&shell);
 	rl_clear_history();
 	return (0);
 }
