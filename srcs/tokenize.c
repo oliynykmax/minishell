@@ -22,13 +22,14 @@ static char	*tokenize_meta(t_shell *s, t_vec *tokens, char *i)
 
 static char	*tokenize_word(t_shell *s, t_vec *tokens, char *input)
 {
-	char *const begin = input;
+	char *const	begin = input;
 	char		del;
 
 	del = '\0';
 	if (*input == '\'' || *input == '\"')
 		del = *input++;
-	while (*input != '\0' && *input != del && (del != '\0' || !is_meta(*input)))
+	while (*input != '\0' && *input != del && !(del == '\0'
+			&& (is_meta(*input) || *input == '\'' || *input == '\"')))
 		input++;
 	input += *input == del && del != '\0';
 	vector_push(tokens, string_sub(s, begin, input - begin));
