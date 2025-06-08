@@ -58,7 +58,7 @@ static void	cleanup_cycle_resources(t_shell *shell)
 	}
 }
 
-static void cleanup_shell(t_shell *shell)
+static void	cleanup_shell(t_shell *shell)
 {
 	if (shell->cwd)
 	{
@@ -67,7 +67,6 @@ static void cleanup_shell(t_shell *shell)
 	}
 	cleanup_cycle_resources(shell);
 }
-
 
 static t_sstatus	process_command_line(t_shell *shell, char *input)
 {
