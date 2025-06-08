@@ -1,4 +1,5 @@
 #include "../incl/minishell.h"
+#include <errno.h>
 #include <linux/limits.h>
 #include <stddef.h>
 
@@ -7,11 +8,11 @@ volatile sig_atomic_t	g_signal = 0;
 static void	print_tokens(t_vec *tokens)
 {
 	size_t	i;
-	
+
 	i = 0;
 	while (i < tokens->size)
 	{
-		printf("[%s] ", (char *) tokens->data[i]);
+		printf("[%s] ", (char *)tokens->data[i]);
 		i++;
 	}
 	printf("\n");
@@ -41,7 +42,6 @@ void	shell_init(t_shell *s, char **envp)
 
 void	shell_exit(t_shell *s, int exit_status, const char *message)
 {
-	free(s->cwd);
 	free(s->input);
 	arena_free(s->arenas[0]);
 	arena_free(s->arenas[1]);
@@ -56,8 +56,8 @@ void	shell_exit(t_shell *s, int exit_status, const char *message)
 
 void	shell_new_prompt(t_shell *s)
 {
-	t_vec *const	old_envp = s->envp;
 	size_t			i;
+	t_vec *const	old_envp = s->envp;
 
 	s->prompt_count++;
 	s->arena = s->arenas[s->prompt_count % 2];
@@ -91,22 +91,22 @@ static t_sstatus	process_command_line(t_shell *s, char *input)
 
 static void	create_prompt(t_shell *s)
 {
-	if (s->cwd)
-		free(s->cwd);
-	s->cwd = malloc(PATH_MAX);
-	if (s->cwd == NULL)
+	char			*pwd;
+	char			*tmp;
+	static size_t	bufsize;
+
+	pwd = NULL;
+	bufsize = 128;
+	while (1)
 	{
-		perror("malloc failed");
-		exit(EXIT_FAILURE);
+		pwd = shell_malloc(s, bufsize);
+		if (getcwd(pwd, bufsize))
+			break ;
+		if (errno == ERANGE)
+			bufsize *= 2;
 	}
-	if (getcwd(s->cwd, PATH_MAX) == NULL)
-	{
-		perror("getcwd failed");
-		free(s->cwd);
-		s->cwd = NULL;
-	}
-	else
-		ft_strlcat(s->cwd, "\n🐚> ", PATH_MAX);
+	tmp = string_join(s, "\n", pwd);
+	s->cwd = string_join(s, tmp, "\n🐚> ");
 }
 
 static void	shell_loop(t_shell *s)
@@ -141,8 +141,8 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;
 
-	(void) argc;
-	(void) argv;
+	(void)argc;
+	(void)argv;
 	shell_init(&shell, envp);
 	shell_loop(&shell);
 	rl_clear_history();
