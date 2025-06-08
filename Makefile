@@ -6,10 +6,13 @@ CFLAGS  := -Wall -Wextra -Werror
 INCLUDES := -Iincl -Ilibft
 
 SRCS    := \
+	srcs/memory.c \
 	srcs/minishell.c \
-	srcs/tokenize.c \
+	srcs/signals.c \
+	srcs/string.c \
 	srcs/token_types.c \
-	srcs/signals.c
+	srcs/tokenize.c \
+	srcs/vector.c \
 
 OBJS    := $(SRCS:srcs/%.c=objs/%.o)
 
