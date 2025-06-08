@@ -1,22 +1,18 @@
 #include "../incl/minishell.h"
-#include "../incl/tokenize.h"
 #include <linux/limits.h>
 #include <stddef.h>
 
 volatile sig_atomic_t	g_signal = 0;
 
-static void	print_tokens(t_token *token)
+static void	print_tokens(t_vec *tokens)
 {
-	static const char *const	names[] = {"|", "&", "||", "&&", "<", "<<", ">",
-		">>", "(", ")", "word", "word"};
-
-	while (token->type != TOKEN_END)
+	size_t	i;
+	
+	i = 0;
+	while (i < tokens->size)
 	{
-		if (token->data == NULL)
-			printf("operator(\"%s\") ", names[token->type]);
-		else
-			printf("%s(\"%s\") ", names[token->type], token->data);
-		token++;
+		printf("[%s] ", (char *) tokens->data[i]);
+		i++;
 	}
 	printf("\n");
 }
@@ -82,14 +78,9 @@ static t_sstatus	process_command_line(t_shell *s, char *input)
 	status = SHELL_CONTINUE;
 	s->input = input;
 	add_history(s->input);
-	s->tokens = tokenize(s->input);
-	if (s->tokens == NULL)
-	{
-		fprintf(stderr, "shell: tokenization failed\n");
-		return (SHELL_CONTINUE);
-	}
+	s->tokens = tokenize(s, input);
 	print_tokens(s->tokens);
-	if (s->tokens[0].data && ft_strcmp(s->tokens[0].data, "exit") == 0)
+	if (ft_strcmp(s->tokens->data[0], "exit") == 0)
 		status = SHELL_EXIT;
 	/* 	else
 		{

@@ -2,9 +2,12 @@
 
 char	*string_new(t_shell *s, const char *string)
 {
-	const size_t	length = ft_strlen(string);
-	char *const		result = shell_malloc(s, length + 1);
+	return (string_sub(s, string, ft_strlen(string)));
+}
 
+char	*string_sub(t_shell *s, const char *string, size_t length)
+{
+	char *const result = shell_malloc(s, length + 1);
 	return (ft_memcpy(result, string, length));
 }
 
