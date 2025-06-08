@@ -1,10 +1,13 @@
 #include "../incl/minishell.h"
 
-void	handle_signals(int signum)
+void	handle_signals(int sig)
 {
-	if (signum == SIGINT)
+	if (sig == SIGINT)
 	{
 		g_signal = 1;
-		// safe_write_string("\n");
+		printf("\n");
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
 	}
 }
