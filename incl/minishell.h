@@ -37,6 +37,7 @@ struct s_shell
 	t_arena						*arenas[2];
 	t_vec						*envp;
 	size_t						prompt_count;
+	unsigned char 				last_status;
 };
 
 struct s_arena
@@ -88,5 +89,6 @@ t_vec	*tokenize(t_shell *s, char *input);
 /*------------------builtins----------------------------------------*/
 int		pwd(char **argv, int fd);
 int		env(char **envp, int fd);
+void	mini_exit(char **args, int fd, t_shell *s);
 
 #endif
