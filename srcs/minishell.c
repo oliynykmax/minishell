@@ -1,7 +1,4 @@
 #include "../incl/minishell.h"
-#include <errno.h>
-#include <linux/limits.h>
-#include <stddef.h>
 
 volatile sig_atomic_t	g_signal = 0;
 
@@ -105,7 +102,7 @@ static void	create_prompt(t_shell *s)
 		if (errno == ERANGE)
 			bufsize *= 2;
 	}
-	tmp = string_join(s, "\n", pwd);
+	tmp = string_join(s, "\033[33m\n", pwd);
 	s->cwd = string_join(s, tmp, "\n🐚> ");
 }
 
