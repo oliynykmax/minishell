@@ -28,10 +28,7 @@ void	shell_init(t_shell *s, char **envp)
 	sigemptyset(&s->sa.sa_mask);
 	s->sa.sa_flags = SA_RESTART;
 	if (sigaction(SIGINT, &s->sa, NULL) == -1)
-	{
-		perror("sigaction for SIGINT failed");
-		exit(EXIT_FAILURE);
-	}
+		shell_exit(s, EXIT_FAILURE, strerror(errno));
 	signal(SIGQUIT, SIG_IGN);
 }
 
@@ -43,8 +40,26 @@ void	shell_exit(t_shell *s, int exit_status, const char *message)
 	arena_free(s->arenas[0]);
 	arena_free(s->arenas[1]);
 	if (message != NULL)
-		printf("error: %s\n", message);
+		printf("minishell: %s\n", message);
 	exit(exit_status);
+}
+
+static char	*get_working_dir(t_shell *s)
+{
+	size_t	size;
+	char	*path;
+
+	size = PATH_MAX;
+	while (1)
+	{
+		path = shell_malloc(s, size);
+		if (getcwd(path, size) != NULL)
+			return (path);
+		if (errno != ERANGE)
+			shell_exit(s, EXIT_FAILURE, strerror(errno));
+		size *= 2;
+	}
+	return (path);
 }
 
 // Begin a new prompt, starting over with a new, empty memory arena. Environment
@@ -66,71 +81,29 @@ void	shell_new_prompt(t_shell *s)
 		while (i < old_envp->size)
 			vector_push(s->envp, string_new(s, old_envp->data[i++]));
 	}
-}
-
-static t_sstatus	process_command_line(t_shell *s, char *input)
-{
-	t_sstatus	status;
-
-	status = SHELL_CONTINUE;
-	s->input = input;
-	add_history(s->input);
-	s->tokens = tokenize(s, input);
-	print_tokens(s->tokens);
-	if (ft_strcmp(s->tokens->data[0], "exit") == 0)
-		status = SHELL_EXIT;
-	/* 	else
-		{
-			// TODO:
-		} */
-	return (status);
-}
-
-static void	create_prompt(t_shell *s)
-{
-	char			*pwd;
-	char			*tmp;
-	static size_t	bufsize;
-
-	pwd = NULL;
-	bufsize = 128;
-	while (1)
-	{
-		pwd = shell_malloc(s, bufsize);
-		if (getcwd(pwd, bufsize))
-			break ;
-		if (errno == ERANGE)
-			bufsize *= 2;
-	}
-	tmp = string_join(s, "\033[33m\n", pwd);
-	s->cwd = string_join(s, tmp, "\n🐚> ");
+	s->cwd = get_working_dir(s);
+	g_signal = 0;
 }
 
 static void	shell_loop(t_shell *s)
 {
-	char	*current_input;
-
 	while (1)
 	{
 		shell_new_prompt(s);
-		create_prompt(s);
-		g_signal = 0;
-		current_input = readline(s->cwd);
-		if (current_input == NULL)
-		{
-			printf("exit\n");
-			break ;
-		}
-		if (g_signal || current_input[0] == '\0')
-		{
-			free(current_input);
+		printf("\n%s", s->cwd);
+		s->input = readline("\n🐚> ");
+		if (s->input == NULL)
+			shell_exit(s, EXIT_SUCCESS, NULL);
+		s->tokens = tokenize(s, s->input);
+		if (s->tokens->size > 0)
+			add_history(s->input);
+		free(s->input);
+		s->input = NULL;
+		if (g_signal || s->tokens->size == 0)
 			continue ;
-		}
-		if (process_command_line(s, current_input) == SHELL_EXIT)
-		{
-			free(current_input);
-			break ;
-		}
+		print_tokens(s->tokens);
+		if (ft_strcmp(s->tokens->data[0], "exit") == 0)
+			shell_exit(s, EXIT_SUCCESS, NULL);
 	}
 }
 
