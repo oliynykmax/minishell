@@ -16,6 +16,7 @@
 # include <term.h>
 # include <termios.h>
 # include <unistd.h>
+# include <errno.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 
