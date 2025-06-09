@@ -1,7 +1,4 @@
 #include "../incl/minishell.h"
-#include <errno.h>
-#include <linux/limits.h>
-#include <stddef.h>
 
 volatile sig_atomic_t	g_signal = 0;
 
