@@ -90,7 +90,7 @@ static void	shell_loop(t_shell *s)
 	while (1)
 	{
 		shell_new_prompt(s);
-		printf("\n%s", s->cwd);
+		printf("\033[1;32m\n%s", s->cwd);
 		s->input = readline("\n🐚> ");
 		if (s->input == NULL)
 			shell_exit(s, EXIT_SUCCESS, NULL);
