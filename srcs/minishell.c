@@ -17,6 +17,8 @@ static void	print_tokens(t_vec *tokens)
 
 void	shell_init(t_shell *s, char **envp)
 {
+	struct sigaction	sa;
+
 	ft_bzero(s, sizeof(t_shell));
 	s->arenas[0] = arena_new(s, ARENA_SIZE);
 	s->arenas[1] = arena_new(s, ARENA_SIZE);
@@ -24,42 +26,15 @@ void	shell_init(t_shell *s, char **envp)
 	s->envp = vector_new(s, 0);
 	while (*envp != NULL)
 		vector_push(s->envp, string_new(s, *envp++));
-	s->sa.sa_handler = handle_signals;
-	sigemptyset(&s->sa.sa_mask);
-	s->sa.sa_flags = SA_RESTART;
-	if (sigaction(SIGINT, &s->sa, NULL) == -1)
-		shell_exit(s, EXIT_FAILURE, strerror(errno));
-	signal(SIGQUIT, SIG_IGN);
-}
-
-// Clean up all resources and exit the shell, with an optional error message.
-
-void	shell_exit(t_shell *s, int exit_status, const char *message)
-{
-	free(s->input);
-	arena_free(s->arenas[0]);
-	arena_free(s->arenas[1]);
-	if (message != NULL)
-		printf("minishell: %s\n", message);
-	exit(exit_status);
-}
-
-static char	*get_working_dir(t_shell *s)
-{
-	size_t	size;
-	char	*path;
-
-	size = PATH_MAX;
-	while (1)
+	if (isatty(STDIN_FILENO) && isatty(STDOUT_FILENO))
 	{
-		path = shell_malloc(s, size);
-		if (getcwd(path, size) != NULL)
-			return (path);
-		if (errno != ERANGE)
+		sa.sa_handler = handle_signals;
+		sigemptyset(&sa.sa_mask);
+		sa.sa_flags = SA_RESTART;
+		if (sigaction(SIGINT, &sa, NULL) == -1)
 			shell_exit(s, EXIT_FAILURE, strerror(errno));
-		size *= 2;
+		signal(SIGQUIT, SIG_IGN);
 	}
-	return (path);
 }
 
 // Begin a new prompt, starting over with a new, empty memory arena. Environment
