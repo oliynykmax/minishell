@@ -7,12 +7,14 @@ INCLUDES := -Iincl -Ilibft
 
 SRCS    := \
 	srcs/env.c \
+	srcs/exit.c \
 	srcs/memory.c \
 	srcs/minishell.c \
 	srcs/pwd.c \
 	srcs/signals.c \
 	srcs/string.c \
 	srcs/tokenize.c \
+	srcs/utils.c \
 	srcs/vector.c
 
 OBJS    := $(SRCS:srcs/%.c=objs/%.o)

@@ -1,0 +1,33 @@
+incl/minishell.h:/*------------------builtins----------------------------------------*/
+incl/minishell.h:/*------------------utils----------------------------------------- */
+srcs/exit.c:		shell_exit(s, s->last_status, NULL);
+srcs/exit.c:		s->last_status = 1;
+srcs/memory.c:	arena = s->arena;
+srcs/minishell.c:	while (i < tokens->size)
+srcs/minishell.c:		printf("[%s] ", (char *)tokens->data[i]);
+srcs/minishell.c:	s->arenas[0] = arena_new(s, ARENA_SIZE);
+srcs/minishell.c:	s->arenas[1] = arena_new(s, ARENA_SIZE);
+srcs/minishell.c:	s->envp = vector_new(s, 0);
+srcs/minishell.c:		vector_push(s->envp, string_new(s, *envp++));
+srcs/minishell.c:	s->sa.sa_handler = handle_signals;
+srcs/minishell.c:	sigemptyset(&s->sa.sa_mask);
+srcs/minishell.c:	s->sa.sa_flags = SA_RESTART;
+srcs/minishell.c:	if (sigaction(SIGINT, &s->sa, NULL) == -1)
+srcs/minishell.c:	t_vec *const	old_envp = s->envp;
+srcs/minishell.c:	s->prompt_count++;
+srcs/minishell.c:	s->arena = s->arenas[s->prompt_count % 2];
+srcs/minishell.c:	arena_reset(s->arena);
+srcs/minishell.c:		s->envp = vector_new(s, old_envp->capacity);
+srcs/minishell.c:			vector_push(s->envp, string_new(s, old_envp->data[i++]));
+srcs/minishell.c:	s->cwd = get_working_dir(s);
+srcs/minishell.c:		//printf("\033[1;32m\n%s", s->cwd);
+srcs/minishell.c:		s->input = readline("\n🐚> ");
+srcs/minishell.c:		if (s->input == NULL)
+srcs/minishell.c:		s->tokens = tokenize(s, s->input);
+srcs/minishell.c:		if (s->tokens->size > 0)
+srcs/minishell.c:			add_history(s->input);
+srcs/minishell.c:		free(s->input);
+srcs/minishell.c:		s->input = NULL;
+srcs/minishell.c:		if (g_signal || s->tokens->size == 0)
+srcs/minishell.c:		print_tokens(s->tokens);
+srcs/minishell.c:		if (ft_strcmp(s->tokens->data[0], "exit") == 0)

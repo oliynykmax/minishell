@@ -31,13 +31,12 @@ struct s_shell
 {
 	char						*input;
 	t_vec						*tokens;
-	struct sigaction			sa;
 	char						*cwd;
 	t_arena						*arena;
 	t_arena						*arenas[2];
 	t_vec						*envp;
 	size_t						prompt_count;
-	unsigned char 				last_status;
+	unsigned char				last_status;
 };
 
 struct s_arena
@@ -55,12 +54,6 @@ struct s_vec
 	size_t	capacity;	// The number of allocated elements.
 	void	**data;		// Array of elements.
 };
-
-typedef enum e_shell_status
-{
-	SHELL_CONTINUE,
-	SHELL_EXIT
-}								t_sstatus;
 
 extern t_signal					g_signal;
 
@@ -90,5 +83,8 @@ t_vec	*tokenize(t_shell *s, char *input);
 int		pwd(char **argv, int fd);
 int		env(char **envp, int fd);
 void	mini_exit(char **args, int fd, t_shell *s);
+
+/*------------------utils----------------------------------------- */
+char	*get_working_dir(t_shell *s);
 
 #endif
