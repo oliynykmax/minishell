@@ -7,15 +7,13 @@ static int	is_blank(char c)
 
 static int	is_meta(char c)
 {
-	return (is_blank(c) || c == '|' || c == '&' || c == '<' || c == '>'
-		|| c == '(' || c == ')');
+	return (c == '|' || c == '<' || c == '>');
 }
 
 static char	*tokenize_meta(t_shell *s, t_vec *tokens, char *i)
 {
-	int	paired;
+	const int	paired = i[0] == i[1] && (i[0] == '<' || i[0] == '>');
 
-	paired = i[0] == i[1] && (*i == '<' || *i == '>' || *i == '&' || *i == '|');
 	vector_push(tokens, string_sub(s, i, paired + 1));
 	return (i + paired + 1);
 }
@@ -23,15 +21,22 @@ static char	*tokenize_meta(t_shell *s, t_vec *tokens, char *i)
 static char	*tokenize_word(t_shell *s, t_vec *tokens, char *input)
 {
 	char *const	begin = input;
-	char		del;
+	char		quote;
 
-	del = '\0';
-	if (*input == '\'' || *input == '\"')
-		del = *input++;
-	while (*input != '\0' && *input != del && !(del == '\0'
-			&& (is_meta(*input) || *input == '\'' || *input == '\"')))
+	quote = 0;
+	while (*input != '\0')
+	{
+		if (!quote)
+		{
+			if (*input == '\'' || *input == '\"')
+				quote = *input;
+			if (is_meta(*input) || is_blank(*input))
+				break ;
+		}
+		else if (*input == quote)
+			quote = 0;
 		input++;
-	input += *input == del && del != '\0';
+	}
 	vector_push(tokens, string_sub(s, begin, input - begin));
 	return (input);
 }
