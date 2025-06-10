@@ -1,10 +1,12 @@
 #include "../incl/minishell.h"
 
-int	env(char **envp, int fd)
+int	mini_env(char **argv, int fd, t_shell *s, char **envp)
 {
 	int	i;
 
 	i = 0;
+	(void)argv;
+	(void)s;
 	if (envp == NULL)
 		return (1);
 	else
