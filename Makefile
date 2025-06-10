@@ -26,6 +26,8 @@ SRCS    := \
 	srcs/utils.c \
 	srcs/vector.c
 
+ECHO := echo -e
+
 OBJS    := $(SRCS:srcs/%.c=objs/%.o)
 
 LIBFT_DIR := libft
@@ -70,7 +72,6 @@ re:
 	@$(MAKE) --no-print-directory all
 
 norm:
-	@echo "$(GREEN)📏 Norminette...$(RESET)"
 	@norminette | awk '\
 		/^.*: Error!/ { file = $$1; seen = 0; next } \
 		/Error:/ && $$0 !~ /INVALID_HEADER/ { \
@@ -80,5 +81,4 @@ norm:
 	'
 
 valgrind:
-	@echo "$(GREEN)🐛 Valgrind...$(RESET)"
 	@valgrind --leak-check=full --show-leak-kinds=all --suppressions=mini.supp ./minishell
