@@ -20,26 +20,26 @@ static int	str_isdigit(const char *s)
 	return (0);
 }
 
-void	mini_exit(char **args, int fd, t_shell *s)
+int	mini_exit(char **args, int fd, t_shell *s, char **envp)
 {
 	int	has_second_arg;
 
+	(void)envp;
 	has_second_arg = (args[2] != NULL);
 	ft_putstr_fd("exit\n", fd);
 	if (args[1] == NULL)
 		shell_exit(s, s->last_status, NULL);
 	if (!str_isdigit(args[1]))
 	{
-		ft_putstr_fd("minishell: exit: ", fd);
-		ft_putstr_fd(args[1], fd);
-		ft_putstr_fd(": numeric argument required\n", fd);
+		ft_fprintf(fd, "minishell: exit: %s: numeric argument required\n", fd);
 		shell_exit(s, 2, NULL);
 	}
 	if (has_second_arg)
 	{
-		ft_putstr_fd("minishell: exit: too many arguments\n", fd);
+		ft_fprintf(fd, "minishell: exit: too many arguments\n");
 		s->last_status = 1;
-		return ;
+		return (1);
 	}
 	shell_exit(s, (unsigned char)ft_atoi(args[1]), NULL);
+	return (0);
 }

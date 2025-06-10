@@ -86,10 +86,10 @@ t_vec	*tokenize(t_shell *s, char *input);
 int		is_blank(char c);
 int		is_meta(char c);
 /*------------------builtins----------------------------------------*/
-int		pwd(char **argv, int fd);
-int		env(char **envp, int fd);
-void	mini_exit(char **args, int fd, t_shell *s);
-int		mini_export(int argc, char **argv, char **envp);
+int		mini_pwd(char **argv, int fd, t_shell *s, char **envp);
+int		mini_env(char **argv, int fd, t_shell *s, char **envp);
+int		mini_exit(char **args, int fd, t_shell *s, char **envp);
+int		mini_export(char **argv, int fd, t_shell *s, char **envp);
 
 /*------------------utils----------------------------------------- */
 char	*get_working_dir(t_shell *s);

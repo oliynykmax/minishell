@@ -67,8 +67,9 @@ void	export_sort_and_print(char **envp, int fd)
 	free(sorted_envp);
 }
 
-int	mini_export(int fd, char **argv, char **envp)
+int	mini_export(char **argv, int fd, t_shell *s, char **envp)
 {
+	(void)s;
 	if (!envp)
 		return (EXIT_FAILURE);
 	(void)argv;
