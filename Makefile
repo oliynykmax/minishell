@@ -1,9 +1,4 @@
 
-# Colors
-RESET	= \033[0m
-GREEN	= \033[32m
-YELLOW	= \033[33m
-
 NAME    := minishell
 
 CC      := cc
@@ -26,8 +21,6 @@ SRCS    := \
 	srcs/utils.c \
 	srcs/vector.c
 
-ECHO := echo -e
-
 OBJS    := $(SRCS:srcs/%.c=objs/%.o)
 
 LIBFT_DIR := libft
@@ -38,17 +31,17 @@ LIBFT_A   := $(LIBFT_DIR)/libft.a
 .SILENT : objs
 
 all: $(NAME)
-	@echo "$(GREEN)🎉 Build complete!$(RESET)"
+	@echo "🎉 Build complete!"
 
 $(NAME): $(OBJS) $(LIBFT_A)
-	@echo "$(YELLOW)🔗 Linking $(NAME)...$(RESET)"
+	@echo "🔗 Linking $(NAME)..."
 	@$(CC) $(CFLAGS) $(OBJS) -lreadline -ltinfo $(LIBFT_A) -o $(NAME)
 
 objs/%.o: srcs/%.c incl/minishell.h | objs
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(LIBFT_A):
-	@echo "$(GREEN)📚 Building libft...$(RESET)"
+	@echo "📚 Building libft..."
 	@$(MAKE) --no-print-directory -C $(LIBFT_DIR)
 
 objs:
@@ -57,17 +50,17 @@ objs:
 
 
 clean:
-	@echo "$(YELLOW)🧹 Cleaning...$(RESET)"
+	@echo "🧹 Cleaning..."
 	@rm -rf objs
 	@$(MAKE) --no-print-directory -C $(LIBFT_DIR) clean
 
 fclean: clean
-	@echo "$(YELLOW)🗑️  Removing $(NAME)$(RESET)"
+	@echo "🗑️  Removing $(NAME)"
 	@rm -f $(NAME)
 	@$(MAKE) --no-print-directory -C $(LIBFT_DIR) fclean
 
 re:
-	@echo "$(GREEN)🔄 Rebuilding...$(RESET)"
+	@echo "🔄 Rebuilding..."
 	@$(MAKE) --no-print-directory fclean
 	@$(MAKE) --no-print-directory all
 
