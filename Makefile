@@ -1,7 +1,13 @@
+
+# Colors
+RESET	= \033[0m
+GREEN	= \033[32m
+YELLOW	= \033[33m
+
 NAME    := minishell
 
 CC      := cc
-CFLAGS  := -Wall -Wextra -Werror 
+CFLAGS  := -Wall -Wextra -Werror
 
 INCLUDES := -Iincl -Ilibft
 
@@ -27,35 +33,44 @@ LIBFT_A   := $(LIBFT_DIR)/libft.a
 
 .PHONY: all clean fclean re norm
 .SECONDARY : $(OBJS)
+.SILENT : objs
+
 all: $(NAME)
+	@echo "$(GREEN)🎉 Build complete!$(RESET)"
 
 $(NAME): $(OBJS) $(LIBFT_A)
-	$(CC) $(CFLAGS) $(OBJS) -lreadline -ltinfo $(LIBFT_A) -o $(NAME)
+	@echo "$(YELLOW)🔗 Linking $(NAME)...$(RESET)"
+	@$(CC) $(CFLAGS) $(OBJS) -lreadline -ltinfo $(LIBFT_A) -o $(NAME)
 
 objs/%.o: srcs/%.c incl/minishell.h | objs
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(LIBFT_A):
+	@echo "$(GREEN)📚 Building libft...$(RESET)"
 	@$(MAKE) --no-print-directory -C $(LIBFT_DIR)
-	@echo "make libft"
 
 objs:
 	@mkdir -p objs
+
+
+
 clean:
-	rm -rf objs
+	@echo "$(YELLOW)🧹 Cleaning...$(RESET)"
+	@rm -rf objs
 	@$(MAKE) --no-print-directory -C $(LIBFT_DIR) clean
-	@echo "clean libft"
 
 fclean: clean
-	rm -f $(NAME)
+	@echo "$(YELLOW)🗑️  Removing $(NAME)$(RESET)"
+	@rm -f $(NAME)
 	@$(MAKE) --no-print-directory -C $(LIBFT_DIR) fclean
-	@echo "fclean libft"
 
 re:
+	@echo "$(GREEN)🔄 Rebuilding...$(RESET)"
 	@$(MAKE) --no-print-directory fclean
 	@$(MAKE) --no-print-directory all
 
 norm:
+	@echo "$(GREEN)📏 Norminette...$(RESET)"
 	@norminette | awk '\
 		/^.*: Error!/ { file = $$1; seen = 0; next } \
 		/Error:/ && $$0 !~ /INVALID_HEADER/ { \
@@ -65,4 +80,5 @@ norm:
 	'
 
 valgrind:
-	valgrind --leak-check=full --show-leak-kinds=all --suppressions=mini.supp ./minishell
+	@echo "$(GREEN)🐛 Valgrind...$(RESET)"
+	@valgrind --leak-check=full --show-leak-kinds=all --suppressions=mini.supp ./minishell

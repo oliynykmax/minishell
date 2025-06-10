@@ -12,16 +12,14 @@
 
 #include "libft.h"
 
-int	printf_fd(int fd, const char *s, ...)
+int	printf_fd(int fd, const char *s, va_list *args)
 {
-	va_list	args;
 	int		counter;
 	int		temp;
 
 	counter = 0;
 	if (!s)
 		return (-1);
-	va_start(args, s);
 	while (*s)
 	{
 		if (*s != '%')
@@ -31,13 +29,12 @@ int	printf_fd(int fd, const char *s, ...)
 			counter += 1;
 			continue ;
 		}
-		temp = choose_type_fd(&args, &s, fd);
+		temp = choose_type_fd(args, &s, fd);
 		if (temp == -1)
 			return (temp);
 		counter += temp;
 		s++;
 	}
-	va_end(args);
 	return (counter);
 }
 
