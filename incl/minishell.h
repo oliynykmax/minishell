@@ -21,6 +21,10 @@
 # include <readline/readline.h>
 
 # define ARENA_SIZE 10000 // Default size for new memory arenas.
+# define BGRN	"\001\e[1;32m\002"
+# define CRESET	"\001\e[0m\002"
+# define STR_PROMPTSTART		"\001\e[1;96m\002\001\e[0m\002"
+# define STR_PROMPTDELIM		"🐚> "
 
 typedef volatile sig_atomic_t	t_signal;
 typedef struct s_arena			t_arena;
@@ -85,5 +89,8 @@ void	mini_exit(char **args, int fd, t_shell *s);
 
 /*------------------utils----------------------------------------- */
 char	*get_working_dir(t_shell *s);
+char	*get_prompt(t_shell *s);
+/*----------------execution-------------------------------------- */
+void	shell_execute(t_shell *s);
 
 #endif
