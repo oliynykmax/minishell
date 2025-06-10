@@ -1,5 +1,4 @@
 #include "../incl/minishell.h"
-#include <stdlib.h>
 
 char	**sort_chars(char **sorted, int len)
 {
@@ -42,31 +41,37 @@ char	**sort_envp(char **ep)
 	return (sort_chars(sorted, len));
 }
 
-void	export_sort_and_print(char **envp)
+void	export_sort_and_print(char **envp, int fd)
 {
 	int		i;
 	char	**sorted_envp;
+	char	*equals_pos;
 
 	i = 0;
 	sorted_envp = NULL;
 	sorted_envp = sort_envp(envp);
 	while (sorted_envp[i])
 	{
-		printf("declare -x %s\n", sorted_envp[i]);
+		equals_pos = ft_strchr(sorted_envp[i], '=');
+		if (equals_pos)
+		{
+			*equals_pos = '\0';
+			printf_fd(fd, "declare -x %s=\"%s\"\n", sorted_envp[i],
+				equals_pos + 1);
+			*equals_pos = '=';
+		}
+		else
+			printf_fd(fd, "declare -x %s\n", sorted_envp[i]);
 		i++;
 	}
 	free(sorted_envp);
 }
 
-int	export(int argc, char **argv, char **envp)
+int	mini_export(int fd, char **argv, char **envp)
 {
 	if (!envp)
 		return (EXIT_FAILURE);
 	(void)argv;
-	if (argc == 1)
-	{
-		export_sort_and_print(envp);
-		return (0);
-	}
+	export_sort_and_print(envp, fd);
 	return (0);
 }

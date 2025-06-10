@@ -81,6 +81,15 @@ int					write_reverse(const char *buffer, int len);
 int					ft_printf_pnum(unsigned long long un, char *base);
 int					ft_printf(const char *s, ...);
 int					ft_printf_p(void *ptr);
+
+int					printf_fd(int fd, const char *s, ...);
+int					choose_type_fd(va_list *args, const char **s, int fd);
+int					printf_fd_c(char c, int fd);
+int					printf_fd_s(char *s, int fd);
+int					printf_fd_p(void *ptr, int fd);
+int					printf_fd_pnum(unsigned long long un, char *base, int fd);
+int					printf_fd_diux(long un, char *base, int fd);
+int					write_reverse_fd(const char *buffer, int len, int fd);
 int					ft_strcmp(const char *s1, const char *s2);
 
 # ifndef BUFFER_SIZE
