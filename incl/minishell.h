@@ -21,7 +21,7 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 
-# define ARENA_SIZE 10000 // Default size for new memory arenas.
+# define ARENA_SIZE 10000
 # define BGRN	"\001\e[1;32m\002"
 # define CRESET	"\001\e[0m\002"
 # define STR_PROMPTSTART		"\001\e[1;96m\002\001\e[0m\002"
@@ -89,6 +89,7 @@ int		is_meta(char c);
 int		pwd(char **argv, int fd);
 int		env(char **envp, int fd);
 void	mini_exit(char **args, int fd, t_shell *s);
+int		mini_export(int argc, char **argv, char **envp);
 
 /*------------------utils----------------------------------------- */
 char	*get_working_dir(t_shell *s);
