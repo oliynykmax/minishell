@@ -2,19 +2,6 @@
 
 volatile sig_atomic_t	g_signal = 0;
 
-static void	print_tokens(t_vec *tokens)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < tokens->size)
-	{
-		printf("[%s] ", (char *)tokens->data[i]);
-		i++;
-	}
-	printf("\n");
-}
-
 void	shell_init(t_shell *s, char **envp)
 {
 	struct sigaction	sa;
@@ -37,10 +24,6 @@ void	shell_init(t_shell *s, char **envp)
 	}
 }
 
-// Begin a new prompt, starting over with a new, empty memory arena. Environment
-// variables are copied into the new arena so that they are preserved across
-// prompts.
-
 void	shell_new_prompt(t_shell *s)
 {
 	size_t			i;
@@ -60,25 +43,48 @@ void	shell_new_prompt(t_shell *s)
 	g_signal = 0;
 }
 
-static void	shell_loop(t_shell *s)
+static char	*shell_readline(t_shell *s, int cont)
 {
+	char	*input;
+
+	if (cont)
+		s->input = readline("> ");
+	else
+		s->input = readline(get_prompt(s));
+	if (s->input == NULL)
+	{
+		write(1, "exit\n", 5);
+		shell_exit(s, EXIT_SUCCESS, NULL);
+	}
+	input = string_new(s, s->input);
+	free(s->input);
+	s->input = NULL;
+	return (input);
+}
+
+static void	user_input(t_shell *s)
+{
+	char	*input;
+	char	*line;
+	int		cont;
+
+	input = "";
+	cont = 0;
 	while (1)
 	{
-		shell_new_prompt(s);
-		printf("\033[1;32m\n%s", s->cwd);
-		s->input = readline("\n🐚> ");
-		if (s->input == NULL)
-			shell_exit(s, EXIT_SUCCESS, NULL);
-		s->tokens = tokenize(s, s->input);
-		if (s->tokens->size > 0)
-			add_history(s->input);
-		free(s->input);
-		s->input = NULL;
-		if (g_signal || s->tokens->size == 0)
+		line = shell_readline(s, cont);
+		if (cont && g_signal != SIGINT)
+			input = string_join(s, input, string_join(s, " ", line));
+		else
+			input = line;
+		s->tokens = tokenize(s, input);
+		if (s->tokens->size == 0)
+			break ;
+		cont = strcmp(s->tokens->data[s->tokens->size - 1], "|") == 0;
+		if (cont)
 			continue ;
-		print_tokens(s->tokens);
-		if (ft_strcmp(s->tokens->data[0], "exit") == 0)
-			shell_exit(s, EXIT_SUCCESS, NULL);
+		add_history(input);
+		return (shell_execute(s));
 	}
 }
 
@@ -89,7 +95,10 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	shell_init(&shell, envp);
-	shell_loop(&shell);
-	rl_clear_history();
+	while (1)
+	{
+		shell_new_prompt(&shell);
+		user_input(&shell);
+	}
 	shell_exit(&shell, 0, NULL);
 }

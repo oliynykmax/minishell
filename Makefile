@@ -7,6 +7,7 @@ INCLUDES := -Iincl -Ilibft
 
 SRCS    := \
 	srcs/env.c \
+	srcs/execution.c \
 	srcs/exit.c \
 	srcs/memory.c \
 	srcs/minishell.c \

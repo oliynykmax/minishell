@@ -1,5 +1,18 @@
 #include "../incl/minishell.h"
 
+char	*get_prompt(t_shell *s)
+{
+	char	*prompt;
+	char	*current_dir;
+
+	current_dir = get_working_dir(s);
+	prompt = string_join(s, STR_PROMPTSTART, BGRN);
+	prompt = string_join(s, prompt, current_dir);
+	prompt = string_join(s, prompt, CRESET);
+	prompt = string_join(s, prompt, STR_PROMPTDELIM);
+	return (prompt);
+}
+
 // Clean up all resources and exit the shell, with an optional error message.
 void	shell_exit(t_shell *s, int exit_status, const char *message)
 {
