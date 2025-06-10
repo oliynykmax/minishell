@@ -78,3 +78,25 @@ int	write_reverse_fd(const char *buffer, int len, int fd)
 	}
 	return (written);
 }
+
+int	ft_fprintf(int fd, const char *s, ...)
+{
+	va_list	args;
+	int		result;
+
+	va_start(args, s);
+	result = printf_fd(fd, s, &args);
+	va_end(args);
+	return (result);
+}
+
+int	ft_printf(const char *s, ...)
+{
+	va_list	args;
+	int		result;
+
+	va_start(args, s);
+	result = printf_fd(1, s, &args);
+	va_end(args);
+	return (result);
+}
