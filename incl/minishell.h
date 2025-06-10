@@ -31,6 +31,7 @@ typedef volatile sig_atomic_t	t_signal;
 typedef struct s_arena			t_arena;
 typedef struct s_vec			t_vec;
 typedef struct s_shell			t_shell;
+typedef int						t_builtin(char**, int, t_shell*, char**);
 
 struct s_shell
 {

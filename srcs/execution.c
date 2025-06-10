@@ -1,23 +1,77 @@
 #include "../incl/minishell.h"
 
-static void	print_tokens(t_vec *tokens)
+static int	unimplemented(char **argv, int fd, t_shell *s, char **envp)
 {
-	size_t	i;
+	(void) fd, (void) s, (void) envp;
+	printf("Unimplemented builtin: %s\n", *argv++);
+	while (*argv != NULL)
+		printf("    Argument: %s\n", *argv++);
+	return (EXIT_FAILURE);
+}
 
-	i = 0;
-	while (i < tokens->size)
-	{
-		printf("[%s] ", (char *)tokens->data[i]);
-		i++;
-	}
-	printf("\n");
+static t_builtin	*get_builtin_by_name(char *name)
+{
+	if (strcmp(name, "echo") == 0)
+		return (unimplemented);
+	if (strcmp(name, "cd") == 0)
+		return (unimplemented);
+	if (strcmp(name, "pwd") == 0)
+		return (mini_pwd);
+	if (strcmp(name, "export") == 0)
+		return (mini_export);
+	if (strcmp(name, "unset") == 0)
+		return (unimplemented);
+	if (strcmp(name, "env") == 0)
+		return (mini_env);
+	if (strcmp(name, "exit") == 0)
+		return (mini_exit);
+	return (NULL);
+}
+
+static void	error(const char *message)
+{
+	printf("minishell: %s\n", message);
+}
+
+static void	simple_command(t_shell *s, t_vec *command, t_vec *redirs)
+{
+	t_builtin	*builtin;
+
+	(void) redirs;
+	if (command->size == 0)
+		return ;
+	builtin = get_builtin_by_name(command->data[0]);
+	if (builtin != NULL)
+		builtin((char **) command->data, 1, s, (char **) s->envp->data);
+	else
+		printf("TODO: Run command '%s' here\n", (char *) command->data[0]);
 }
 
 void	shell_execute(t_shell *s)
 {
-	if (s->tokens->size == 0)
-		return ;
-	print_tokens(s->tokens);
-	if (ft_strcmp(s->tokens->data[0], "exit") == 0)
-		shell_exit(s, EXIT_SUCCESS, NULL);
+	t_vec *const	command = vector_new(s, 0);
+	t_vec *const	redirs = vector_new(s, 0);
+	char **const	tokens = (char**) s->tokens->data;
+	size_t			i;
+
+	i = -1;
+	while (tokens[++i] != NULL)
+	{
+		if (strcmp(tokens[i], "|") == 0)
+		{
+			simple_command(s, command, redirs);
+			command->size = 0;
+			redirs->size = 0;
+		}
+		else if (tokens[i][0] == '<' || tokens[i][0] == '>')
+		{
+			vector_push(redirs, tokens[i]);
+			vector_push(redirs, tokens[++i]);
+			if (tokens[i] == NULL)
+				return (error("syntax error"));
+		}
+		else
+			vector_push(command, tokens[i]);
+	}
+	simple_command(s, command, redirs);
 }
