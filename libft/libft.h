@@ -73,16 +73,10 @@ void				ft_putstr_fd(char *s, int fd);
 void				ft_putendl_fd(char *s, int fd);
 void				ft_putnbr_fd(int n, int fd);
 
-int					ft_printf_c(char c);
-int					choose_type(va_list *args, const char **s);
-int					ft_printf_s(char *s);
-int					ft_printf_diux(long un, char *base);
-int					write_reverse(const char *buffer, int len);
-int					ft_printf_pnum(unsigned long long un, char *base);
 int					ft_printf(const char *s, ...);
-int					ft_printf_p(void *ptr);
 
-int					printf_fd(int fd, const char *s, ...);
+int					printf_fd(int fd, const char *s, va_list *args);
+int					ft_fprintf(int fd, const char *s, ...);
 int					choose_type_fd(va_list *args, const char **s, int fd);
 int					printf_fd_c(char c, int fd);
 int					printf_fd_s(char *s, int fd);
