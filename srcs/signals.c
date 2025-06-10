@@ -5,10 +5,9 @@ void	handle_signals(int sig)
 	if (sig == SIGINT)
 	{
 		g_signal = 1;
-		printf("\n");
+		write(1, "^C\n", 3);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
-		g_signal = 0;
 	}
 }
