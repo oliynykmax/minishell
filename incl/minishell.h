@@ -3,9 +3,11 @@
 
 # include "../libft/libft.h"
 # include <dirent.h>
+# include <errno.h>
 # include <fcntl.h>
 # include <signal.h>
 # include <stdatomic.h>
+# include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
@@ -16,7 +18,6 @@
 # include <term.h>
 # include <termios.h>
 # include <unistd.h>
-# include <errno.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 
@@ -82,6 +83,8 @@ char	*string_sub(t_shell *s, const char *string, size_t length);
 char	*string_join(t_shell *s, const char *a, const char *b);
 /*------------------tokenizer---------------------------------------- */
 t_vec	*tokenize(t_shell *s, char *input);
+int		is_blank(char c);
+int		is_meta(char c);
 /*------------------builtins----------------------------------------*/
 int		pwd(char **argv, int fd);
 int		env(char **envp, int fd);

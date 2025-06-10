@@ -78,7 +78,9 @@ static void	user_input(t_shell *s)
 		else
 			input = line;
 		s->tokens = tokenize(s, input);
-		if (s->tokens->size == 0)
+		if (s->tokens == NULL)
+			add_history(input);
+		if (s->tokens == NULL || s->tokens->size == 0)
 			break ;
 		cont = strcmp(s->tokens->data[s->tokens->size - 1], "|") == 0;
 		if (cont)
