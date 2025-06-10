@@ -34,6 +34,7 @@ void	shell_init(t_shell *s, char **envp)
 		if (sigaction(SIGINT, &sa, NULL) == -1)
 			shell_exit(s, EXIT_FAILURE, strerror(errno));
 		signal(SIGQUIT, SIG_IGN);
+		rl_catch_signals = 0;
 	}
 }
 
@@ -57,9 +58,8 @@ void	shell_new_prompt(t_shell *s)
 			vector_push(s->envp, string_new(s, old_envp->data[i++]));
 	}
 	s->cwd = get_working_dir(s);
-	g_signal = 0;
 }
-
+#include "stdbool.h"
 static void	shell_loop(t_shell *s)
 {
 	while (1)
@@ -75,7 +75,11 @@ static void	shell_loop(t_shell *s)
 		free(s->input);
 		s->input = NULL;
 		if (g_signal || s->tokens->size == 0)
-			continue ;
+		{
+			print_tokens(s->tokens);
+			g_signal = 0;
+			continue;
+		}
 		print_tokens(s->tokens);
 		if (ft_strcmp(s->tokens->data[0], "exit") == 0)
 			shell_exit(s, EXIT_SUCCESS, NULL);
