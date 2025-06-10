@@ -56,12 +56,12 @@ void	export_sort_and_print(char **envp, int fd)
 		if (equals_pos)
 		{
 			*equals_pos = '\0';
-			printf_fd(fd, "declare -x %s=\"%s\"\n", sorted_envp[i],
+			ft_fprintf(fd, "declare -x %s=\"%s\"\n", sorted_envp[i],
 				equals_pos + 1);
 			*equals_pos = '=';
 		}
 		else
-			printf_fd(fd, "declare -x %s\n", sorted_envp[i]);
+			ft_fprintf(fd, "declare -x %s\n", sorted_envp[i]);
 		i++;
 	}
 	free(sorted_envp);
