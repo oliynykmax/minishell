@@ -1,11 +1,13 @@
 #include "../incl/minishell.h"
 
-int	pwd(char **argv, int fd)
+int	mini_pwd(char **argv, int fd, t_shell *s, char **envp)
 {
 	char	*cwd;
 	int		i;
 
 	i = 1;
+	(void)s;
+	(void)envp;
 	while (argv[i])
 	{
 		if (argv[i][0] == '-')
@@ -21,8 +23,7 @@ int	pwd(char **argv, int fd)
 		perror("pwd");
 		return (1);
 	}
-	ft_putstr_fd(cwd, fd);
-	ft_putchar_fd('\n', fd);
+	ft_fprintf(fd, "%s\n", cwd);
 	free(cwd);
 	return (0);
 }
