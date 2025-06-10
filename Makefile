@@ -1,7 +1,7 @@
 NAME    := minishell
 
 CC      := cc
-CFLAGS  := -Wall -Wextra -Werror
+CFLAGS  := -Wall -Wextra -Werror -g
 
 INCLUDES := -Iincl -Ilibft
 
@@ -9,6 +9,7 @@ SRCS    := \
 	srcs/env.c \
 	srcs/execution.c \
 	srcs/exit.c \
+	srcs/export.c \
 	srcs/memory.c \
 	srcs/minishell.c \
 	srcs/pwd.c \
