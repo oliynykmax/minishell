@@ -20,7 +20,7 @@ static int	str_isdigit(const char *s)
 	return (0);
 }
 
-void	mini_exit(char **args, int fd, t_shell *s, char **envp)
+int	mini_exit(char **args, int fd, t_shell *s, char **envp)
 {
 	int	has_second_arg;
 
@@ -38,7 +38,8 @@ void	mini_exit(char **args, int fd, t_shell *s, char **envp)
 	{
 		ft_fprintf(fd, "minishell: exit: too many arguments\n");
 		s->last_status = 1;
-		return ;
+		return (1);
 	}
 	shell_exit(s, (unsigned char)ft_atoi(args[1]), NULL);
+	return (0);
 }

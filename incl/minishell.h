@@ -88,7 +88,7 @@ int		is_meta(char c);
 /*------------------builtins----------------------------------------*/
 int		mini_pwd(char **argv, int fd, t_shell *s, char **envp);
 int		mini_env(char **argv, int fd, t_shell *s, char **envp);
-void	mini_exit(char **args, int fd, t_shell *s, char **envp);
+int		mini_exit(char **args, int fd, t_shell *s, char **envp);
 int		mini_export(char **argv, int fd, t_shell *s, char **envp);
 
 /*------------------utils----------------------------------------- */
