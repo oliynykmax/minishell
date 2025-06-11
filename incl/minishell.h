@@ -101,4 +101,6 @@ char	*get_prompt(t_shell *s);
 /*----------------execution-------------------------------------- */
 void	shell_execute(t_shell *s);
 
+void debug_mode(t_shell *s, char *input, char **envp);
+
 #endif
