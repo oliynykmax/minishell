@@ -82,7 +82,7 @@ static void	user_input(t_shell *s)
 			add_history(input);
 		if (s->tokens == NULL || s->tokens->size == 0)
 			break ;
-		cont = strcmp(s->tokens->data[s->tokens->size - 1], "|") == 0;
+		cont = ft_strcmp(s->tokens->data[s->tokens->size - 1], "|") == 0;
 		if (cont)
 			continue ;
 		add_history(input);
