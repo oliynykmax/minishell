@@ -1,22 +1,24 @@
 #include "../incl/minishell.h"
 
-int	mini_env(char **argv, int fd, t_shell *s, char **envp)
+int	mini_env(char **argv, int fd, t_shell *s)
 {
-	int	i;
+	int		i;
+	char	**env;
 
-	i = 0;
 	(void)argv;
-	(void)s;
-	if (envp == NULL)
+	if (s == NULL)
 		return (1);
-	else
-	{
-		while (envp[i])
-		{
-			ft_putstr_fd(envp[i], fd);
-			ft_putstr_fd("\n", fd);
-			i++;
-		}
+	if (s->envp == NULL)
+		return (1);
+	env = (char **)s->envp->data;
+	if (env == NULL)
 		return (0);
+	i = 0;
+	while (env[i] != NULL)
+	{
+		ft_putstr_fd(env[i], fd);
+		ft_putstr_fd("\n", fd);
+		i++;
 	}
+	return (0);
 }

@@ -20,11 +20,10 @@ static int	str_isdigit(const char *s)
 	return (0);
 }
 
-int	mini_exit(char **args, int fd, t_shell *s, char **envp)
+int	mini_exit(char **args, int fd, t_shell *s)
 {
 	int	has_second_arg;
 
-	(void)envp;
 	has_second_arg = (args[2] != NULL);
 	ft_putstr_fd("exit\n", fd);
 	if (args[1] == NULL)
