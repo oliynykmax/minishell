@@ -20,8 +20,8 @@ SRCS    := \
 	srcs/token_types.c \
 	srcs/tokenize.c \
 	srcs/utils.c \
-	srcs/vector.c
-
+	srcs/vector.c \
+	srcs/debug.c
 OBJS    := $(SRCS:srcs/%.c=objs/%.o)
 
 LIBFT_DIR := libft
