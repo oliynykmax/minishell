@@ -88,10 +88,14 @@ t_vec	*tokenize(t_shell *s, char *input);
 int		is_blank(char c);
 int		is_meta(char c);
 /*------------------builtins----------------------------------------*/
-int		mini_pwd(char **argv, int fd, t_shell *s, char **envp);
+int		mini_cd(char **argv, int fd, t_shell *s, char **envp);
+int		mini_echo(char **argv, int fd, t_shell *s, char **envp);
 int		mini_env(char **argv, int fd, t_shell *s, char **envp);
 int		mini_exit(char **args, int fd, t_shell *s, char **envp);
 int		mini_export(char **argv, int fd, t_shell *s, char **envp);
+int		mini_pwd(char **argv, int fd, t_shell *s, char **envp);
+int		mini_unset(char **argv, int fd, t_shell *s, char **envp);
+
 /*------------------params----------------------------------------*/
 char	*params_expand_string(t_shell *s, char *string);
 void	params_expand_vector(t_vec *tokens);

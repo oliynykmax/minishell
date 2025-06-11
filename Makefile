@@ -7,6 +7,7 @@ CFLAGS  := -Wall -Wextra -Werror
 INCLUDES := -Iincl -Ilibft
 
 SRCS    := \
+	srcs/echo.c \
 	srcs/env.c \
 	srcs/execution.c \
 	srcs/exit.c \
