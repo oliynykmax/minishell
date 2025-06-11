@@ -91,6 +91,9 @@ int		mini_pwd(char **argv, int fd, t_shell *s, char **envp);
 int		mini_env(char **argv, int fd, t_shell *s, char **envp);
 int		mini_exit(char **args, int fd, t_shell *s, char **envp);
 int		mini_export(char **argv, int fd, t_shell *s, char **envp);
+/*------------------params----------------------------------------*/
+char	*params_expand_string(t_shell *s, char *string);
+void	params_expand_vector(t_vec *tokens);
 
 /*------------------utils----------------------------------------- */
 char	*get_working_dir(t_shell *s);
