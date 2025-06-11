@@ -22,6 +22,11 @@ static char	*params_replace(t_shell *s, char **out, char *in)
 	char	*start;
 
 	start = in;
+	if (*in == '?')
+	{
+		*out = string_join(s, *out, string_itoa(s, s->last_status));
+		return (in + 1);
+	}
 	if (ft_isalpha(*in) || *in == '_')
 		in++;
 	while (ft_isalpha(*in) || ft_isdigit(*in) || *in == '_')
