@@ -11,19 +11,19 @@ static int	unimplemented(char **argv, int fd, t_shell *s, char **envp)
 
 static t_builtin	*get_builtin_by_name(char *name)
 {
-	if (strcmp(name, "echo") == 0)
+	if (ft_strcmp(name, "echo") == 0)
 		return (unimplemented);
-	if (strcmp(name, "cd") == 0)
+	if (ft_strcmp(name, "cd") == 0)
 		return (unimplemented);
-	if (strcmp(name, "pwd") == 0)
+	if (ft_strcmp(name, "pwd") == 0)
 		return (mini_pwd);
-	if (strcmp(name, "export") == 0)
+	if (ft_strcmp(name, "export") == 0)
 		return (mini_export);
-	if (strcmp(name, "unset") == 0)
+	if (ft_strcmp(name, "unset") == 0)
 		return (unimplemented);
-	if (strcmp(name, "env") == 0)
+	if (ft_strcmp(name, "env") == 0)
 		return (mini_env);
-	if (strcmp(name, "exit") == 0)
+	if (ft_strcmp(name, "exit") == 0)
 		return (mini_exit);
 	return (NULL);
 }
@@ -57,13 +57,13 @@ void	shell_execute(t_shell *s)
 	i = -1;
 	while (tokens[++i] != NULL)
 	{
-		if (strcmp(tokens[i], "|") == 0)
+		if (!ft_strcmp(tokens[i], "|"))
 		{
 			simple_command(s, command, redirs);
 			command->size = 0;
 			redirs->size = 0;
 		}
-		else if (tokens[i][0] == '<' || tokens[i][0] == '>')
+		else if (!ft_strcmp(tokens[i], "<") || !ft_strcmp(tokens[i], ">"))
 		{
 			vector_push(redirs, tokens[i]);
 			vector_push(redirs, tokens[++i]);
