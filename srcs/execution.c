@@ -12,7 +12,7 @@ static int	unimplemented(char **argv, int fd, t_shell *s, char **envp)
 static t_builtin	*get_builtin_by_name(char *name)
 {
 	if (ft_strcmp(name, "echo") == 0)
-		return (unimplemented);
+		return (mini_echo);
 	if (ft_strcmp(name, "cd") == 0)
 		return (unimplemented);
 	if (ft_strcmp(name, "pwd") == 0)
