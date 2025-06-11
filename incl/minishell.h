@@ -31,7 +31,7 @@ typedef volatile sig_atomic_t	t_signal;
 typedef struct s_arena			t_arena;
 typedef struct s_vec			t_vec;
 typedef struct s_shell			t_shell;
-typedef int						t_builtin(char**, int, t_shell*, char**);
+typedef int						t_builtin(char**, int, t_shell*);
 
 struct s_shell
 {
@@ -88,13 +88,13 @@ t_vec	*tokenize(t_shell *s, char *input);
 int		is_blank(char c);
 int		is_meta(char c);
 /*------------------builtins----------------------------------------*/
-int		mini_cd(char **argv, int fd, t_shell *s, char **envp);
-int		mini_echo(char **argv, int fd, t_shell *s, char **envp);
-int		mini_env(char **argv, int fd, t_shell *s, char **envp);
-int		mini_exit(char **args, int fd, t_shell *s, char **envp);
-int		mini_export(char **argv, int fd, t_shell *s, char **envp);
-int		mini_pwd(char **argv, int fd, t_shell *s, char **envp);
-int		mini_unset(char **argv, int fd, t_shell *s, char **envp);
+int		mini_cd(char **argv, int fd, t_shell *s);
+int		mini_echo(char **argv, int fd, t_shell *s);
+int		mini_env(char **argv, int fd, t_shell *s);
+int		mini_exit(char **args, int fd, t_shell *s);
+int		mini_export(char **argv, int fd, t_shell *s);
+int		mini_pwd(char **argv, int fd, t_shell *s);
+int		mini_unset(char **argv, int fd, t_shell *s);
 
 /*------------------params----------------------------------------*/
 char	*params_expand_string(t_shell *s, char *string);

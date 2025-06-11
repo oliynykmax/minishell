@@ -1,8 +1,8 @@
 #include "../incl/minishell.h"
 
-static int	unimplemented(char **argv, int fd, t_shell *s, char **envp)
+static int	unimplemented(char **argv, int fd, t_shell *s)
 {
-	(void) fd, (void) s, (void) envp;
+	(void) fd, (void) s;
 	printf("Unimplemented builtin: %s\n", *argv++);
 	while (*argv != NULL)
 		printf("    Argument: %s\n", *argv++);
@@ -44,7 +44,7 @@ static void	simple_command(t_shell *s, t_vec *command, t_vec *redirs)
 	params_expand_vector(command);
 	builtin = get_builtin_by_name(command->data[0]);
 	if (builtin != NULL)
-		builtin((char **) command->data, 1, s, (char **) s->envp->data);
+		builtin((char **) command->data, 1, s);
 	else
 	{
 		printf("TODO: Run command '%s' here\n", (char *) command->data[0]);
