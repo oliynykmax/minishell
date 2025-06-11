@@ -1,13 +1,12 @@
 #include "../incl/minishell.h"
 
-int	mini_pwd(char **argv, int fd, t_shell *s, char **envp)
+int	mini_pwd(char **argv, int fd, t_shell *s)
 {
 	char	*cwd;
 	int		i;
 
 	i = 1;
 	(void)s;
-	(void)envp;
 	while (argv[i])
 	{
 		if (argv[i][0] == '-')

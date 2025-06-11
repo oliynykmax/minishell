@@ -1,6 +1,6 @@
 #include "../incl/minishell.h"
 
-int	mini_echo(char **argv, int fd, t_shell *s, char **envp)
+int	mini_echo(char **argv, int fd, t_shell *s)
 {
 	int			i;
 	const bool	if_new_line = ft_strcmp(argv[1], "-n") == 0;
@@ -16,6 +16,5 @@ int	mini_echo(char **argv, int fd, t_shell *s, char **envp)
 	if (!if_new_line)
 		ft_fprintf(fd, "\n");
 	(void)s;
-	(void)envp;
 	return (0);
 }
