@@ -13,6 +13,7 @@ SRCS    := \
 	srcs/export.c \
 	srcs/memory.c \
 	srcs/minishell.c \
+	srcs/params.c \
 	srcs/pwd.c \
 	srcs/signals.c \
 	srcs/string.c \
