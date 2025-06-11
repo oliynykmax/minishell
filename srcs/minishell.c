@@ -97,7 +97,6 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	shell_init(&shell, envp);
-	//debugging
 	if (argc == 3 && ft_strcmp(argv[1], "-c") == 0)
 		debug_mode(&shell, argv[2], envp);
 	while (1)
