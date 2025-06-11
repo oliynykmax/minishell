@@ -21,3 +21,32 @@ char	*string_join(t_shell *s, const char *a, const char *b)
 	ft_memcpy(result + a_length, b, b_length);
 	return (ft_memcpy(result, a, a_length));
 }
+
+char	*string_itoa(t_shell *s, int value)
+{
+	char	*str;
+	int		digits;
+	long	temp;
+
+	temp = value;
+	if (value < 0)
+		temp = -temp;
+	digits = value <= 0;
+	while (temp > 0)
+	{
+		digits++;
+		temp /= 10;
+	}
+	str = shell_malloc(s, digits + 1);
+	temp = value;
+	if (value < 0)
+		temp = -temp;
+	while (digits-- > 0)
+	{
+		str[digits] = '0' + temp % 10;
+		temp /= 10;
+	}
+	if (value < 0)
+		str[0] = '-';
+	return (str);
+}

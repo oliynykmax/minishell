@@ -82,6 +82,7 @@ void	vector_delete(t_vec *v, size_t index);
 char	*string_new(t_shell *s, const char *string);
 char	*string_sub(t_shell *s, const char *string, size_t length);
 char	*string_join(t_shell *s, const char *a, const char *b);
+char	*string_itoa(t_shell *s, int value);
 /*------------------tokenizer---------------------------------------- */
 t_vec	*tokenize(t_shell *s, char *input);
 int		is_blank(char c);
@@ -101,6 +102,6 @@ char	*get_prompt(t_shell *s);
 /*----------------execution-------------------------------------- */
 void	shell_execute(t_shell *s);
 
-void debug_mode(t_shell *s, char *input, char **envp);
+void	debug_mode(t_shell *s, char *input, char **envp);
 
 #endif
