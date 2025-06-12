@@ -1,6 +1,6 @@
 #include "../incl/minishell.h"
 
-static char	*params_get_value(t_shell *s, char *key)
+char	*get_env_variable(t_shell *s, char *key)
 {
 	char	**envp;
 	char	*equals;
@@ -36,7 +36,7 @@ static char	*params_replace(t_shell *s, char **out, char *in)
 	else
 	{
 		key = string_sub(s, start, in - start);
-		*out = string_join(s, *out, params_get_value(s, key));
+		*out = string_join(s, *out, get_env_variable(s, key));
 	}
 	return (in);
 }
