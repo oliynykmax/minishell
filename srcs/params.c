@@ -6,6 +6,8 @@ char	*get_env_variable(t_shell *s, char *key)
 	char	*equals;
 
 	envp = (char **) s->envp->data;
+	if (!envp)
+		return ("");
 	while (*envp != NULL)
 	{
 		equals = ft_strchr(*envp, '=');
