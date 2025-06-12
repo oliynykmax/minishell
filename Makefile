@@ -22,6 +22,7 @@ SRCS    := \
 	srcs/subprocess.c \
 	srcs/token_types.c \
 	srcs/tokenize.c \
+	srcs/unset.c \
 	srcs/utils.c \
 	srcs/vector.c \
 
