@@ -20,7 +20,7 @@ static t_builtin	*get_builtin_by_name(char *name)
 	if (ft_strcmp(name, "export") == 0)
 		return (mini_export);
 	if (ft_strcmp(name, "unset") == 0)
-		return (unimplemented);
+		return (mini_unset);
 	if (ft_strcmp(name, "env") == 0)
 		return (mini_env);
 	if (ft_strcmp(name, "exit") == 0)
