@@ -1,9 +1,10 @@
 #include "../incl/minishell.h"
 
-// Given the name of a command (like "ls"), get the program filename for that
-// command (like "/usr/bin/ls"). This is done by searching the PATH environment
-// variable and looking for an executable file matching the command's name in
-// each listed directory. Returns NULL if the command can not be found.
+// Given a command (like "ls"), get the program filename for that command (like
+// "/usr/bin/ls"). If the command contains a slash, it's returned directly.
+// Otherwise, the directories listed in the PATH environment variable are
+// searched, and the first executable file matching the name of the command is
+// returned. Returns NULL if the command could not be found.
 
 static char	*get_command_filename(t_shell *s, char *command)
 {
@@ -12,6 +13,8 @@ static char	*get_command_filename(t_shell *s, char *command)
 	char	*directory;
 	char	*filename;
 
+	if (ft_strchr(command, '/') != NULL)
+		return (command);
 	path = get_env_variable(s, "PATH");
 	command = string_join(s, "/", command);
 	while (*path != '\0')
@@ -32,16 +35,19 @@ void	subprocess_run(t_shell *s, t_vec *command, t_vec *redirs)
 {
 	char *const	name = command->data[0];
 	char *const	filename = get_command_filename(s, name);
-	size_t		i;
+	const pid_t	pid = fork();
+	int			status;
 
 	(void) redirs;
-	if (filename == NULL)
+	if (pid == -1)
+		ft_fprintf(2, "minishell: fork: %s\n", strerror(errno));
+	else if (pid > 0)
 	{
-		ft_fprintf(2, "minishell: %s: command not found\n", name);
+		waitpid(pid, &status, 0);
 		return ;
 	}
-	printf("TODO: Run program %s\n", filename);
-	i = 0;
-	while (++i < command->size)
-		printf("    Argument #%zu: %s\n", i, (char *) command->data[i]);
+	if (filename == NULL)
+		shell_exit(s, 127, "command not found");
+	execve(filename, (char **) command->data, (char **) s->envp->data);
+	shell_exit(s, EXIT_FAILURE, strerror(errno));
 }
