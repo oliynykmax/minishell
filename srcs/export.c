@@ -1,85 +1,61 @@
 #include "../incl/minishell.h"
 
-char	**sort_chars(char **sorted, int len)
+void	sort_envp(char **sorted)
 {
 	int		i;
 	int		j;
+	int		len;
 	char	*tmp;
 
+	len = 0;
+	while (sorted[len])
+		len++;
 	i = -1;
 	while (++i < len - 1)
 	{
-		j = -1;
-		while (++j < len - i - 1)
+		j = i;
+		while (++j < len)
 		{
-			if (ft_strcmp(sorted[j], sorted[j + 1]) > 0)
+			if (ft_strcmp(sorted[i], sorted[j]) > 0)
 			{
-				tmp = sorted[j];
-				sorted[j] = sorted[j + 1];
-				sorted[j + 1] = tmp;
+				tmp = sorted[i];
+				sorted[i] = sorted[j];
+				sorted[j] = tmp;
 			}
 		}
 	}
-	return (sorted);
 }
 
-char	**sort_envp(char **ep)
-{
-	char	**sorted;
-	int		len;
-	int		i;
-
-	if (!ep)
-		return (NULL);
-	len = 0;
-	while (ep[len])
-		len++;
-	if (len == 0)
-		return (NULL);
-	sorted = malloc((len + 1) * sizeof(char *));
-	if (!sorted)
-		return (NULL);
-	i = -1;
-	while (++i < len)
-		sorted[i] = ep[i];
-	sorted[len] = NULL;
-	return (sort_chars(sorted, len));
-}
-
-void	export_sort_and_print(char **envp, int fd)
+int	export_sort_and_print(char **envp, int fd)
 {
 	int		i;
-	char	**sorted_envp;
 	char	*equals_pos;
 
-	if (!envp)
-		return ;
 	i = 0;
-	sorted_envp = sort_envp(envp);
-	if (!sorted_envp)
-		return ;
-	while (sorted_envp[i])
+	if (!envp)
+		return (0);
+	sort_envp(envp);
+	while (envp[i])
 	{
-		equals_pos = ft_strchr(sorted_envp[i], '=');
+		equals_pos = ft_strchr(envp[i], '=');
 		if (equals_pos)
 		{
 			*equals_pos = '\0';
-			ft_fprintf(fd, "declare -x %s=\"%s\"\n", sorted_envp[i], equals_pos
-				+ 1);
+			ft_fprintf(fd, "declare -x %s=\"%s\"\n", envp[i], equals_pos + 1);
 			*equals_pos = '=';
 		}
 		else
-			ft_fprintf(fd, "declare -x %s\n", sorted_envp[i]);
+			ft_fprintf(fd, "declare -x %s\n", envp[i]);
 		i++;
 	}
-	free(sorted_envp);
+	return (0);
 }
 
 void	insert_into_envp(char *var, t_shell *s, int var_len)
 {
-	const char		**envp = (const char **)s->envp->data;
-	char			*equals_pos;
-	int				i;
+	const char	**envp = (const char **)s->envp->data;
+	char		*equals_pos;
+	int			i;
 
 	if (!envp)
 		return (vector_push(s->envp, string_new(s, var)));
@@ -87,10 +63,9 @@ void	insert_into_envp(char *var, t_shell *s, int var_len)
 	while (envp[++i])
 	{
 		equals_pos = ft_strchr(envp[i], '=');
-		if ((equals_pos && ft_strncmp(envp[i], var, var_len) == 0
-				&& equals_pos - envp[i] == var_len)
-			|| (!equals_pos && ft_strncmp(envp[i], var, var_len) == 0
-				&& (int)ft_strlen(envp[i]) == var_len))
+		if ((equals_pos && ft_strncmp(envp[i], var, var_len) == 0 && equals_pos
+				- envp[i] == var_len) || (!equals_pos && ft_strncmp(envp[i],
+					var, var_len) == 0 && (int)ft_strlen(envp[i]) == var_len))
 		{
 			s->envp->data[i] = string_new(s, var);
 			return ;
@@ -99,29 +74,58 @@ void	insert_into_envp(char *var, t_shell *s, int var_len)
 	vector_push(s->envp, string_new(s, var));
 }
 
+int	is_valid_var(char *var, int *status)
+{
+	int	i;
+
+	i = 1;
+	if (!var || !var[0] || (!ft_isalpha(var[0]) && !(var[0] == '_')))
+	{
+		*status = 1;
+		ft_fprintf(2, "minishell: export: `%s': not a valid identifier\n", var);
+		return (0);
+	}
+	while (var[i] && var[i] != '=')
+	{
+		if (!ft_isalnum(var[i]) && var[i] != '_')
+		{
+			*status = 1;
+			ft_fprintf(2, "minishell: export: `%s': not a valid identifier\n",
+				var);
+			return (0);
+		}
+		i++;
+	}
+	if (*status != 1)
+		*status = 0;
+	return (1);
+}
+
 int	mini_export(char **argv, int fd, t_shell *s)
 {
 	char	*equals_pos;
 	int		var_len;
 	int		i;
+	int		status;
 
-	if (!s || !s->envp)
-		return (EXIT_FAILURE);
+	status = 0;
 	if (argv[1] == NULL)
-		export_sort_and_print((char **)s->envp->data, fd);
-	else
+		return (export_sort_and_print((char **)s->envp->data, fd));
+	i = 1;
+	while (argv[i])
 	{
-		i = 1;
-		while (argv[i])
+		if (!is_valid_var(argv[i], &status))
 		{
-			equals_pos = ft_strchr(argv[i], '=');
-			if (equals_pos)
-				var_len = equals_pos - argv[i];
-			else
-				var_len = ft_strlen(argv[i]);
-			insert_into_envp(argv[i], s, var_len);
 			i++;
+			continue ;
 		}
+		equals_pos = ft_strchr(argv[i], '=');
+		if (equals_pos)
+			var_len = equals_pos - argv[i];
+		else
+			var_len = ft_strlen(argv[i]);
+		insert_into_envp(argv[i], s, var_len);
+		i++;
 	}
-	return (0);
+	return (status);
 }
