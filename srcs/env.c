@@ -1,5 +1,12 @@
 #include "../incl/minishell.h"
 
+int	set_invalid(char *var, int *status)
+{
+	ft_fprintf(2, "minishell: export: `%s': not a valid identifier\n", var);
+	*status = 1;
+	return (0);
+}
+
 int	mini_env(char **argv, int fd, t_shell *s)
 {
 	int		i;
