@@ -97,6 +97,7 @@ int		mini_pwd(char **argv, int fd, t_shell *s);
 int		mini_unset(char **argv, int fd, t_shell *s);
 
 /*------------------params----------------------------------------*/
+char	*get_env_variable(t_shell *s, char *name);
 char	*params_expand_string(t_shell *s, char *string);
 void	params_expand_vector(t_vec *tokens);
 
@@ -105,6 +106,8 @@ char	*get_working_dir(t_shell *s);
 char	*get_prompt(t_shell *s);
 /*----------------execution-------------------------------------- */
 void	shell_execute(t_shell *s);
+
+void	subprocess_run(t_shell *s, t_vec *command, t_vec *redirs);
 
 void	debug_mode(t_shell *s, char *input, char **envp);
 

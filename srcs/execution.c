@@ -36,23 +36,17 @@ static void	error(const char *message)
 static void	simple_command(t_shell *s, t_vec *command, t_vec *redirs)
 {
 	t_builtin	*builtin;
-	size_t		i;
+	char		*name;
 
-	(void) redirs;
 	if (command->size == 0)
 		return ;
+	name = command->data[0];
 	params_expand_vector(command);
-	builtin = get_builtin_by_name(command->data[0]);
+	builtin = get_builtin_by_name(name);
 	if (builtin != NULL)
 		builtin((char **) command->data, 1, s);
 	else
-	{
-		printf("TODO: Run command '%s' here\n", (char *) command->data[0]);
-		printf("With arguments:\n");
-		i = 0;
-		while (++i < command->size)
-			printf("    #%zu: '%s'\n", i, (char *) command->data[i]);
-	}
+		subprocess_run(s, command, redirs);
 }
 
 void	shell_execute(t_shell *s)
