@@ -7,6 +7,7 @@ CFLAGS  := -Wall -Wextra -Werror
 INCLUDES := -Iincl -Ilibft
 
 SRCS    := \
+	srcs/debug.c \
 	srcs/echo.c \
 	srcs/env.c \
 	srcs/execution.c \
@@ -18,11 +19,12 @@ SRCS    := \
 	srcs/pwd.c \
 	srcs/signals.c \
 	srcs/string.c \
+	srcs/subprocess.c \
 	srcs/token_types.c \
 	srcs/tokenize.c \
 	srcs/utils.c \
 	srcs/vector.c \
-	srcs/debug.c
+
 OBJS    := $(SRCS:srcs/%.c=objs/%.o)
 
 LIBFT_DIR := libft
