@@ -95,7 +95,7 @@ int		mini_exit(char **args, int fd, t_shell *s);
 int		mini_export(char **argv, int fd, t_shell *s);
 int		mini_pwd(char **argv, int fd, t_shell *s);
 int		mini_unset(char **argv, int fd, t_shell *s);
-
+int		set_invalid(char *var, int *status);
 /*------------------params----------------------------------------*/
 char	*get_env_variable(t_shell *s, char *name);
 char	*params_expand_string(t_shell *s, char *string);
