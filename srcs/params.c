@@ -11,7 +11,8 @@ char	*get_env_variable(t_shell *s, char *key)
 	while (*envp != NULL)
 	{
 		equals = ft_strchr(*envp, '=');
-		if (equals != NULL && ft_strncmp(*envp, key, equals - *envp) == 0)
+		if (equals && ft_strlen(key) == (size_t)(equals - *envp)
+		&& !ft_strncmp(*envp, key, equals - *envp))
 			return (equals + 1);
 		envp++;
 	}
@@ -31,7 +32,7 @@ static char	*params_replace(t_shell *s, char **out, char *in)
 	}
 	if (ft_isalpha(*in) || *in == '_')
 		in++;
-	while (ft_isalpha(*in) || ft_isdigit(*in) || *in == '_')
+	while (ft_isalnum(*in) || *in == '_')
 		in++;
 	if (in == start)
 		*out = string_join(s, *out, "$");
