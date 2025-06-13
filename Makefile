@@ -17,6 +17,7 @@ SRCS    := \
 	srcs/minishell.c \
 	srcs/params.c \
 	srcs/pwd.c \
+	srcs/redirect.c \
 	srcs/signals.c \
 	srcs/string.c \
 	srcs/subprocess.c \

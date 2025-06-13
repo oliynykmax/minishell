@@ -33,7 +33,7 @@ static void	error(const char *message)
 	printf("minishell: %s\n", message);
 }
 
-static void safe_close(int *fd)
+static void	safe_close(int *fd)
 {
 	if (*fd != -1 && *fd != STDIN_FILENO && *fd != STDOUT_FILENO)
 	{
@@ -42,7 +42,7 @@ static void safe_close(int *fd)
 	}
 }
 
-static void	*simple_command(t_shell *s, t_vec *command, t_vec *redirs, int fds[3])
+static void	*run_command(t_shell *s, t_vec *command, t_vec *redirs, int fds[3])
 {
 	t_builtin	*builtin;
 	char		*name;
@@ -63,6 +63,7 @@ static void	*simple_command(t_shell *s, t_vec *command, t_vec *redirs, int fds[3
 		safe_close(&fds[0]);
 		safe_close(&fds[1]);
 		safe_close(&fds[2]);
+		redirect(redirs);
 		name = command->data[0];
 		params_expand_vector(command);
 		builtin = get_builtin_by_name(name);
@@ -73,7 +74,7 @@ static void	*simple_command(t_shell *s, t_vec *command, t_vec *redirs, int fds[3
 		}
 		subprocess_run(s, command, redirs);
 	}
-	return ((void*) (intptr_t) pid);
+	return ((void *)(intptr_t) pid);
 }
 
 static void	wait_for_all(t_shell *s, t_vec *pids)
@@ -84,7 +85,7 @@ static void	wait_for_all(t_shell *s, t_vec *pids)
 	i = 0;
 	status = 0;
 	while (i < pids->size)
-		waitpid((pid_t) (intptr_t) pids->data[i++], &status, 0);
+		waitpid((pid_t)(intptr_t) pids->data[i++], &status, 0);
 	s->last_status = status;
 }
 
@@ -94,22 +95,24 @@ void	shell_execute(t_shell *s, char **tokens)
 	t_vec *const	redirs = vector_new(s, 0);
 	t_vec *const	pids = vector_new(s, 0);
 	int				pipe_fd[2];
-	int				fds[3]; // TODO: Store in t_shell to avoid leaking.
+	int				fds[3];
 
 	fds[0] = STDIN_FILENO;
+	fds[1] = -1;
+	fds[2] = -1;
 	while (*tokens != NULL)
 	{
 		if (!ft_strcmp(*tokens, "|"))
 		{
-			pipe(pipe_fd); // TODO: Error handling.
+			pipe(pipe_fd);
 			fds[1] = pipe_fd[1];
 			fds[2] = pipe_fd[0];
-			vector_push(pids, simple_command(s, command, redirs, fds));
+			vector_push(pids, run_command(s, command, redirs, fds));
 			fds[0] = pipe_fd[0];
 			command->size = 0;
 			redirs->size = 0;
 		}
-		else if (!ft_strcmp(*tokens, "<") || !ft_strcmp(*tokens, ">"))
+		else if (**tokens == '<' || **tokens == '>')
 		{
 			vector_push(redirs, *tokens++);
 			vector_push(redirs, *tokens);
@@ -122,6 +125,6 @@ void	shell_execute(t_shell *s, char **tokens)
 	}
 	fds[1] = STDOUT_FILENO;
 	if (command->size != 0)
-		vector_push(pids, simple_command(s, command, redirs, fds));
+		vector_push(pids, run_command(s, command, redirs, fds));
 	wait_for_all(s, pids);
 }
