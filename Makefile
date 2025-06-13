@@ -2,7 +2,7 @@
 NAME    := minishell
 
 CC      := cc
-CFLAGS  := -Wall -Wextra -Werror 
+CFLAGS  := -Wall -Wextra -Werror
 
 INCLUDES := -Iincl -Ilibft
 
@@ -20,6 +20,10 @@ SRCS    := \
 	srcs/pwd.c \
 	srcs/redirect.c \
 	srcs/signals.c \
+	srcs/signal_setup.c \
+	srcs/input_handling.c \
+	srcs/user_interface.c \
+	srcs/command_exec.c \
 	srcs/string.c \
 	srcs/subprocess.c \
 	srcs/token_types.c \
