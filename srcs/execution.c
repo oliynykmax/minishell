@@ -1,6 +1,5 @@
 #include "../incl/minishell.h"
 
-
 t_bn	*get_builtin_by_name(char *name)
 {
 	if (ft_strcmp(name, "echo") == 0)
