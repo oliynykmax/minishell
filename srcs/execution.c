@@ -1,6 +1,6 @@
 #include "../incl/minishell.h"
 
-static t_builtin	*get_builtin_by_name(char *name)
+t_bn	*get_builtin_by_name(char *name)
 {
 	if (ft_strcmp(name, "echo") == 0)
 		return (mini_echo);
@@ -19,52 +19,25 @@ static t_builtin	*get_builtin_by_name(char *name)
 	return (NULL);
 }
 
-static void	error(const char *message)
+void	error(const char *message)
 {
 	printf("minishell: %s\n", message);
 }
 
-static void	simple_command(t_shell *s, t_vec *command, t_vec *redirs)
+static void	safe_close(int *fd)
 {
-	t_builtin	*builtin;
-	char		*name;
-
-	if (command->size == 0)
-		return ;
-	name = command->data[0];
-	params_expand_vector(command);
-	builtin = get_builtin_by_name(name);
-	if (builtin != NULL)
-		builtin((char **) command->data, 1, s);
-	else
-		subprocess_run(s, command, redirs);
+	if (*fd != -1 && *fd != STDIN_FILENO && *fd != STDOUT_FILENO)
+	{
+		close(*fd);
+		*fd = -1;
+	}
 }
 
-void	shell_execute(t_shell *s)
+void	loop_safe_close(int *fd, int len)
 {
-	t_vec *const	command = vector_new(s, 0);
-	t_vec *const	redirs = vector_new(s, 0);
-	char **const	tokens = (char**) s->tokens->data;
-	size_t			i;
+	int	i;
 
-	i = -1;
-	while (tokens[++i] != NULL)
-	{
-		if (!ft_strcmp(tokens[i], "|"))
-		{
-			simple_command(s, command, redirs);
-			command->size = 0;
-			redirs->size = 0;
-		}
-		else if (!ft_strcmp(tokens[i], "<") || !ft_strcmp(tokens[i], ">"))
-		{
-			vector_push(redirs, tokens[i]);
-			vector_push(redirs, tokens[++i]);
-			if (tokens[i] == NULL)
-				return (error("syntax error"));
-		}
-		else
-			vector_push(command, tokens[i]);
-	}
-	simple_command(s, command, redirs);
+	i = 0;
+	while (i < len)
+		safe_close(&fd[i++]);
 }

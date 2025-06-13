@@ -18,6 +18,7 @@ SRCS    := \
 	srcs/minishell.c \
 	srcs/params.c \
 	srcs/pwd.c \
+	srcs/redirect.c \
 	srcs/signals.c \
 	srcs/string.c \
 	srcs/subprocess.c \
@@ -26,6 +27,7 @@ SRCS    := \
 	srcs/unset.c \
 	srcs/utils.c \
 	srcs/vector.c \
+	srcs/shell_exec.c \
 
 OBJS    := $(SRCS:srcs/%.c=objs/%.o)
 
