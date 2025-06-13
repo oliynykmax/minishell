@@ -26,6 +26,7 @@ SRCS    := \
 	srcs/unset.c \
 	srcs/utils.c \
 	srcs/vector.c \
+	srcs/shell_exec.c \
 
 OBJS    := $(SRCS:srcs/%.c=objs/%.o)
 
