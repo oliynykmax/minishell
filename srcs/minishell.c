@@ -86,7 +86,7 @@ static void	user_input(t_shell *s)
 		if (cont)
 			continue ;
 		add_history(input);
-		return (shell_execute(s));
+		return (shell_execute(s, (char **) s->tokens->data));
 	}
 }
 

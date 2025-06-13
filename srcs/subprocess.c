@@ -35,17 +35,8 @@ void	subprocess_run(t_shell *s, t_vec *command, t_vec *redirs)
 {
 	char *const	name = command->data[0];
 	char *const	filename = get_command_filename(s, name);
-	const pid_t	pid = fork();
-	int			status;
 
 	(void) redirs;
-	if (pid == -1)
-		ft_fprintf(2, "minishell: fork: %s\n", strerror(errno));
-	else if (pid > 0)
-	{
-		waitpid(pid, &status, 0);
-		return ;
-	}
 	if (filename == NULL)
 		shell_exit(s, 127, "command not found");
 	execve(filename, (char **) command->data, (char **) s->envp->data);

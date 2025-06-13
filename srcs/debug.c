@@ -7,7 +7,7 @@ void	debug_mode(t_shell *s, char *input, char **envp)
 
 	s->tokens = tokenize(s, (char *)av_input);
 	printf("Our shell:\n");
-	shell_execute(s);
+	shell_execute(s, (char **) s->tokens->data);
 	printf("Bash:\n");
 	execve("/bin/bash", (char **)bash_args, envp);
 }
