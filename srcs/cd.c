@@ -1,11 +1,11 @@
 #include "../incl/minishell.h"
 
-static int	do_chdir(char *path)
+static int	do_chdir(char *path, t_shell *s)
 {
 	if (path[0] == '-' && path[1] == '\0')
 	{
-		path = getenv("OLDPWD");
-		if (!path)
+		path = get_env_variable(s, "OLDPWD");
+		if (!path || !path[0])
 		{
 			ft_fprintf(2, "minishell: cd: OLDPWD not set\n");
 			return (1);
@@ -25,7 +25,6 @@ int	mini_cd(char **argv, int fd, t_shell *s)
 	char		*path;
 
 	(void)fd;
-	(void)s;
 	i = 0;
 	while (argv[i])
 		i++;
@@ -36,8 +35,8 @@ int	mini_cd(char **argv, int fd, t_shell *s)
 	}
 	if (!argv[1])
 	{
-		path = getenv("HOME");
-		if (!path)
+		path = get_env_variable(s, "HOME");
+		if (!path || !path[0])
 		{
 			ft_fprintf(2, "minishell: cd: HOME not set\n");
 			return (1);
@@ -45,5 +44,5 @@ int	mini_cd(char **argv, int fd, t_shell *s)
 	}
 	else
 		path = argv[1];
-	return (do_chdir(path));
+	return (do_chdir(path, s));
 }

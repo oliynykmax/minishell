@@ -27,6 +27,13 @@
 # define STR_PROMPTSTART		"\001\e[1;96m\002\001\e[0m\002"
 # define STR_PROMPTDELIM		"🐚> "
 
+typedef enum e_input_mode
+{
+	INPUT_MAIN,
+	INPUT_PIPE,
+	INPUT_HEREDOC
+}	t_input_mode;
+
 typedef volatile sig_atomic_t	t_signal;
 typedef struct s_arena			t_arena;
 typedef struct s_vec			t_vec;
@@ -44,6 +51,7 @@ struct s_shell
 	size_t						prompt_count;
 	unsigned char				last_status;
 	t_vec						*pids;
+	t_input_mode				input_mode;
 };
 
 struct s_arena
@@ -65,6 +73,16 @@ struct s_vec
 extern t_signal					g_signal;
 
 void	handle_signals(int signum);
+int		my_rl_event_hook(void);
+void	setup_parent_signals(void);
+void	setup_child_signals(void);
+void	setup_heredoc_signals(void);
+void	handle_heredoc_signals(void);
+void	handle_pending_signals(t_shell *s);
+/*------------------input-handling---------------------------------- */
+char	*shell_readline(t_shell *s, t_input_mode mode);
+char	*process_pipe_input(t_shell *s);
+void	user_input(t_shell *s);
 /*------------------shell------------------------------------------- */
 void	shell_init(t_shell *s, char **envp);
 void	shell_exit(t_shell *s, int exit_status, const char *message);
@@ -107,6 +125,8 @@ char	*get_working_dir(t_shell *s);
 char	*get_prompt(t_shell *s);
 /*----------------execution-------------------------------------- */
 void	shell_execute(t_shell *s, char **tokens);
+void	*run_command(t_shell *s, t_vec *command, t_vec *redirs, int fds[3]);
+void	execute_command_pipeline(t_shell *s, char **tokens);
 void	redirect(t_vec *redirections);
 void	subprocess_run(t_shell *s, t_vec *command, t_vec *redirs);
 void	error(const char *message);
