@@ -33,47 +33,95 @@ static void	error(const char *message)
 	printf("minishell: %s\n", message);
 }
 
-static void	simple_command(t_shell *s, t_vec *command, t_vec *redirs)
+static void safe_close(int *fd)
+{
+	if (*fd != -1 && *fd != STDIN_FILENO && *fd != STDOUT_FILENO)
+	{
+		close(*fd);
+		*fd = -1;
+	}
+}
+
+static void	*simple_command(t_shell *s, t_vec *command, t_vec *redirs, int fds[3])
 {
 	t_builtin	*builtin;
 	char		*name;
+	const pid_t	pid = fork();
+	int			status;
 
-	if (command->size == 0)
-		return ;
-	name = command->data[0];
-	params_expand_vector(command);
-	builtin = get_builtin_by_name(name);
-	if (builtin != NULL)
-		builtin((char **) command->data, 1, s);
+	if (pid == -1)
+		ft_fprintf(2, "minishell: fork: %s\n", strerror(errno));
+	else if (pid > 0)
+	{
+		safe_close(&fds[0]);
+		safe_close(&fds[1]);
+	}
 	else
+	{
+		dup2(fds[0], STDIN_FILENO);
+		dup2(fds[1], STDOUT_FILENO);
+		safe_close(&fds[0]);
+		safe_close(&fds[1]);
+		safe_close(&fds[2]);
+		name = command->data[0];
+		params_expand_vector(command);
+		builtin = get_builtin_by_name(name);
+		if (builtin != NULL)
+		{
+			status = builtin((char **) command->data, 1, s);
+			shell_exit(s, status, NULL);
+		}
 		subprocess_run(s, command, redirs);
+	}
+	return ((void*) (intptr_t) pid);
 }
 
-void	shell_execute(t_shell *s)
+static void	wait_for_all(t_shell *s, t_vec *pids)
+{
+	size_t	i;
+	int		status;
+
+	i = 0;
+	status = 0;
+	while (i < pids->size)
+		waitpid((pid_t) (intptr_t) pids->data[i++], &status, 0);
+	s->last_status = status;
+}
+
+void	shell_execute(t_shell *s, char **tokens)
 {
 	t_vec *const	command = vector_new(s, 0);
 	t_vec *const	redirs = vector_new(s, 0);
-	char **const	tokens = (char**) s->tokens->data;
-	size_t			i;
+	t_vec *const	pids = vector_new(s, 0);
+	int				pipe_fd[2];
+	int				fds[3]; // TODO: Store in t_shell to avoid leaking.
 
-	i = -1;
-	while (tokens[++i] != NULL)
+	fds[0] = STDIN_FILENO;
+	while (*tokens != NULL)
 	{
-		if (!ft_strcmp(tokens[i], "|"))
+		if (!ft_strcmp(*tokens, "|"))
 		{
-			simple_command(s, command, redirs);
+			pipe(pipe_fd); // TODO: Error handling.
+			fds[1] = pipe_fd[1];
+			fds[2] = pipe_fd[0];
+			vector_push(pids, simple_command(s, command, redirs, fds));
+			fds[0] = pipe_fd[0];
 			command->size = 0;
 			redirs->size = 0;
 		}
-		else if (!ft_strcmp(tokens[i], "<") || !ft_strcmp(tokens[i], ">"))
+		else if (!ft_strcmp(*tokens, "<") || !ft_strcmp(*tokens, ">"))
 		{
-			vector_push(redirs, tokens[i]);
-			vector_push(redirs, tokens[++i]);
-			if (tokens[i] == NULL)
+			vector_push(redirs, *tokens++);
+			vector_push(redirs, *tokens);
+			if (*tokens == NULL)
 				return (error("syntax error"));
 		}
 		else
-			vector_push(command, tokens[i]);
+			vector_push(command, *tokens);
+		tokens++;
 	}
-	simple_command(s, command, redirs);
+	fds[1] = STDOUT_FILENO;
+	if (command->size != 0)
+		vector_push(pids, simple_command(s, command, redirs, fds));
+	wait_for_all(s, pids);
 }

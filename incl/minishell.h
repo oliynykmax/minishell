@@ -105,7 +105,7 @@ void	params_expand_vector(t_vec *tokens);
 char	*get_working_dir(t_shell *s);
 char	*get_prompt(t_shell *s);
 /*----------------execution-------------------------------------- */
-void	shell_execute(t_shell *s);
+void	shell_execute(t_shell *s, char **tokens);
 
 void	subprocess_run(t_shell *s, t_vec *command, t_vec *redirs);
 
