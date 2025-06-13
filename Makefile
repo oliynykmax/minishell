@@ -2,11 +2,12 @@
 NAME    := minishell
 
 CC      := cc
-CFLAGS  := -Wall -Wextra -Werror
+CFLAGS  := -Wall -Wextra -Werror 
 
 INCLUDES := -Iincl -Ilibft
 
 SRCS    := \
+	srcs/cd.c \
 	srcs/debug.c \
 	srcs/echo.c \
 	srcs/env.c \
