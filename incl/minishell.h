@@ -31,7 +31,7 @@ typedef volatile sig_atomic_t	t_signal;
 typedef struct s_arena			t_arena;
 typedef struct s_vec			t_vec;
 typedef struct s_shell			t_shell;
-typedef int						t_builtin(char**, int, t_shell*);
+typedef int						t_bn(char**, int, t_shell*);
 
 struct s_shell
 {
@@ -43,6 +43,7 @@ struct s_shell
 	t_vec						*envp;
 	size_t						prompt_count;
 	unsigned char				last_status;
+	t_vec						*pids;
 };
 
 struct s_arena
@@ -105,10 +106,12 @@ void	params_expand_vector(t_vec *tokens);
 char	*get_working_dir(t_shell *s);
 char	*get_prompt(t_shell *s);
 /*----------------execution-------------------------------------- */
-void	shell_execute(t_shell *s);
-
+void	shell_execute(t_shell *s, char **tokens);
+void	redirect(t_vec *redirections);
 void	subprocess_run(t_shell *s, t_vec *command, t_vec *redirs);
-
+void	error(const char *message);
+void	loop_safe_close(int *fd, int len);
+t_bn	*get_builtin_by_name(char *name);
 void	debug_mode(t_shell *s, char *input, char **envp);
 
 #endif
