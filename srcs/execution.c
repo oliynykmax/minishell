@@ -1,20 +1,12 @@
 #include "../incl/minishell.h"
 
-static int	unimplemented(char **argv, int fd, t_shell *s)
-{
-	(void) fd, (void) s;
-	printf("Unimplemented builtin: %s\n", *argv++);
-	while (*argv != NULL)
-		printf("    Argument: %s\n", *argv++);
-	return (EXIT_FAILURE);
-}
 
 t_bn	*get_builtin_by_name(char *name)
 {
 	if (ft_strcmp(name, "echo") == 0)
 		return (mini_echo);
 	if (ft_strcmp(name, "cd") == 0)
-		return (unimplemented);
+		return (mini_cd);
 	if (ft_strcmp(name, "pwd") == 0)
 		return (mini_pwd);
 	if (ft_strcmp(name, "export") == 0)
