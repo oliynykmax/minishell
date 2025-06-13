@@ -1,6 +1,6 @@
 #include "../incl/minishell.h"
 
-void	sort_envp(char **sorted)
+static void	sort_envp(char **sorted)
 {
 	int		i;
 	int		j;
@@ -26,7 +26,7 @@ void	sort_envp(char **sorted)
 	}
 }
 
-int	export_sort_and_print(char **envp, int fd)
+static int	export_sort_and_print(char **envp, int fd)
 {
 	int		i;
 	char	*equals_pos;
@@ -51,7 +51,7 @@ int	export_sort_and_print(char **envp, int fd)
 	return (0);
 }
 
-void	insert_into_envp(char *var, t_shell *s, int var_len)
+static void	insert_into_envp(char *var, t_shell *s, int var_len)
 {
 	const char	**envp = (const char **)s->envp->data;
 	char		*equals_pos;
@@ -75,7 +75,7 @@ void	insert_into_envp(char *var, t_shell *s, int var_len)
 	vector_push(s->envp, string_new(s, var));
 }
 
-int	is_valid_var(char *var, int *status)
+static int	is_valid_var(char *var, int *status)
 {
 	int	i;
 
