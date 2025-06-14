@@ -2,6 +2,7 @@
 
 volatile sig_atomic_t	g_signal;
 
+/* general signal handling */
 void	handle_signals(int sig)
 {
 	g_signal = sig;

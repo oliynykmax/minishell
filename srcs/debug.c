@@ -1,5 +1,8 @@
 #include "../incl/minishell.h"
-
+/*
+ * debug mode for minishell
+ * needs to be removed later, idk.
+ */
 void	debug_mode(t_shell *s, char *input, char **envp)
 {
 	const char		*av_input = string_new(s, input);
