@@ -11,6 +11,7 @@ t_arena	*arena_new(t_shell *s, size_t capacity)
 		shell_exit(s, EXIT_FAILURE, "out of memory");
 	arena->capacity = capacity;
 	ft_memset(arena->data, 'A', arena->capacity);
+	printf("arena_new(..., %zu)\n", capacity);
 	return (arena);
 }
 
@@ -69,7 +70,7 @@ void	*shell_malloc(t_shell *s, size_t size)
 		arena = new_arena;
 	}
 	result = &arena->data[arena->size];
-	arena->size += size;
+	arena->size = (arena->size + size + ARENA_ALIGN - 1) & -ARENA_ALIGN;
 	ft_bzero(result, size);
 	return (result);
 }
