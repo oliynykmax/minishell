@@ -129,7 +129,7 @@ char	*get_working_dir(t_shell *s);
 char	*get_prompt(t_shell *s);
 /*----------------execution-------------------------------------- */
 void	shell_execute(t_shell *s, char **tokens);
-void	*run_command(t_shell *s, t_vec *command, t_vec *redirs);
+void	run_command(t_shell *s, t_vec *command, t_vec *redirs);
 void	execute_command_pipeline(t_shell *s, char **tokens);
 void	redirect(t_vec *redirections);
 void	subprocess_run(t_shell *s, t_vec *command);
