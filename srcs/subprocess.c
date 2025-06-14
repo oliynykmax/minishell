@@ -31,12 +31,11 @@ static char	*get_command_filename(t_shell *s, char *command)
 	return (NULL);
 }
 
-void	subprocess_run(t_shell *s, t_vec *command, t_vec *redirs)
+void	subprocess_run(t_shell *s, t_vec *command)
 {
 	char *const	name = command->data[0];
 	char *const	filename = get_command_filename(s, name);
 
-	(void) redirs;
 	if (filename == NULL)
 		shell_exit(s, 127, "command not found");
 	execve(filename, (char **) command->data, (char **) s->envp->data);

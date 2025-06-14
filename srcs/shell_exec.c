@@ -1,36 +1,37 @@
 #include "../incl/minishell.h"
 
-static void	run_child_process(t_shell *s, t_vec *command, t_vec *redirs,
-	int fds[3])
+static void	run_child_process(t_shell *s, t_vec *command, t_vec *redirs)
 {
 	t_bn		*builtin;
 	int			status;
 
 	setup_child_signals();
-	dup2(fds[0], STDIN_FILENO);
-	dup2(fds[1], STDOUT_FILENO);
-	loop_safe_close(&fds[0], 3);
+	dup2(s->fd_in, STDIN_FILENO);
+	dup2(s->fd_out, STDOUT_FILENO);
+	safe_close(&s->fd_in);
+	safe_close(&s->fd_out);
+	safe_close(&s->fd_unused);
 	redirect(redirs);
 	params_expand_vector(command);
-	builtin = get_builtin_by_name((char *)command->data[0]);
+	builtin = get_builtin_by_name(command->data[0]);
 	if (builtin != NULL)
 	{
 		status = builtin((char **) command->data, 1, s);
 		shell_exit(s, status, NULL);
 	}
-	subprocess_run(s, command, redirs);
+	subprocess_run(s, command);
 }
 
-void	*run_command(t_shell *s, t_vec *command, t_vec *redirs, int fds[3])
+void	*run_command(t_shell *s, t_vec *command, t_vec *redirs)
 {
 	const pid_t	pid = fork();
 
 	if (pid == -1)
 		ft_fprintf(2, "minishell: fork: %s\n", strerror(errno));
-	else if (pid > 0)
-		loop_safe_close(&fds[0], 2);
-	else
-		run_child_process(s, command, redirs, fds);
+	else if (pid == 0)
+		run_child_process(s, command, redirs);
+	safe_close(&s->fd_in);
+	safe_close(&s->fd_out);
 	return ((void *)(intptr_t) pid);
 }
 
