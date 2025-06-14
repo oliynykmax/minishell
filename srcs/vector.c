@@ -29,6 +29,7 @@ void	vector_push(t_vec *v, void *value)
 		v->data = ft_memcpy(new_data, v->data, v->size * sizeof(*v->data));
 	}
 	v->data[v->size++] = value;
+	v->data[v->size] = NULL;
 }
 
 // Insert a value into a vector, placing it at the given index, and shifting any
