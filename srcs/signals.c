@@ -39,6 +39,7 @@ void	setup_parent_signals(void)
 	signal(SIGQUIT, SIG_IGN);
 	rl_event_hook = my_rl_event_hook;
 	rl_catch_signals = 0;
+	signal(SIGPIPE, SIG_IGN);
 }
 
 void	setup_child_signals(void)
