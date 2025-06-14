@@ -44,7 +44,11 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	shell_init(&shell, envp);
 	if (argc == 3 && ft_strcmp(argv[1], "-c") == 0)
-		debug_mode(&shell, argv[2], envp);
+	{
+		shell.tokens = tokenize(&shell, argv[2]);
+		shell_execute(&shell, (char **) shell.tokens->data);
+		shell_exit(&shell, 0, NULL);
+	}
 	while (1)
 	{
 		shell_new_prompt(&shell);
