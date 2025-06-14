@@ -2,7 +2,7 @@
 
 // Apply a file-based redirection (covers "<", ">", and ">>"). Opens the given
 // file with the provided flags, and redirects it to a target file descriptor
-// (which should normally be stdout or stdint).
+// (which should normally be stdout or stdin).
 
 static void	redirect_file(char *filename, int open_flags, int target)
 {
