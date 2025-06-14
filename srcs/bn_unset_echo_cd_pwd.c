@@ -59,7 +59,10 @@ int	mini_echo(char **argv, int fd, t_shell *s)
  */
 static int	do_chdir(char *path, t_shell *s)
 {
-	if (path[0] == '-' && path[1] == '\0')
+	int	if_dash;
+
+	if_dash = path[0] == '-' && path[1] == '\0';
+	if (if_dash)
 	{
 		path = get_env_variable(s, "OLDPWD");
 		if (!path || !path[0])
@@ -70,9 +73,12 @@ static int	do_chdir(char *path, t_shell *s)
 	}
 	if (chdir(path) != 0)
 	{
-		perror("minishell: cd");
+		ft_fprintf(2, "minishell: cd: %s: ", path);
+		perror(NULL);
 		return (1);
 	}
+	if (if_dash)
+		ft_fprintf(1, "%s\n", path);
 	return (0);
 }
 /*
