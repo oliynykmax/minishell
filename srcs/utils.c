@@ -16,6 +16,9 @@ char	*get_prompt(t_shell *s)
 // Clean up all resources and exit the shell, with an optional error message.
 void	shell_exit(t_shell *s, int exit_status, const char *message)
 {
+	safe_close(&s->fd_in);
+	safe_close(&s->fd_out);
+	safe_close(&s->fd_unused);
 	free(s->input);
 	arena_free(s->arenas[0]);
 	arena_free(s->arenas[1]);
