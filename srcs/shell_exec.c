@@ -1,10 +1,7 @@
 #include "../incl/minishell.h"
 
-void	run_child_process(t_shell *s, t_vec *command, t_vec *redirs)
+static void	init_subshell(t_shell *s, t_vec *redirs)
 {
-	t_bn		*builtin;
-	int			status;
-
 	setup_child_signals();
 	dup2(s->fd_in, STDIN_FILENO);
 	dup2(s->fd_out, STDOUT_FILENO);
@@ -12,13 +9,6 @@ void	run_child_process(t_shell *s, t_vec *command, t_vec *redirs)
 	safe_close(&s->fd_out);
 	safe_close(&s->fd_unused);
 	redirect(redirs);
-	builtin = get_builtin_by_name(command->data[0]);
-	if (builtin != NULL)
-	{
-		status = builtin((char **) command->data, 1, s);
-		shell_exit(s, status, NULL);
-	}
-	subprocess_run(s, command);
 }
 
 void	run_builtin(t_shell *s, t_vec *command, t_vec *redirs)
@@ -28,6 +18,12 @@ void	run_builtin(t_shell *s, t_vec *command, t_vec *redirs)
 	int			saved_stdin;
 	int			saved_stdout;
 
+	if (pipelined)
+	{
+		init_subshell(s, redirs);
+		s->last_status = builtin((char **) command->data, STDOUT_FILENO, s);
+		shell_exit(s, s->last_status, NULL);
+	}
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
 	redirect(redirs);
@@ -36,19 +32,11 @@ void	run_builtin(t_shell *s, t_vec *command, t_vec *redirs)
 	dup2(saved_stdout, STDOUT_FILENO);
 	safe_close(&saved_stdin);
 	safe_close(&saved_stdout);
-	if (pipelined)
-		shell_exit(s, s->last_status, NULL);
 }
 
 void	run_program(t_shell *s, t_vec *command, t_vec *redirs)
 {
-	setup_child_signals();
-	dup2(s->fd_in, STDIN_FILENO);
-	dup2(s->fd_out, STDOUT_FILENO);
-	safe_close(&s->fd_in);
-	safe_close(&s->fd_out);
-	safe_close(&s->fd_unused);
-	redirect(redirs);
+	init_subshell(s, redirs);
 	subprocess_run(s, command);
 }
 
