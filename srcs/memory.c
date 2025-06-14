@@ -11,7 +11,6 @@ t_arena	*arena_new(t_shell *s, size_t capacity)
 		shell_exit(s, EXIT_FAILURE, "out of memory");
 	arena->capacity = capacity;
 	ft_memset(arena->data, 'A', arena->capacity);
-	printf("arena_new(..., %zu)\n", capacity);
 	return (arena);
 }
 
