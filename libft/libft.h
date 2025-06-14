@@ -65,6 +65,7 @@ char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 void				ft_striteri(char *s, void (*f)(unsigned int, char *));
 
 long				ft_atoi(const char *nptr);
+int					ft_atoi_safe(const char *nptr, long *result);
 char				**ft_split(char const *s, char c);
 char				*ft_itoa(int n);
 

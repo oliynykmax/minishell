@@ -1,25 +1,33 @@
 #include "../incl/minishell.h"
-
+/*
+ * Checks if a string is a valid integer (like bash exit).
+ */
 static int	str_isdigit(const char *s)
 {
-	int	i;
-	int	len;
+	long	result;
+	int		i;
 
+	if (!s || !*s)
+		return (0);
 	i = 0;
-	len = 0;
-	if ((s[i] == '-' || s[i] == '+') && ft_strlen(s) > 1)
-	{
-		len++;
+	while (s[i] && (s[i] == ' ' || s[i] == '\t'))
 		i++;
-	}
-	while (s[i])
-		if (ft_isdigit(s[i++]) == 0)
-			return (0);
-	if (ft_strlen(s) - len < 20)
-		return (1);
-	return (0);
+	if (s[i] == '-' || s[i] == '+')
+		i++;
+	if (!s[i] || !ft_isdigit(s[i]))
+		return (0);
+	while (s[i] && ft_isdigit(s[i]))
+		i++;
+	while (s[i] && (s[i] == ' ' || s[i] == '\t'))
+		i++;
+	if (s[i] != '\0')
+		return (0);
+	return (ft_atoi_safe(s, &result));
 }
 
+/*
+ * Exits the shell with the given status code.
+ */
 int	mini_exit(char **args, int fd, t_shell *s)
 {
 	int	has_second_arg;
