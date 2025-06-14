@@ -21,7 +21,8 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 
-# define ARENA_SIZE 10000
+# define ARENA_ALIGN 8
+# define ARENA_SIZE 16384 // 16 KiB
 # define BGRN	"\001\e[1;32m\002"
 # define CRESET	"\001\e[0m\002"
 # define STR_PROMPTSTART		"\001\e[1;96m\002\001\e[0m\002"
