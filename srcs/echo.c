@@ -1,5 +1,10 @@
 #include "../incl/minishell.h"
 
+/*
+ * echo command
+ * always returns 0
+ * writes to the file descriptor passed as argument
+ */
 int	mini_echo(char **argv, int fd, t_shell *s)
 {
 	int			i;

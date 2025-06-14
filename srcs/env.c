@@ -1,5 +1,8 @@
 #include "../incl/minishell.h"
-
+/*
+ * set invalid is used by
+ * export command
+ */
 int	set_invalid(char *var, int *status)
 {
 	ft_fprintf(2, "minishell: export: `%s': not a valid identifier\n", var);
@@ -7,6 +10,10 @@ int	set_invalid(char *var, int *status)
 	return (0);
 }
 
+/*
+ * prints out all the envp variables that has some value,
+ * not just key
+ */
 int	mini_env(char **argv, int fd, t_shell *s)
 {
 	int		i;

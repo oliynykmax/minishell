@@ -1,5 +1,9 @@
 #include "../incl/minishell.h"
-
+/*
+ * This file contains the implementation of the cd command.
+ * returns 0 on success, 1 on failure
+ * gets local envp variable from our envp, not the system wide one
+ */
 static int	do_chdir(char *path, t_shell *s)
 {
 	if (path[0] == '-' && path[1] == '\0')
@@ -18,6 +22,10 @@ static int	do_chdir(char *path, t_shell *s)
 	}
 	return (0);
 }
+/*
+ * doesn't needs fd, only argv and shell struct are essential
+ * accepts 0 or 1 argument, works with "cd -"
+ */
 
 int	mini_cd(char **argv, int fd, t_shell *s)
 {
