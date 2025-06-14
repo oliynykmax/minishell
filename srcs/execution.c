@@ -21,7 +21,7 @@ t_bn	*get_builtin_by_name(char *name)
 
 void	error(const char *message)
 {
-	printf("minishell: %s\n", message);
+	ft_fprintf(2, "minishell: %s\n", message);
 }
 
 void	safe_close(int *fd)

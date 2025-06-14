@@ -44,3 +44,13 @@ char	*get_working_dir(t_shell *s)
 	}
 	return (path);
 }
+
+int	is_blank(char c)
+{
+	return (c == ' ' || c == '\t' || c == '\n');
+}
+
+int	is_meta(char c)
+{
+	return (c == '|' || c == '<' || c == '>');
+}

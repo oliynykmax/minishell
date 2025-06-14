@@ -7,31 +7,26 @@ CFLAGS  := -Wall -Wextra -Werror
 INCLUDES := -Iincl -Ilibft
 
 SRCS    := \
-	srcs/cd.c \
+	srcs/bn_exit_env.c \
+	srcs/bn_export.c \
+	srcs/bn_unset_echo_cd_pwd.c \
+	srcs/command_exec.c \
 	srcs/debug.c \
-	srcs/echo.c \
-	srcs/env.c \
 	srcs/execution.c \
-	srcs/exit.c \
-	srcs/export.c \
+	srcs/input_handling.c \
 	srcs/memory.c \
 	srcs/minishell.c \
 	srcs/params.c \
-	srcs/pwd.c \
 	srcs/redirect.c \
-	srcs/signals.c \
+	srcs/shell_exec.c \
 	srcs/signal_setup.c \
-	srcs/input_handling.c \
-	srcs/user_interface.c \
-	srcs/command_exec.c \
+	srcs/signals.c \
 	srcs/string.c \
 	srcs/subprocess.c \
-	srcs/token_types.c \
 	srcs/tokenize.c \
-	srcs/unset.c \
+	srcs/user_interface.c \
 	srcs/utils.c \
 	srcs/vector.c \
-	srcs/shell_exec.c \
 
 OBJS    := $(SRCS:srcs/%.c=objs/%.o)
 
