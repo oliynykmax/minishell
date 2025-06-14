@@ -1,6 +1,6 @@
 #include "../incl/minishell.h"
 
-static void	run_child_process(t_shell *s, t_vec *command, t_vec *redirs)
+void	run_child_process(t_shell *s, t_vec *command, t_vec *redirs)
 {
 	t_bn		*builtin;
 	int			status;
@@ -12,7 +12,6 @@ static void	run_child_process(t_shell *s, t_vec *command, t_vec *redirs)
 	safe_close(&s->fd_out);
 	safe_close(&s->fd_unused);
 	redirect(redirs);
-	params_expand_vector(command);
 	builtin = get_builtin_by_name(command->data[0]);
 	if (builtin != NULL)
 	{
@@ -22,17 +21,65 @@ static void	run_child_process(t_shell *s, t_vec *command, t_vec *redirs)
 	subprocess_run(s, command);
 }
 
-void	*run_command(t_shell *s, t_vec *command, t_vec *redirs)
+void	run_builtin(t_shell *s, t_vec *command, t_vec *redirs)
 {
-	const pid_t	pid = fork();
+	t_bn *const	builtin = get_builtin_by_name(command->data[0]);
+	const bool	pipelined = s->fd_in != 0 || s->fd_out != 1;
+	int			saved_stdin;
+	int			saved_stdout;
 
-	if (pid == -1)
-		ft_fprintf(2, "minishell: fork: %s\n", strerror(errno));
-	else if (pid == 0)
-		run_child_process(s, command, redirs);
+	saved_stdin = dup(STDIN_FILENO);
+	saved_stdout = dup(STDOUT_FILENO);
+	redirect(redirs);
+	s->last_status = builtin((char **) command->data, STDOUT_FILENO, s);
+	dup2(saved_stdin, STDIN_FILENO);
+	dup2(saved_stdout, STDOUT_FILENO);
+	safe_close(&saved_stdin);
+	safe_close(&saved_stdout);
+	if (pipelined)
+		shell_exit(s, s->last_status, NULL);
+}
+
+void	run_program(t_shell *s, t_vec *command, t_vec *redirs)
+{
+	setup_child_signals();
+	dup2(s->fd_in, STDIN_FILENO);
+	dup2(s->fd_out, STDOUT_FILENO);
 	safe_close(&s->fd_in);
 	safe_close(&s->fd_out);
-	return ((void *)(intptr_t) pid);
+	safe_close(&s->fd_unused);
+	redirect(redirs);
+	subprocess_run(s, command);
+}
+
+void	run_command(t_shell *s, t_vec *command, t_vec *redirs)
+{
+	t_bn		*builtin;
+	pid_t		pid;
+
+	params_expand_vector(command);
+	builtin = get_builtin_by_name(command->data[0]);
+	pid = -1;
+	if (builtin == NULL || s->fd_in != 0 || s->fd_out != 1)
+	{
+		pid = fork();
+		if (pid == -1)
+		{
+			ft_fprintf(2, "minishell: fork: %s\n", strerror(errno));
+			return ;
+		}
+		else if (pid != 0)
+		{
+			safe_close(&s->fd_in);
+			safe_close(&s->fd_out);
+			vector_push(s->pids, (void *)(intptr_t)pid);
+			return ;
+		}
+	}
+	if (builtin != NULL)
+		run_builtin(s, command, redirs);
+	else
+		run_program(s, command, redirs);
 }
 
 static void	handle_signal_termination(int status, int *last_status)
