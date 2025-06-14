@@ -3,6 +3,9 @@
 void	shell_init(t_shell *s, char **envp)
 {
 	ft_bzero(s, sizeof(t_shell));
+	s->fd_in = -1;
+	s->fd_out = -1;
+	s->fd_unused = -1;
 	s->arenas[0] = arena_new(s, ARENA_SIZE);
 	s->arenas[1] = arena_new(s, ARENA_SIZE);
 	shell_new_prompt(s);

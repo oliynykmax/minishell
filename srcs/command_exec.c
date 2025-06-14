@@ -1,50 +1,45 @@
 #include "../incl/minishell.h"
 
-static void	handle_pipe_token(t_shell *s, t_vec *com, t_vec *redirs, int *fds)
+static void	handle_pipe_token(t_shell *s, t_vec *command, t_vec *redirs)
 {
 	int	pipe_fd[2];
 
 	pipe(pipe_fd);
-	fds[1] = pipe_fd[1];
-	vector_push(s->pids, run_command(s, com, redirs, fds));
-	fds[0] = pipe_fd[0];
-	fds[1] = -1;
-	com->size = 0;
+	s->fd_out = pipe_fd[1];
+	s->fd_unused = pipe_fd[0];
+	vector_push(s->pids, run_command(s, command, redirs));
+	s->fd_in = pipe_fd[0];
+	s->fd_out = STDOUT_FILENO;
+	s->fd_unused = -1;
+	command->size = 0;
 	redirs->size = 0;
-}
-
-static int	handle_redirect_token(char ***tokens, t_vec *redirs)
-{
-	vector_push(redirs, **tokens);
-	(*tokens)++;
-	vector_push(redirs, **tokens);
-	return (**tokens == NULL);
 }
 
 void	execute_command_pipeline(t_shell *s, char **tokens)
 {
 	t_vec *const	command = vector_new(s, 0);
 	t_vec *const	redirs = vector_new(s, 0);
-	int				fds[3];
 
-	fds[0] = STDIN_FILENO;
-	fds[1] = -1;
-	fds[2] = -1;
+	s->fd_in = STDIN_FILENO;
+	s->fd_out = STDOUT_FILENO;
+	s->fd_unused = -1;
 	s->pids = vector_new(s, 0);
 	while (*tokens != NULL)
 	{
 		if (!ft_strcmp(*tokens, "|"))
-			handle_pipe_token(s, command, redirs, fds);
+			handle_pipe_token(s, command, redirs);
 		else if (**tokens == '<' || **tokens == '>')
 		{
-			if (handle_redirect_token(&tokens, redirs))
+			vector_push(redirs, *tokens++);
+			vector_push(redirs, *tokens);
+			if (*tokens == NULL)
 				return (error("syntax error"));
 		}
 		else
 			vector_push(command, *tokens);
 		tokens++;
 	}
-	fds[1] = STDOUT_FILENO;
+	s->fd_out = STDOUT_FILENO;
 	if (command->size != 0)
-		vector_push(s->pids, run_command(s, command, redirs, fds));
+		vector_push(s->pids, run_command(s, command, redirs));
 }

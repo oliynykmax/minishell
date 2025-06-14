@@ -52,6 +52,9 @@ struct s_shell
 	unsigned char				last_status;
 	t_vec						*pids;
 	t_input_mode				input_mode;
+	int							fd_in;
+	int							fd_out;
+	int							fd_unused;
 };
 
 struct s_arena
@@ -125,11 +128,12 @@ char	*get_working_dir(t_shell *s);
 char	*get_prompt(t_shell *s);
 /*----------------execution-------------------------------------- */
 void	shell_execute(t_shell *s, char **tokens);
-void	*run_command(t_shell *s, t_vec *command, t_vec *redirs, int fds[3]);
+void	*run_command(t_shell *s, t_vec *command, t_vec *redirs);
 void	execute_command_pipeline(t_shell *s, char **tokens);
 void	redirect(t_vec *redirections);
-void	subprocess_run(t_shell *s, t_vec *command, t_vec *redirs);
+void	subprocess_run(t_shell *s, t_vec *command);
 void	error(const char *message);
+void	safe_close(int *fd);
 void	loop_safe_close(int *fd, int len);
 t_bn	*get_builtin_by_name(char *name);
 void	debug_mode(t_shell *s, char *input, char **envp);

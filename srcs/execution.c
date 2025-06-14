@@ -24,7 +24,7 @@ void	error(const char *message)
 	printf("minishell: %s\n", message);
 }
 
-static void	safe_close(int *fd)
+void	safe_close(int *fd)
 {
 	if (*fd != -1 && *fd != STDIN_FILENO && *fd != STDOUT_FILENO)
 	{
