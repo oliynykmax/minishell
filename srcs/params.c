@@ -78,4 +78,5 @@ void	params_expand_vector(t_vec *tokens)
 	i = -1;
 	while (++i < tokens->size)
 		tokens->data[i] = params_expand_string(tokens->shell, tokens->data[i]);
+	filename_expand(tokens);
 }
