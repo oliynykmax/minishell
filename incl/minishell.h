@@ -43,19 +43,20 @@ typedef int						t_bn(char**, int, t_shell*);
 
 struct s_shell
 {
-	char						*input;
-	t_vec						*tokens;
-	char						*cwd;
-	t_arena						*arena;
-	t_arena						*arenas[2];
-	t_vec						*envp;
-	size_t						prompt_count;
-	unsigned char				last_status;
-	t_vec						*pids;
-	t_input_mode				input_mode;
-	int							fd_in;
-	int							fd_out;
-	int							fd_unused;
+	char			*input;
+	t_vec			*tokens;
+	char			*cwd;
+	t_arena			*arena;
+	t_arena			*arenas[2];
+	t_vec			*envp;
+	size_t			prompt_count;
+	unsigned char	last_status;
+	t_vec			*pids;
+	t_input_mode	input_mode;
+	int				fd_in;
+	int				fd_out;
+	int				fd_unused;
+	DIR				*dirent;
 };
 
 struct s_arena
@@ -120,9 +121,11 @@ int		mini_pwd(char **argv, int fd, t_shell *s);
 int		mini_unset(char **argv, int fd, t_shell *s);
 int		set_invalid(char *var, int *status);
 /*------------------params----------------------------------------*/
+void	sort_strings(char **array);
 char	*get_env_variable(t_shell *s, char *name);
 char	*params_expand_string(t_shell *s, char *string);
 void	params_expand_vector(t_vec *tokens);
+void	filename_expand(t_vec *tokens);
 
 /*------------------utils----------------------------------------- */
 char	*get_working_dir(t_shell *s);
