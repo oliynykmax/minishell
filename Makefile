@@ -13,6 +13,7 @@ SRCS    := \
 	srcs/command_exec.c \
 	srcs/debug.c \
 	srcs/execution.c \
+	srcs/filename.c \
 	srcs/input_handling.c \
 	srcs/memory.c \
 	srcs/minishell.c \

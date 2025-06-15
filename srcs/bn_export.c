@@ -1,6 +1,6 @@
 #include "../incl/minishell.h"
 
-static void	sort_envp(char **sorted)
+void	sort_strings(char **sorted)
 {
 	int		i;
 	int		j;
@@ -34,7 +34,7 @@ static int	export_sort_and_print(char **envp, int fd)
 	i = 0;
 	if (!envp)
 		return (0);
-	sort_envp(envp);
+	sort_strings(envp);
 	while (envp[i])
 	{
 		equals_pos = ft_strchr(envp[i], '=');
