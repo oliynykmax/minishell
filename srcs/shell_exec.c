@@ -74,9 +74,9 @@ void	run_command(t_shell *s, t_vec *command, t_vec *redirs)
 static void	handle_signal_termination(int status, int *last_status)
 {
 	if (WTERMSIG(status) == SIGINT)
-		write(STDOUT_FILENO, "\n", 1);
+		write(STDERR_FILENO, "\n", 1);
 	else if (WTERMSIG(status) == SIGQUIT)
-		write(STDOUT_FILENO, "Quit\n", 5);
+		ft_fprintf(STDERR_FILENO, "Quit (core dumped)\n");
 	*last_status = 128 + WTERMSIG(status);
 }
 
