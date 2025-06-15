@@ -84,6 +84,7 @@ void	setup_child_signals(void);
 void	setup_heredoc_signals(void);
 void	handle_heredoc_signals(void);
 void	handle_pending_signals(t_shell *s);
+void	ignore_sigpipe(void);
 /*------------------input-handling---------------------------------- */
 char	*shell_readline(t_shell *s, t_input_mode mode);
 char	*process_pipe_input(t_shell *s);
