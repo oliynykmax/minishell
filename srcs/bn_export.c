@@ -51,7 +51,7 @@ static int	export_sort_and_print(char **envp, int fd)
 	return (0);
 }
 
-static void	insert_into_envp(char *var, t_shell *s, int var_len)
+void	insert_into_envp(char *var, t_shell *s, int var_len)
 {
 	const char	**envp = (const char **)s->envp->data;
 	char		*equals_pos;
