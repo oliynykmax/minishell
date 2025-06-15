@@ -59,7 +59,8 @@ int	mini_echo(char **argv, int fd, t_shell *s)
  */
 static int	do_chdir(char *path, t_shell *s)
 {
-	int	if_dash;
+	int		if_dash;
+	char	*pwd;
 
 	if_dash = path[0] == '-' && path[1] == '\0';
 	if (if_dash)
@@ -71,12 +72,14 @@ static int	do_chdir(char *path, t_shell *s)
 			return (1);
 		}
 	}
+	pwd = get_working_dir(s);
 	if (chdir(path) != 0)
 	{
 		ft_fprintf(2, "minishell: cd: %s: ", path);
 		perror(NULL);
 		return (1);
 	}
+	insert_into_envp(ft_strjoin("OLDPWD=", pwd), s, 6);
 	if (if_dash)
 		ft_fprintf(1, "%s\n", path);
 	return (0);

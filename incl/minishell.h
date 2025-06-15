@@ -77,13 +77,17 @@ struct s_vec
 
 extern t_signal					g_signal;
 
+/*------------------temporary files---------------------------------- */
+int		clear_temp_files(char *filename);
+char	*create_temp_file(t_shell *s);
+/*-----------------signals------------------------------------------- */
 void	handle_signals(int signum);
 int		my_rl_event_hook(void);
 void	setup_parent_signals(void);
 void	setup_child_signals(void);
 void	setup_heredoc_signals(void);
+void	setup_heredoc_signals_local(void);
 void	handle_heredoc_signals(void);
-void	handle_pending_signals(t_shell *s);
 void	ignore_sigpipe(void);
 /*------------------input-handling---------------------------------- */
 char	*shell_readline(t_shell *s, t_input_mode mode);
@@ -121,6 +125,7 @@ int		mini_export(char **argv, int fd, t_shell *s);
 int		mini_pwd(char **argv, int fd, t_shell *s);
 int		mini_unset(char **argv, int fd, t_shell *s);
 int		set_invalid(char *var, int *status);
+void	insert_into_envp(char *var, t_shell *s, int var_len);
 /*------------------params----------------------------------------*/
 void	sort_strings(char **array);
 char	*get_env_variable(t_shell *s, char *name);
@@ -142,5 +147,7 @@ void	safe_close(int *fd);
 void	loop_safe_close(int *fd, int len);
 t_bn	*get_builtin_by_name(char *name);
 void	debug_mode(t_shell *s, char *input, char **envp);
+
+char	*heredoc(char *delim, t_shell *sn);
 
 #endif

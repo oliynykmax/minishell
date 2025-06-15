@@ -14,6 +14,7 @@ SRCS    := \
 	srcs/debug.c \
 	srcs/execution.c \
 	srcs/filename.c \
+	srcs/heredoc.c \
 	srcs/input_handling.c \
 	srcs/memory.c \
 	srcs/minishell.c \
@@ -25,6 +26,7 @@ SRCS    := \
 	srcs/string.c \
 	srcs/subprocess.c \
 	srcs/tokenize.c \
+	srcs/temp_files.c \
 	srcs/user_interface.c \
 	srcs/utils.c \
 	srcs/vector.c \
