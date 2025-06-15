@@ -20,6 +20,7 @@ void	run_builtin(t_shell *s, t_vec *command, t_vec *redirs)
 
 	if (pipelined)
 	{
+		ignore_sigpipe();
 		init_subshell(s, redirs);
 		s->last_status = builtin((char **) command->data, STDOUT_FILENO, s);
 		shell_exit(s, s->last_status, NULL);
