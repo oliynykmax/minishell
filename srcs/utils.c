@@ -19,6 +19,8 @@ void	shell_exit(t_shell *s, int exit_status, const char *message)
 	safe_close(&s->fd_in);
 	safe_close(&s->fd_out);
 	safe_close(&s->fd_unused);
+	if (s->dirent != NULL)
+		closedir(s->dirent);
 	free(s->input);
 	arena_free(s->arenas[0]);
 	arena_free(s->arenas[1]);
