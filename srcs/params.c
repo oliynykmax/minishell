@@ -71,6 +71,33 @@ char	*params_expand_string(t_shell *s, char *in)
 	return (out);
 }
 
+static void	remove_quotes(t_vec *tokens)
+{
+	size_t	i;
+	char	*src;
+	char	*dst;
+	char	quote;
+
+	i = 0;
+	while (i < tokens->size)
+	{
+		quote = 0;
+		src = tokens->data[i++];
+		dst = src;
+		while (*src != '\0')
+		{
+			if (!quote && (*src == '\'' || *src == '\"'))
+				quote = *src;
+			else if (*src == quote)
+				quote = 0;
+			else
+				*dst++ = *src;
+			src++;
+		}
+		*dst = '\0';
+	}
+}
+
 void	params_expand_vector(t_vec *tokens)
 {
 	size_t	i;
@@ -80,4 +107,5 @@ void	params_expand_vector(t_vec *tokens)
 		tokens->data[i] = params_expand_string(tokens->shell, tokens->data[i]);
 	split_words(tokens);
 	filename_expand(tokens);
+	remove_quotes(tokens);
 }
