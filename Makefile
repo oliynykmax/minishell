@@ -23,10 +23,11 @@ SRCS    := \
 	srcs/shell_exec.c \
 	srcs/signal_setup.c \
 	srcs/signals.c \
+	srcs/split_words.c \
 	srcs/string.c \
 	srcs/subprocess.c \
-	srcs/tokenize.c \
 	srcs/temp_files.c \
+	srcs/tokenize.c \
 	srcs/user_interface.c \
 	srcs/utils.c \
 	srcs/vector.c \
