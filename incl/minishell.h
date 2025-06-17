@@ -21,12 +21,12 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 
-# define ARENA_ALIGN 8
-# define ARENA_SIZE 16384 // 16 KiB
-# define BGRN	"\001\e[1;32m\002"
-# define CRESET	"\001\e[0m\002"
-# define STR_PROMPTSTART		"\1\e[1;96m\002\001\e[0m\2"
-# define STR_PROMPTDELIM		"🐚> "
+# define ARENA_ALIGN 8 // Memory arena data alignment.
+# define ARENA_SIZE 16384 // Minimum size per memory arena (16 KiB)
+
+#define ANSI_COLOR_GREEN "\1\e[1;32m\2" // Set text color to bright green.
+#define ANSI_COLOR_RESET "\1\e[0m\2" // Reset text color.
+#define MINISHELL_PROMPT "🐚> " // Shown after current working directory.
 
 typedef enum e_input_mode
 {
@@ -56,6 +56,8 @@ struct s_shell
 	int				fd_in;
 	int				fd_out;
 	int				fd_unused;
+	int				fd_saved_in;
+	int				fd_saved_out;
 	DIR				*dirent;
 };
 
