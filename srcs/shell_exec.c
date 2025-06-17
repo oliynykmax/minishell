@@ -15,8 +15,6 @@ void	run_builtin(t_shell *s, t_vec *command, t_vec *redirs)
 {
 	t_bn *const	builtin = get_builtin_by_name(command->data[0]);
 	const bool	pipelined = s->fd_in != 0 || s->fd_out != 1;
-	int			saved_stdin;
-	int			saved_stdout;
 
 	if (pipelined)
 	{
@@ -25,14 +23,14 @@ void	run_builtin(t_shell *s, t_vec *command, t_vec *redirs)
 		s->last_status = builtin((char **) command->data, STDOUT_FILENO, s);
 		shell_exit(s, s->last_status, NULL);
 	}
-	saved_stdin = dup(STDIN_FILENO);
-	saved_stdout = dup(STDOUT_FILENO);
+	s->fd_saved_in = dup(STDIN_FILENO);
+	s->fd_saved_out = dup(STDOUT_FILENO);
 	redirect(redirs);
 	s->last_status = builtin((char **) command->data, STDOUT_FILENO, s);
-	dup2(saved_stdin, STDIN_FILENO);
-	dup2(saved_stdout, STDOUT_FILENO);
-	safe_close(&saved_stdin);
-	safe_close(&saved_stdout);
+	dup2(s->fd_saved_in, STDIN_FILENO);
+	dup2(s->fd_saved_out, STDOUT_FILENO);
+	safe_close(&s->fd_saved_in);
+	safe_close(&s->fd_saved_out);
 }
 
 void	run_program(t_shell *s, t_vec *command, t_vec *redirs)

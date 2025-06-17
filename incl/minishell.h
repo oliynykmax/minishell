@@ -56,6 +56,8 @@ struct s_shell
 	int				fd_in;
 	int				fd_out;
 	int				fd_unused;
+	int				fd_saved_in;
+	int				fd_saved_out;
 	DIR				*dirent;
 };
 
