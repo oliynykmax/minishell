@@ -1,0 +1,131 @@
+incl/minishell.h:/*------------------temporary files---------------------------------- */
+incl/minishell.h:/*-----------------signals------------------------------------------- */
+incl/minishell.h:/*-----------------vector-funcs------------------------------------- */
+incl/minishell.h:/*------------------string-funcs-using-arena------------------------- */
+incl/minishell.h:/*------------------builtins----------------------------------------*/
+incl/minishell.h:/*------------------params----------------------------------------*/
+incl/minishell.h:/*------------------utils----------------------------------------- */
+srcs/bn_exit_env.c:		shell_exit(s, s->last_status, NULL);
+srcs/bn_exit_env.c:		s->last_status = 1;
+srcs/bn_exit_env.c:	if (s->envp == NULL)
+srcs/bn_exit_env.c:	env = (char **)s->envp->data;
+srcs/bn_export.c:	const char	**envp = (const char **)s->envp->data;
+srcs/bn_export.c:		return (vector_push(s->envp, string_new(s, var)));
+srcs/bn_export.c:				s->envp->data[i] = string_new(s, var);
+srcs/bn_export.c:	vector_push(s->envp, string_new(s, var));
+srcs/bn_export.c:		return (export_sort_and_print((char **)s->envp->data, fd));
+srcs/bn_unset_echo_cd_pwd.c:	envp = (char **)s->envp->data;
+srcs/bn_unset_echo_cd_pwd.c:		envp = (char **)s->envp->data;
+srcs/bn_unset_echo_cd_pwd.c:			vector_delete(s->envp, j);
+srcs/command_exec.c:	s->fd_out = pipe_fd[1];
+srcs/command_exec.c:	s->fd_unused = pipe_fd[0];
+srcs/command_exec.c:	s->fd_in = pipe_fd[0];
+srcs/command_exec.c:	s->fd_out = STDOUT_FILENO;
+srcs/command_exec.c:	s->fd_unused = -1;
+srcs/command_exec.c:	redirs->size = 0;
+srcs/command_exec.c:	s->fd_in = STDIN_FILENO;
+srcs/command_exec.c:	s->fd_out = STDOUT_FILENO;
+srcs/command_exec.c:	s->fd_unused = -1;
+srcs/command_exec.c:	s->pids = vector_new(s, 0);
+srcs/command_exec.c:	s->fd_out = STDOUT_FILENO;
+srcs/debug.c:	s->tokens = tokenize(s, (char *)av_input);
+srcs/debug.c:	shell_execute(s, (char **) s->tokens->data);
+srcs/filename.c:	s->dirent = opendir(".");
+srcs/filename.c:	if (!s->dirent)
+srcs/filename.c:		entry = readdir(s->dirent);
+srcs/filename.c:			entry = readdir(s->dirent);
+srcs/filename.c:		closedir(s->dirent);
+srcs/filename.c:		s->dirent = NULL;
+srcs/filename.c:	if (files->size > 0)
+srcs/filename.c:		sort_strings((char **) files->data);
+srcs/filename.c:	files = list_files(tokens->shell);
+srcs/filename.c:	while (i < tokens->size)
+srcs/filename.c:		pattern = tokens->data[i];
+srcs/filename.c:		while (j < files->size)
+srcs/filename.c:			if (match_pattern(files->data[j], pattern))
+srcs/filename.c:				vector_insert(tokens, k++, files->data[j]);
+srcs/heredoc.c:	s->last_status = 130;
+srcs/input_handling.c:	cont = ft_strcmp(s->tokens->data[s->tokens->size - 1], "|") == 0;
+srcs/input_handling.c:			s->last_status = 130;
+srcs/input_handling.c:		s->tokens = tokenize(s, input);
+srcs/input_handling.c:		if (s->tokens == NULL || s->tokens->size == 0)
+srcs/input_handling.c:		cont = ft_strcmp(s->tokens->data[s->tokens->size - 1], "|") == 0;
+srcs/input_handling.c:		s->last_status = 130;
+srcs/input_handling.c:	s->tokens = tokenize(s, input);
+srcs/input_handling.c:	if (s->tokens == NULL || s->tokens->size == 0)
+srcs/input_handling.c:	if (s->tokens && s->tokens->size > 0
+srcs/input_handling.c:		&& ft_strcmp(s->tokens->data[s->tokens->size - 1], "|") != 0)
+srcs/memory.c:	arena = s->arena;
+srcs/minishell.c:	s->fd_in = -1;
+srcs/minishell.c:	s->fd_out = -1;
+srcs/minishell.c:	s->fd_unused = -1;
+srcs/minishell.c:	s->arenas[0] = arena_new(s, ARENA_SIZE);
+srcs/minishell.c:	s->arenas[1] = arena_new(s, ARENA_SIZE);
+srcs/minishell.c:	s->envp = vector_new(s, 0);
+srcs/minishell.c:		vector_push(s->envp, string_new(s, *envp++));
+srcs/minishell.c:	s->input_mode = INPUT_MAIN;
+srcs/minishell.c:	t_vec *const	old_envp = s->envp;
+srcs/minishell.c:	s->prompt_count++;
+srcs/minishell.c:	s->arena = s->arenas[s->prompt_count % 2];
+srcs/minishell.c:	arena_reset(s->arena);
+srcs/minishell.c:		s->envp = vector_new(s, old_envp->capacity);
+srcs/minishell.c:			vector_push(s->envp, string_new(s, old_envp->data[i++]));
+srcs/minishell.c:	s->cwd = get_working_dir(s);
+srcs/minishell.c:		shell_execute(&shell, (char **) shell.tokens->data);
+srcs/params.c:	envp = (char **) s->envp->data;
+srcs/params.c:		*out = string_join(s, *out, string_itoa(s, s->last_status));
+srcs/params.c:	while (i < tokens->size)
+srcs/params.c:		src = tokens->data[i++];
+srcs/params.c:	while (++i < tokens->size)
+srcs/params.c:		tokens->data[i] = params_expand_string(tokens->shell, tokens->data[i]);
+srcs/redirect.c:	if (redirections->size == 0)
+srcs/redirect.c:	str = (char **)redirections->data;
+srcs/redirect.c:			redirect_file(heredoc(*++str, redirections->shell), O_RDONLY,
+srcs/shell_exec.c:	dup2(s->fd_in, STDIN_FILENO);
+srcs/shell_exec.c:	dup2(s->fd_out, STDOUT_FILENO);
+srcs/shell_exec.c:	safe_close(&s->fd_in);
+srcs/shell_exec.c:	safe_close(&s->fd_out);
+srcs/shell_exec.c:	safe_close(&s->fd_unused);
+srcs/shell_exec.c:	const bool	pipelined = s->fd_in != 0 || s->fd_out != 1;
+srcs/shell_exec.c:		s->last_status = builtin((char **) command->data, STDOUT_FILENO, s);
+srcs/shell_exec.c:		shell_exit(s, s->last_status, NULL);
+srcs/shell_exec.c:	s->last_status = builtin((char **) command->data, STDOUT_FILENO, s);
+srcs/shell_exec.c:	if (builtin == NULL || s->fd_in != 0 || s->fd_out != 1)
+srcs/shell_exec.c:			safe_close(&s->fd_in);
+srcs/shell_exec.c:			safe_close(&s->fd_out);
+srcs/shell_exec.c:			vector_push(s->pids, (void *)(intptr_t)pid);
+srcs/shell_exec.c:	while (i < pids->size)
+srcs/shell_exec.c:		waitpid((pid_t)(intptr_t) pids->data[i++], &status, 0);
+srcs/shell_exec.c:	s->last_status = last_status;
+srcs/shell_exec.c:	wait_for_all(s, s->pids);
+srcs/string.c:	while (digits-- > 0)
+srcs/subprocess.c:	execve(filename, (char **) command->data, (char **) s->envp->data);
+srcs/tokenize.c:	char **const	str = (char**) tokens->data;
+srcs/tokenize.c:	while (++i < tokens->size)
+srcs/tokenize.c:	if (tokens->size == 0)
+srcs/tokenize.c:	last = str[tokens->size - 1];
+srcs/user_interface.c:	s->last_status = 130;
+srcs/user_interface.c:	if (s->input)
+srcs/user_interface.c:		free(s->input);
+srcs/user_interface.c:		s->input = NULL;
+srcs/user_interface.c:	s->input_mode = mode;
+srcs/user_interface.c:		s->input = readline("> ");
+srcs/user_interface.c:		s->input = readline(get_prompt(s));
+srcs/user_interface.c:	if (s->input == NULL)
+srcs/user_interface.c:	input = string_new(s, s->input);
+srcs/user_interface.c:	free(s->input);
+srcs/user_interface.c:	s->input = NULL;
+srcs/user_interface.c:			s->last_status = 130;
+srcs/user_interface.c:		if (s->tokens == NULL || s->tokens->size == 0)
+srcs/user_interface.c:		shell_execute(s, (char **) s->tokens->data);
+srcs/utils.c:	safe_close(&s->fd_in);
+srcs/utils.c:	safe_close(&s->fd_out);
+srcs/utils.c:	safe_close(&s->fd_unused);
+srcs/utils.c:	if (s->dirent != NULL)
+srcs/utils.c:		closedir(s->dirent);
+srcs/utils.c:	free(s->input);
+srcs/utils.c:	arena_free(s->arenas[0]);
+srcs/utils.c:	arena_free(s->arenas[1]);
+srcs/utils.c:			s->cwd = string_new(s, path);
+srcs/utils.c:			if (s->cwd)
+srcs/utils.c:				return (string_new(s, s->cwd));
