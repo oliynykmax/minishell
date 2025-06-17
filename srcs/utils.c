@@ -43,12 +43,9 @@ char	*get_working_dir(t_shell *s)
 		if (errno != ERANGE)
 		{
 			if (s->cwd)
-			{
-				printf("func failed\n");
-				return (string_new(s, s->cwd));
-			}
+				return (s->cwd);
 			else
-				return (string_new(s, "/"));
+				return ("/");
 		}
 		size *= 2;
 	}
