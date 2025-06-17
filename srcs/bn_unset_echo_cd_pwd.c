@@ -79,7 +79,7 @@ static int	do_chdir(char *path, t_shell *s)
 		perror(NULL);
 		return (1);
 	}
-	insert_into_envp(ft_strjoin("OLDPWD=", pwd), s, 6);
+	insert_into_envp(string_join(s, "OLDPWD=", pwd), s, 6);
 	if (if_dash)
 		ft_fprintf(1, "%s\n", path);
 	return (0);

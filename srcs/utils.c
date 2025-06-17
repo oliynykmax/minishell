@@ -41,10 +41,17 @@ char	*get_working_dir(t_shell *s)
 		if (getcwd(path, size) != NULL)
 			return (path);
 		if (errno != ERANGE)
-			shell_exit(s, EXIT_FAILURE, strerror(errno));
+		{
+			if (s->cwd)
+			{
+				printf("func failed\n");
+				return (string_new(s, s->cwd));
+			}
+			else
+				return (string_new(s, "/"));
+		}
 		size *= 2;
 	}
-	return (path);
 }
 
 int	is_blank(char c)
