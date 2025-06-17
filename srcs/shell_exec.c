@@ -97,9 +97,9 @@ static void	wait_for_all(t_shell *s, t_vec *pids)
 			last_status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
 			handle_signal_termination(status, &last_status);
+		s->last_status = last_status;
 	}
 	setup_parent_signals();
-	s->last_status = last_status;
 }
 
 void	shell_execute(t_shell *s, char **tokens)
