@@ -26,7 +26,7 @@ void	sort_strings(char **sorted)
 	}
 }
 
-static int	export_sort_and_print(char **envp, int fd)
+static int	export_print(char **envp, int fd)
 {
 	int		i;
 	char	*equals_pos;
@@ -34,7 +34,6 @@ static int	export_sort_and_print(char **envp, int fd)
 	i = 0;
 	if (!envp)
 		return (0);
-	sort_strings(envp);
 	while (envp[i])
 	{
 		equals_pos = ft_strchr(envp[i], '=');
