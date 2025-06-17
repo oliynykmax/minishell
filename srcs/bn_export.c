@@ -101,7 +101,7 @@ int	mini_export(char **argv, int fd, t_shell *s)
 
 	status = 0;
 	if (argv[1] == NULL)
-		return (export_sort_and_print((char **)s->envp->data, fd));
+		return (export_print((char **)s->envp->data, fd));
 	i = 1;
 	while (argv[i])
 	{

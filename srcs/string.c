@@ -55,9 +55,9 @@ int	is_not_empty(const char *str)
 {
 	while (*str)
 	{
-		if (is_blank(*str))
-			return (0);
+		if (!is_blank(*str))
+			return (1);
 		str++;
 	}
-	return (1);
+	return (0);
 }
