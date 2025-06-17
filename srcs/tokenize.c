@@ -46,7 +46,7 @@ static bool	is_syntax_error(t_vec *tokens)
 	last = str[tokens->size - 1];
 	if (*last == '<' || *last == '>')
 		return (true);
-	return (is_meta(str[0][0]));
+	return (str[0][0] == '|');
 }
 
 t_vec	*tokenize(t_shell *s, char *input)
