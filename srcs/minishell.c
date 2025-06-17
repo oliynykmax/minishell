@@ -15,6 +15,8 @@ void	shell_init(t_shell *s, char **envp)
 	s->input_mode = INPUT_MAIN;
 	if (isatty(STDIN_FILENO) && isatty(STDOUT_FILENO))
 		setup_parent_signals();
+	else
+		shell_exit(s, 1, NULL);
 }
 
 void	shell_new_prompt(t_shell *s)
