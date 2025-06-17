@@ -3,13 +3,9 @@
 char	*get_prompt(t_shell *s)
 {
 	char	*prompt;
-	char	*current_dir;
 
-	current_dir = get_working_dir(s);
-	prompt = string_join(s, STR_PROMPTSTART, BGRN);
-	prompt = string_join(s, prompt, current_dir);
-	prompt = string_join(s, prompt, CRESET);
-	prompt = string_join(s, prompt, STR_PROMPTDELIM);
+	prompt = string_join(s, ANSI_COLOR_GREEN, get_working_dir(s));
+	prompt = string_join(s, prompt, ANSI_COLOR_RESET MINISHELL_PROMPT);
 	return (prompt);
 }
 
