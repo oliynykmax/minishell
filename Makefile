@@ -12,6 +12,7 @@ SRCS    := \
 	srcs/bn_unset_echo_cd_pwd.c \
 	srcs/command_exec.c \
 	srcs/debug.c \
+	srcs/event_hooks.c \
 	srcs/execution.c \
 	srcs/filename.c \
 	srcs/heredoc.c \

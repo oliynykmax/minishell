@@ -2,27 +2,21 @@
 
 int	mini_unset(char **argv, int fd, t_shell *s)
 {
-	int		i;
-	int		j;
 	char	**envp;
+	int		j;
 
 	(void)fd;
-	i = 0;
-	if (!argv[1])
+	if (!argv[1] || !s->envp->data)
 		return (0);
-	envp = (char **)s->envp->data;
-	if (!envp)
-		return (0);
-	while (argv[i++])
+	while (*(++argv))
 	{
 		envp = (char **)s->envp->data;
 		j = 0;
-		while (envp[j] && ft_strncmp(envp[j], argv[i], ft_strlen(argv[i])) != 0)
+		while (envp[j] && (ft_strncmp(envp[j], *argv, ft_strlen(*argv))
+				|| (envp[j][ft_strlen(*argv)] != '='
+				&& envp[j][ft_strlen(*argv)] != '\0')))
 			j++;
-		if (!envp[j])
-			continue ;
-		if (envp[j][ft_strlen(argv[i])] == '='
-			|| envp[j][ft_strlen(argv[i])] == '\0')
+		if (envp[j])
 			vector_delete(s->envp, j);
 	}
 	return (0);
@@ -38,7 +32,9 @@ int	mini_echo(char **argv, int fd, t_shell *s)
 	int			i;
 	const bool	if_new_line = ft_strcmp(argv[1], "-n") == 0;
 
-	i = 1 + if_new_line;
+	i = 1;
+	while (ft_strcmp(argv[i], "-n") == 0)
+		i++;
 	while (argv[i])
 	{
 		ft_fprintf(fd, "%s", argv[i]);
@@ -92,8 +88,8 @@ static int	do_chdir(char *path, t_shell *s)
 
 int	mini_cd(char **argv, int fd, t_shell *s)
 {
-	int			i;
-	char		*path;
+	int		i;
+	char	*path;
 
 	(void)fd;
 	i = 0;

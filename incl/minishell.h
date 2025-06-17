@@ -11,12 +11,9 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
-# include <sys/ioctl.h>
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-# include <term.h>
-# include <termios.h>
 # include <unistd.h>
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -24,15 +21,14 @@
 # define ARENA_ALIGN 8 // Memory arena data alignment.
 # define ARENA_SIZE 16384 // Minimum size per memory arena (16 KiB)
 
-#define ANSI_COLOR_GREEN "\1\e[1;32m\2" // Set text color to bright green.
-#define ANSI_COLOR_RESET "\1\e[0m\2" // Reset text color.
-#define MINISHELL_PROMPT "🐚> " // Shown after current working directory.
+# define ANSI_COLOR_GREEN "\1\e[1;32m\2" // Set text color to bright green.
+# define ANSI_COLOR_RESET "\1\e[0m\2" // Reset text color.
+# define MINISHELL_PROMPT "🐚> " // Shown after current working directory.
 
 typedef enum e_input_mode
 {
 	INPUT_MAIN,
 	INPUT_PIPE,
-	INPUT_HEREDOC
 }	t_input_mode;
 
 typedef volatile sig_atomic_t	t_signal;
@@ -82,15 +78,16 @@ extern t_signal					g_signal;
 /*------------------temporary files---------------------------------- */
 int		clear_temp_files(char *filename);
 char	*create_temp_file(t_shell *s);
-/*-----------------signals------------------------------------------- */
+/*-----------------signals & signal setup--------------------------- */
 void	handle_signals(int signum);
-int		my_rl_event_hook(void);
+void	setup_signal_base(void (*handler)(int), int (*event_hook)(void));
 void	setup_parent_signals(void);
 void	setup_child_signals(void);
-void	setup_heredoc_signals(void);
 void	setup_heredoc_signals_local(void);
-void	handle_heredoc_signals(void);
 void	ignore_sigpipe(void);
+/*-----------------readline event hooks------------------------------ */
+int		my_rl_event_hook(void);
+int		heredoc_event_hook(void);
 /*------------------input-handling---------------------------------- */
 char	*shell_readline(t_shell *s, t_input_mode mode);
 char	*process_pipe_input(t_shell *s);
@@ -126,7 +123,6 @@ int		mini_exit(char **args, int fd, t_shell *s);
 int		mini_export(char **argv, int fd, t_shell *s);
 int		mini_pwd(char **argv, int fd, t_shell *s);
 int		mini_unset(char **argv, int fd, t_shell *s);
-int		set_invalid(char *var, int *status);
 void	insert_into_envp(char *var, t_shell *s, int var_len);
 /*------------------params----------------------------------------*/
 void	sort_strings(char **array);
@@ -135,7 +131,6 @@ char	*params_expand_string(t_shell *s, char *string);
 void	params_expand_vector(t_vec *tokens);
 void	filename_expand(t_vec *tokens);
 void	split_words(t_vec *t);
-
 /*------------------utils----------------------------------------- */
 char	*get_working_dir(t_shell *s);
 char	*get_prompt(t_shell *s);
@@ -147,7 +142,6 @@ void	redirect(t_vec *redirections);
 void	subprocess_run(t_shell *s, t_vec *command);
 void	error(const char *message);
 void	safe_close(int *fd);
-void	loop_safe_close(int *fd, int len);
 t_bn	*get_builtin_by_name(char *name);
 void	debug_mode(t_shell *s, char *input, char **envp);
 int		is_not_empty(const char *str);

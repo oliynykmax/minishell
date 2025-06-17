@@ -27,10 +27,7 @@ char	*shell_readline(t_shell *s, t_input_mode mode)
 	char	*input;
 
 	s->input_mode = mode;
-	if (mode == INPUT_HEREDOC)
-		setup_heredoc_signals();
-	else
-		setup_parent_signals();
+	setup_parent_signals();
 	if (mode == INPUT_PIPE)
 		s->input = readline("> ");
 	else
