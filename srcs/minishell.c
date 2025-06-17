@@ -42,8 +42,6 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;
 
-	(void)argc;
-	(void)argv;
 	shell_init(&shell, envp);
 	if (argc == 3 && ft_strcmp(argv[1], "-c") == 0)
 	{
@@ -56,5 +54,4 @@ int	main(int argc, char **argv, char **envp)
 		shell_new_prompt(&shell);
 		user_input(&shell);
 	}
-	shell_exit(&shell, 0, NULL);
 }

@@ -34,14 +34,14 @@ void	redirect(t_vec *redirections)
 	str = (char **)redirections->data;
 	while (*str != NULL)
 	{
-		if (strcmp(*str, "<<") == 0)
+		if (ft_strcmp(*str, "<<") == 0)
 			redirect_file(heredoc(*++str, redirections->shell), O_RDONLY,
 				STDIN_FILENO);
-		if (strcmp(*str, "<") == 0)
+		if (ft_strcmp(*str, "<") == 0)
 			redirect_file(*++str, O_RDONLY, STDIN_FILENO);
-		if (strcmp(*str, ">") == 0)
+		if (ft_strcmp(*str, ">") == 0)
 			redirect_file(*++str, O_WRONLY | O_CREAT | O_TRUNC, STDOUT_FILENO);
-		if (strcmp(*str, ">>") == 0)
+		if (ft_strcmp(*str, ">>") == 0)
 			redirect_file(*++str, O_WRONLY | O_CREAT | O_APPEND, STDOUT_FILENO);
 		str++;
 	}

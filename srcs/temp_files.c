@@ -2,14 +2,14 @@
 
 char	*create_temp_file(t_shell *s)
 {
-	char		*temp_path;
 	char		*temp_name;
 	static int	file_counter = 0;
 
-	temp_name = string_join(s, "/tmp/minishell_heredoc_", string_itoa(s,
-				file_counter++));
-	temp_path = string_new(s, temp_name);
-	return (temp_path);
+	temp_name = string_join(s, "/tmp/m_h_", string_itoa(s, file_counter));
+	while (access(temp_name, F_OK) == 0)
+		temp_name = string_join(s, "/tmp/m_h_", string_itoa(s, file_counter++));
+	file_counter = 0;
+	return (temp_name);
 }
 
 int	clear_temp_files(char *filename)

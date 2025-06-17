@@ -10,7 +10,7 @@ static int	str_isdigit(const char *s)
 	if (!s || !*s)
 		return (0);
 	i = 0;
-	while (s[i] && (s[i] == ' ' || s[i] == '\t'))
+	while (s[i] && is_blank(s[i]))
 		i++;
 	if (s[i] == '-' || s[i] == '+')
 		i++;
@@ -18,7 +18,7 @@ static int	str_isdigit(const char *s)
 		return (0);
 	while (s[i] && ft_isdigit(s[i]))
 		i++;
-	while (s[i] && (s[i] == ' ' || s[i] == '\t'))
+	while (s[i] && is_blank(s[i]))
 		i++;
 	if (s[i] != '\0')
 		return (0);
@@ -49,17 +49,6 @@ int	mini_exit(char **args, int fd, t_shell *s)
 		return (1);
 	}
 	shell_exit(s, (unsigned char)ft_atoi(args[1]), NULL);
-	return (0);
-}
-
-/*
- * set invalid is used by
- * export command
- */
-int	set_invalid(char *var, int *status)
-{
-	ft_fprintf(2, "minishell: export: `%s': not a valid identifier\n", var);
-	*status = 1;
 	return (0);
 }
 
