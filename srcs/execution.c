@@ -32,12 +32,3 @@ void	safe_close(int *fd)
 		*fd = -1;
 	}
 }
-
-void	loop_safe_close(int *fd, int len)
-{
-	int	i;
-
-	i = 0;
-	while (i < len)
-		safe_close(&fd[i++]);
-}
