@@ -24,7 +24,7 @@ static void	write_to_temp_file(int fd, char *line)
 		free(line);
 }
 
-static int	setup_heredoc_fd_and_signals(int *fd, const char *temp_path)
+static int	setup_heredoc_fd(int *fd, const char *temp_path)
 {
 	*fd = open(temp_path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (*fd == -1)
@@ -32,7 +32,6 @@ static int	setup_heredoc_fd_and_signals(int *fd, const char *temp_path)
 		perror("open");
 		return (-1);
 	}
-	setup_heredoc_signals_local();
 	return (0);
 }
 
@@ -64,7 +63,7 @@ char	*heredoc(char *delim, t_shell *s)
 	const int	delim_len = ft_strlen(delim);
 
 	temp_path = create_temp_file(s);
-	if (setup_heredoc_fd_and_signals(&fd, temp_path) == -1)
+	if (setup_heredoc_fd(&fd, temp_path) == -1)
 		return (NULL);
 	while (1)
 	{

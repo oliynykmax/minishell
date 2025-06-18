@@ -14,7 +14,7 @@ void	shell_init(t_shell *s, char **envp)
 		vector_push(s->envp, string_new(s, *envp++));
 	s->input_mode = INPUT_MAIN;
 	if (isatty(STDIN_FILENO) && isatty(STDOUT_FILENO))
-		setup_parent_signals();
+		setup_signals(0);
 	else
 		shell_exit(s, 1, NULL);
 }

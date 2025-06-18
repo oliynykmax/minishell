@@ -37,7 +37,7 @@ char	*process_pipe_input(t_shell *s)
 	}
 	s->tokens = tokenize(s, input);
 	if (ft_strcmp(input, ""))
-	add_history(input);
+		add_history(input);
 	if (s->tokens == NULL || s->tokens->size == 0)
 		return (input);
 	input = handle_pipe_continuation(s, input);

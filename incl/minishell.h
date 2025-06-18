@@ -80,9 +80,8 @@ int		clear_temp_files(char *filename);
 char	*create_temp_file(t_shell *s);
 /*-----------------signals & signal setup--------------------------- */
 void	handle_signals(int signum);
-void	setup_signal_base(void (*handler)(int), int (*event_hook)(void));
+void	setup_signals(int is_child);
 void	setup_parent_signals(void);
-void	setup_child_signals(void);
 void	setup_heredoc_signals_local(void);
 void	ignore_sigpipe(void);
 /*-----------------readline event hooks------------------------------ */
