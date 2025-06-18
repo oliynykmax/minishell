@@ -29,6 +29,7 @@ typedef enum e_input_mode
 {
 	INPUT_MAIN,
 	INPUT_PIPE,
+	INPUT_NONINTERACTIVE,
 }	t_input_mode;
 
 typedef volatile sig_atomic_t	t_signal;
