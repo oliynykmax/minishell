@@ -10,7 +10,7 @@ static void	redirect_file(char *filename, int open_flags, int target)
 
 	////// remove me later please
 	if (!filename)
-		exit(1);
+		exit(130);
 	///////////////////
 	if (file == -1)
 	{
