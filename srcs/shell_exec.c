@@ -2,7 +2,7 @@
 
 static void	init_subshell(t_shell *s, t_vec *redirs)
 {
-	setup_child_signals();
+	setup_signals(1);
 	dup2(s->fd_in, STDIN_FILENO);
 	dup2(s->fd_out, STDOUT_FILENO);
 	safe_close(&s->fd_in);
@@ -97,7 +97,7 @@ static void	wait_for_all(t_shell *s, t_vec *pids)
 			handle_signal_termination(status, &last_status);
 		s->last_status = last_status;
 	}
-	setup_parent_signals();
+	setup_signals(0);
 }
 
 void	shell_execute(t_shell *s, char **tokens)
