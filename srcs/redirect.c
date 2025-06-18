@@ -8,10 +8,6 @@ static void	redirect_file(char *filename, int open_flags, int target)
 {
 	const int	file = open(filename, open_flags, 0644);
 
-	////// remove me later please
-	if (!filename)
-		exit(130);
-	///////////////////
 	if (file == -1)
 	{
 		ft_fprintf(2, "minishell: %s: %s", filename, strerror(errno));
@@ -35,8 +31,7 @@ void	redirect(t_vec *redirections)
 	while (*str != NULL)
 	{
 		if (ft_strcmp(*str, "<<") == 0)
-			redirect_file(heredoc(*++str, redirections->shell), O_RDONLY,
-				STDIN_FILENO);
+			redirect_file(*++str, O_RDONLY, STDIN_FILENO);
 		if (ft_strcmp(*str, "<") == 0)
 			redirect_file(*++str, O_RDONLY, STDIN_FILENO);
 		if (ft_strcmp(*str, ">") == 0)
