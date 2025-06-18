@@ -144,7 +144,6 @@ void	error(const char *message);
 void	safe_close(int *fd);
 t_bn	*get_builtin_by_name(char *name);
 void	debug_mode(t_shell *s, char *input, char **envp);
-int		is_not_empty(const char *str);
 char	*heredoc(char *delim, t_shell *sn);
 
 #endif
