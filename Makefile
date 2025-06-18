@@ -12,7 +12,6 @@ SRCS    := \
 	srcs/bn_unset_echo_cd_pwd.c \
 	srcs/command_exec.c \
 	srcs/debug.c \
-	srcs/event_hooks.c \
 	srcs/execution.c \
 	srcs/filename.c \
 	srcs/heredoc.c \
@@ -22,7 +21,6 @@ SRCS    := \
 	srcs/params.c \
 	srcs/redirect.c \
 	srcs/shell_exec.c \
-	srcs/signal_setup.c \
 	srcs/signals.c \
 	srcs/split_words.c \
 	srcs/string.c \
@@ -47,7 +45,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT_A)
 	@echo "🔗 Linking $(NAME)..."
-	@$(CC) $(CFLAGS) $(OBJS) -lreadline -ltinfo $(LIBFT_A) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) -lreadline $(LIBFT_A) -o $(NAME)
 
 objs/%.o: srcs/%.c incl/minishell.h | objs
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
