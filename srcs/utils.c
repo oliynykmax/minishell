@@ -12,6 +12,8 @@ char	*get_prompt(t_shell *s)
 // Clean up all resources and exit the shell, with an optional error message.
 void	shell_exit(t_shell *s, int exit_status, const char *message)
 {
+	if (message != NULL)
+		printf("minishell: %s\n", message);
 	safe_close(&s->fd_in);
 	safe_close(&s->fd_out);
 	safe_close(&s->fd_unused);
@@ -22,8 +24,6 @@ void	shell_exit(t_shell *s, int exit_status, const char *message)
 	free(s->input);
 	arena_free(s->arenas[0]);
 	arena_free(s->arenas[1]);
-	if (message != NULL)
-		printf("minishell: %s\n", message);
 	exit(exit_status);
 }
 
