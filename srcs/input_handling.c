@@ -36,12 +36,10 @@ char	*process_pipe_input(t_shell *s)
 		return (string_new(s, ""));
 	}
 	s->tokens = tokenize(s, input);
+	if (ft_strcmp(input, ""))
+	add_history(input);
 	if (s->tokens == NULL || s->tokens->size == 0)
 		return (input);
 	input = handle_pipe_continuation(s, input);
-	if (s->tokens && s->tokens->size > 0
-		&& ft_strcmp(s->tokens->data[s->tokens->size - 1], "|") != 0
-		&& is_not_empty(input))
-		add_history(input);
 	return (input);
 }

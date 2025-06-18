@@ -50,14 +50,3 @@ char	*string_itoa(t_shell *s, int value)
 		str[0] = '-';
 	return (str);
 }
-
-int	is_not_empty(const char *str)
-{
-	while (*str)
-	{
-		if (!is_blank(*str))
-			return (1);
-		str++;
-	}
-	return (0);
-}
