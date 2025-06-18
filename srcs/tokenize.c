@@ -63,8 +63,7 @@ int	replace_heredoc(t_shell *s, t_vec *tokens)
 			delim = heredoc(str[i++], s);
 			if (!delim)
 				return (1);
-			vector_delete(tokens, i);
-			vector_insert(tokens, i, delim);
+			tokens->data[i] = delim;
 		}
 		i++;
 	}
