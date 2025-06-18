@@ -49,6 +49,26 @@ static bool	is_syntax_error(t_vec *tokens)
 	return (str[0][0] == '|');
 }
 
+int replace_heredoc(t_shell *s, t_vec *tokens)
+{
+	(void)s;
+	int i;
+	int	heredoc_counter = 0;
+
+	i = 0;
+	char	**data = (char **)tokens->data;
+	while (data[i])
+		if (ft_strcmp(data[i++], "<<") == 0)
+			heredoc_counter++;
+	if (heredoc_counter > 16)
+	{
+		ft_printf("minishell: maximum here-document count exceeded\n");
+		shell_exit(s, 2, NULL);
+	}
+
+	return 1;
+}
+
 t_vec	*tokenize(t_shell *s, char *input)
 {
 	t_vec *const	tokens = vector_new(s, 0);
@@ -62,6 +82,7 @@ t_vec	*tokenize(t_shell *s, char *input)
 		else if (*input != '\0')
 			input = tokenize_word(s, tokens, input);
 	}
+	//replace_heredoc(s, tokens);
 	if (is_syntax_error(tokens))
 	{
 		printf("minishell: syntax error\n");
