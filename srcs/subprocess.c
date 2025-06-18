@@ -35,9 +35,13 @@ void	subprocess_run(t_shell *s, t_vec *command)
 {
 	char *const	name = command->data[0];
 	char *const	filename = get_command_filename(s, name);
+	char		*error_msg;
 
 	if (filename == NULL)
-		shell_exit(s, 127, "command not found");
+	{
+		error_msg = string_join(s, name, ": command not found");
+		shell_exit(s, 127, error_msg);
+	}
 	execve(filename, (char **) command->data, (char **) s->envp->data);
 	shell_exit(s, EXIT_FAILURE, strerror(errno));
 }

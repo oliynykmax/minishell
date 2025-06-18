@@ -12,11 +12,13 @@ void	shell_init(t_shell *s, char **envp)
 	s->envp = vector_new(s, 0);
 	while (*envp != NULL)
 		vector_push(s->envp, string_new(s, *envp++));
-	s->input_mode = INPUT_MAIN;
 	if (isatty(STDIN_FILENO) && isatty(STDOUT_FILENO))
+	{
+		s->input_mode = INPUT_MAIN;
 		setup_signals(0);
+	}
 	else
-		shell_exit(s, 1, NULL);
+		s->input_mode = INPUT_NONINTERACTIVE;
 }
 
 void	shell_new_prompt(t_shell *s)

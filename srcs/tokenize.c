@@ -49,24 +49,49 @@ static bool	is_syntax_error(t_vec *tokens)
 	return (str[0][0] == '|');
 }
 
-int replace_heredoc(t_shell *s, t_vec *tokens)
+int	replace_heredoc(t_shell *s, t_vec *tokens)
 {
-	(void)s;
-	int i;
-	int	heredoc_counter = 0;
+	char **const	str = (char**)tokens->data;
+	char			*delim;
+	size_t			i;
 
 	i = 0;
-	char	**data = (char **)tokens->data;
-	while (data[i])
-		if (ft_strcmp(data[i++], "<<") == 0)
-			heredoc_counter++;
-	if (heredoc_counter > 16)
+	while (++i < tokens->size)
+	{
+		if (ft_strcmp(str[i], "<<") == 0)
+		{
+			delim = heredoc(str[i++], s);
+			if (!delim)
+				return (1);
+			vector_delete(tokens, i);
+			vector_insert(tokens, i, delim);
+		}
+		i++;
+	}
+	return (0);
+}
+
+static int	check_heredoc_limit(t_shell *s, t_vec *tokens)
+{
+	size_t	i;
+	int		heredoc_count;
+
+	heredoc_count = 0;
+	i = 0;
+	while (i < tokens->size)
+		if (ft_strcmp(tokens->data[i++], "<<") == 0)
+			heredoc_count++;
+	if (heredoc_count > 16)
 	{
 		ft_printf("minishell: maximum here-document count exceeded\n");
 		shell_exit(s, 2, NULL);
 	}
-
-	return 1;
+	if (replace_heredoc(s, tokens))
+	{
+		s->last_status = 130 + ((heredoc_count > 1) * 10 - (heredoc_count > 1));
+		return (1);
+	}
+	return (0);
 }
 
 t_vec	*tokenize(t_shell *s, char *input)
@@ -82,7 +107,10 @@ t_vec	*tokenize(t_shell *s, char *input)
 		else if (*input != '\0')
 			input = tokenize_word(s, tokens, input);
 	}
-	//replace_heredoc(s, tokens);
+	/// needs to be in other place, also handle the return value
+	if (check_heredoc_limit(s, tokens))
+		return (NULL);
+	///yeah
 	if (is_syntax_error(tokens))
 	{
 		printf("minishell: syntax error\n");
