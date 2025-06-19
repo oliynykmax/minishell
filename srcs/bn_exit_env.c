@@ -32,8 +32,9 @@ int	mini_exit(char **args, int fd, t_shell *s)
 {
 	int	has_second_arg;
 
+	(void)fd;
 	has_second_arg = (args[2] != NULL);
-	ft_putstr_fd("exit\n", fd);
+	ft_putstr_fd("exit\n", 2);
 	if (args[1] == NULL)
 		shell_exit(s, s->last_status, NULL);
 	if (!str_isdigit(args[1]))
