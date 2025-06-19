@@ -55,7 +55,9 @@ char	*params_expand_string(t_shell *s, char *in)
 	start = in;
 	while (*in != '\0')
 	{
-		if (!quote && (*in == '\'' || *in == '\"'))
+		if (*in == '\\' && in[1] != '\0')
+			in++;
+		else if (!quote && (*in == '\'' || *in == '\"'))
 			quote = *in;
 		else if (quote && *in == quote)
 			quote = 0;
@@ -86,7 +88,9 @@ static void	remove_quotes(t_vec *tokens)
 		dst = src;
 		while (*src != '\0')
 		{
-			if (!quote && (*src == '\'' || *src == '\"'))
+			if (*src == '\\' && src[1] != '\0')
+				*dst++ = *++src;
+			else if (!quote && (*src == '\'' || *src == '\"'))
 				quote = *src;
 			else if (*src == quote)
 				quote = 0;
