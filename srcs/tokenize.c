@@ -113,6 +113,7 @@ t_vec	*tokenize(t_shell *s, char *input)
 	if (is_syntax_error(tokens))
 	{
 		printf("minishell: syntax error\n");
+		s->last_status = 2;
 		return (NULL);
 	}
 	return (tokens);
