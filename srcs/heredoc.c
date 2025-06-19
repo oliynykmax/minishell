@@ -1,9 +1,8 @@
 #include "../incl/minishell.h"
 
-static char	*sigint_heredoc(char *line, int fd, char *temp_path, t_shell *s)
+static char	*sigint_heredoc(char *line, int fd, t_shell *s)
 {
 	close(fd);
-	clear_temp_files(temp_path);
 	if (line)
 		free(line);
 	g_signal = 0;
@@ -69,7 +68,7 @@ char	*heredoc(char *delim, t_shell *s)
 	{
 		line = readline("> ");
 		if (g_signal == SIGINT)
-			return (sigint_heredoc(line, fd, temp_path, s));
+			return (sigint_heredoc(line, fd, s));
 		if (!process_heredoc_line(line, delim, delim_len, fd))
 			break ;
 	}

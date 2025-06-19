@@ -4,7 +4,7 @@
 // file with the provided flags, and redirects it to a target file descriptor
 // (which should normally be stdout or stdin).
 
-static bool	redirect_file(t_shell *s, char *filename, int open_flags, int target)
+bool	redirect_file(t_shell *s, char *filename, int open_flags, int target)
 {
 	const int	file = open(filename, open_flags, 0644);
 
@@ -36,9 +36,11 @@ bool	redirect(t_shell *s, t_vec *redirections)
 			return (false);
 		if (!ft_strcmp(*str, "<") && !redirect_file(s, *++str, O_RDONLY, 0))
 			return (false);
-		if (!ft_strcmp(*str, ">") && !redirect_file(s, *++str, O_WRONLY | O_CREAT | O_TRUNC, 1))
+		if (!ft_strcmp(*str, ">") && !redirect_file(s, *++str,
+				O_WRONLY | O_CREAT | O_TRUNC, 1))
 			return (false);
-		if (!ft_strcmp(*str, ">>") && !redirect_file(s, *++str, O_WRONLY | O_CREAT | O_APPEND, 1))
+		if (!ft_strcmp(*str, ">>") && !redirect_file(s, *++str,
+				O_WRONLY | O_CREAT | O_APPEND, 1))
 			return (false);
 		str++;
 	}

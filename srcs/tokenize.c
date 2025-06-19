@@ -49,6 +49,7 @@ static bool	is_syntax_error(t_vec *tokens)
 	return (str[0][0] == '|');
 }
 
+/*we better be careful with the check for NULL in that loop */
 int	replace_heredoc(t_shell *s, t_vec *tokens)
 {
 	char **const	str = (char**)tokens->data;
@@ -58,12 +59,12 @@ int	replace_heredoc(t_shell *s, t_vec *tokens)
 	i = 0;
 	while (i < tokens->size)
 	{
-		if (ft_strcmp(str[i], "<<") == 0)
+		if (ft_strcmp(str[i], "<<") == 0 && str[i + 1] != NULL)
 		{
-			delim = heredoc(str[i+1], s);
+			delim = heredoc(str[i + 1], s);
 			if (!delim)
 				return (1);
-			tokens->data[i+1] = delim;
+			tokens->data[i + 1] = delim;
 		}
 		i++;
 	}
@@ -77,6 +78,7 @@ static int	check_heredoc_limit(t_shell *s, t_vec *tokens)
 
 	heredoc_count = 0;
 	i = 0;
+	clear_temp_files(s);
 	while (i < tokens->size)
 		if (ft_strcmp(tokens->data[i++], "<<") == 0)
 			heredoc_count++;

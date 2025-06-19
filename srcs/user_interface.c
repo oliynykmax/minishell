@@ -21,7 +21,7 @@ static char	*handle_null_input(t_shell *s, t_input_mode mode)
 	}
 	else if (mode == INPUT_NONINTERACTIVE)
 	{
-		shell_exit(s, EXIT_SUCCESS, NULL);
+		shell_exit(s, s->last_status, NULL);
 	}
 	return (string_new(s, ""));
 }
