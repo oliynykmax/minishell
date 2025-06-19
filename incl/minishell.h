@@ -77,7 +77,7 @@ struct s_vec
 extern t_signal					g_signal;
 
 /*------------------temporary files---------------------------------- */
-int		clear_temp_files(char *filename);
+void	clear_temp_files(t_shell *s);
 char	*create_temp_file(t_shell *s);
 /*-----------------signals & signal setup--------------------------- */
 void	handle_signals(int signum);
