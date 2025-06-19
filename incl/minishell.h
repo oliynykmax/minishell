@@ -130,6 +130,7 @@ char	*get_env_variable(t_shell *s, char *name);
 char	*params_expand_string(t_shell *s, char *string);
 void	params_expand_vector(t_vec *tokens);
 void	filename_expand(t_vec *tokens);
+void	tilde_expand_vector(t_vec *t);
 void	split_words(t_vec *t);
 /*------------------utils----------------------------------------- */
 char	*get_working_dir(t_shell *s);
