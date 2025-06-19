@@ -1,6 +1,6 @@
 #include "../incl/minishell.h"
 
-static void	init_subshell(t_shell *s, t_vec *redirs)
+static void	init_subshell(t_shell *s)
 {
 	setup_signals(1);
 	dup2(s->fd_in, STDIN_FILENO);
@@ -8,7 +8,6 @@ static void	init_subshell(t_shell *s, t_vec *redirs)
 	safe_close(&s->fd_in);
 	safe_close(&s->fd_out);
 	safe_close(&s->fd_unused);
-	redirect(redirs);
 }
 
 void	run_builtin(t_shell *s, t_vec *command, t_vec *redirs)
@@ -19,14 +18,15 @@ void	run_builtin(t_shell *s, t_vec *command, t_vec *redirs)
 	if (pipelined)
 	{
 		ignore_sigpipe();
-		init_subshell(s, redirs);
-		s->last_status = builtin((char **) command->data, STDOUT_FILENO, s);
+		init_subshell(s);
+		if (redirect(s, redirs))
+			s->last_status = builtin((char **) command->data, STDOUT_FILENO, s);
 		shell_exit(s, s->last_status, NULL);
 	}
 	s->fd_saved_in = dup(STDIN_FILENO);
 	s->fd_saved_out = dup(STDOUT_FILENO);
-	redirect(redirs);
-	s->last_status = builtin((char **) command->data, STDOUT_FILENO, s);
+	if (redirect(s, redirs))
+		s->last_status = builtin((char **) command->data, STDOUT_FILENO, s);
 	dup2(s->fd_saved_in, STDIN_FILENO);
 	dup2(s->fd_saved_out, STDOUT_FILENO);
 	safe_close(&s->fd_saved_in);
@@ -35,7 +35,9 @@ void	run_builtin(t_shell *s, t_vec *command, t_vec *redirs)
 
 void	run_program(t_shell *s, t_vec *command, t_vec *redirs)
 {
-	init_subshell(s, redirs);
+	init_subshell(s);
+	if (!redirect(s, redirs))
+		shell_exit(s, 1, NULL);
 	subprocess_run(s, command);
 }
 
@@ -45,6 +47,9 @@ void	run_command(t_shell *s, t_vec *command, t_vec *redirs)
 	pid_t		pid;
 
 	params_expand_vector(command);
+	params_expand_vector(redirs);
+	if (command->size == 0)
+		return ;
 	builtin = get_builtin_by_name(command->data[0]);
 	pid = -1;
 	if (builtin == NULL || s->fd_in != 0 || s->fd_out != 1)
