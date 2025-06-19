@@ -12,13 +12,18 @@ char	*create_temp_file(t_shell *s)
 	return (temp_name);
 }
 
-int	clear_temp_files(char *filename)
+void	clear_temp_files(t_shell *s)
 {
-	if (!filename)
-		return (-1);
-	if (access(filename, F_OK) != 0)
-		return (-1);
-	if (unlink(filename) == -1)
-		return (-1);
-	return (0);
+	char	*temp_name;
+	int		file_counter;
+
+	file_counter = 0;
+	temp_name = string_join(s, "/tmp/m_h_", string_itoa(s, file_counter));
+	while (access(temp_name, F_OK) == 0)
+	{
+		if (access(temp_name, F_OK) == 0)
+			unlink(temp_name);
+		file_counter++;
+		temp_name = string_join(s, "/tmp/m_h_", string_itoa(s, file_counter));
+	}
 }
