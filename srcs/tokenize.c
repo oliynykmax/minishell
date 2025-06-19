@@ -56,14 +56,14 @@ int	replace_heredoc(t_shell *s, t_vec *tokens)
 	size_t			i;
 
 	i = 0;
-	while (++i < tokens->size)
+	while (i < tokens->size)
 	{
 		if (ft_strcmp(str[i], "<<") == 0)
 		{
-			delim = heredoc(str[i++], s);
+			delim = heredoc(str[i+1], s);
 			if (!delim)
 				return (1);
-			tokens->data[i] = delim;
+			tokens->data[i+1] = delim;
 		}
 		i++;
 	}
