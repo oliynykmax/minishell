@@ -38,13 +38,13 @@ int	mini_exit(char **args, int fd, t_shell *s)
 		shell_exit(s, s->last_status, NULL);
 	if (!str_isdigit(args[1]))
 	{
-		ft_fprintf(fd, "minishell: exit: %s: numeric argument required\n",
+		ft_fprintf(2, "minishell: exit: %s: numeric argument required\n",
 			args[1]);
 		shell_exit(s, 2, NULL);
 	}
 	if (has_second_arg)
 	{
-		ft_fprintf(fd, "minishell: exit: too many arguments\n");
+		ft_fprintf(2, "minishell: exit: too many arguments\n");
 		s->last_status = 1;
 		return (1);
 	}
