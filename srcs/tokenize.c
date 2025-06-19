@@ -39,7 +39,7 @@ static bool	is_syntax_error(t_vec *tokens)
 
 	i = 0;
 	while (++i < tokens->size)
-		if (is_meta(str[i - 1][0]) && is_meta(str[i][0]))
+		if (!strcmp(str[i - 1], "|") && !strcmp(str[i], "|"))
 			return (true);
 	if (tokens->size == 0)
 		return (false);
@@ -87,7 +87,7 @@ static int	check_heredoc_limit(t_shell *s, t_vec *tokens)
 	}
 	if (replace_heredoc(s, tokens))
 	{
-		s->last_status = 130 + ((heredoc_count > 1) * 10 - (heredoc_count > 1));
+		s->last_status = 130 + (heredoc_count > 1) * 9;
 		return (1);
 	}
 	return (0);
