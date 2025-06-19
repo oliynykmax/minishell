@@ -34,6 +34,7 @@ static int	export_print(char **envp, int fd)
 	i = 0;
 	if (!envp)
 		return (0);
+	sort_strings(envp);
 	while (envp[i])
 	{
 		equals_pos = ft_strchr(envp[i], '=');
