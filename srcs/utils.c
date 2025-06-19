@@ -13,7 +13,7 @@ char	*get_prompt(t_shell *s)
 void	shell_exit(t_shell *s, int exit_status, const char *message)
 {
 	if (message != NULL)
-		printf("minishell: %s\n", message);
+		ft_fprintf(2, "minishell: %s\n", message);
 	safe_close(&s->fd_in);
 	safe_close(&s->fd_out);
 	safe_close(&s->fd_unused);
