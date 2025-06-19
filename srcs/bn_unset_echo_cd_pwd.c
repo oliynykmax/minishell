@@ -22,6 +22,21 @@ int	mini_unset(char **argv, int fd, t_shell *s)
 	return (0);
 }
 
+static int	is_n_flag(const char *arg)
+{
+	int	i;
+
+	if (!arg)
+		return (0);
+	if (arg[0] != '-' || arg[1] != 'n')
+		return (0);
+	i = 1;
+	while (arg[++i])
+		if (arg[i] != 'n')
+			return (0);
+	return (1);
+}
+
 /*
  * echo command
  * always returns 0
@@ -29,20 +44,24 @@ int	mini_unset(char **argv, int fd, t_shell *s)
  */
 int	mini_echo(char **argv, int fd, t_shell *s)
 {
-	int			i;
-	const bool	if_new_line = ft_strcmp(argv[1], "-n") == 0;
+	int	i;
+	int	if_new_line;
 
+	if_new_line = 1;
 	i = 1;
-	while (ft_strcmp(argv[i], "-n") == 0)
+	while (argv[i] && is_n_flag(argv[i]))
+	{
+		if_new_line = 0;
 		i++;
+	}
 	while (argv[i])
 	{
 		ft_fprintf(fd, "%s", argv[i]);
-		if (argv[i + 1] != NULL)
+		if (argv[i + 1])
 			ft_fprintf(fd, " ");
 		i++;
 	}
-	if (!if_new_line)
+	if (if_new_line)
 		ft_fprintf(fd, "\n");
 	(void)s;
 	return (0);
