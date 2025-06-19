@@ -16,7 +16,9 @@ static char	*tokenize_word(t_shell *s, t_vec *tokens, char *input)
 	quote = 0;
 	while (*input != '\0')
 	{
-		if (!quote)
+		if (*input == '\\')
+			input++;
+		else if (!quote)
 		{
 			if (*input == '\'' || *input == '\"')
 				quote = *input;
