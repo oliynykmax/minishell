@@ -34,5 +34,5 @@ void	split_words(t_vec *t)
 
 	i = 0;
 	while (i < t->size)
-		i = split_word(t, i) + 1;
+		i = split_word(t, i);
 }

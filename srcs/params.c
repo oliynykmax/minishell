@@ -19,7 +19,7 @@ char	*get_env_variable(t_shell *s, char *key)
 	return ("");
 }
 
-static char	*params_replace(t_shell *s, char **out, char *in)
+static char	*params_replace(t_shell *s, char **out, char *in, char quote)
 {
 	char	*key;
 	char	*start;
@@ -34,7 +34,7 @@ static char	*params_replace(t_shell *s, char **out, char *in)
 		in++;
 	while (ft_isalnum(*in) || *in == '_')
 		in++;
-	if (in == start)
+	if (in == start && (*in == '\0' || quote == '\"'))
 		*out = string_join(s, *out, "$");
 	else
 	{
@@ -62,7 +62,7 @@ char	*params_expand_string(t_shell *s, char *in)
 		else if (quote != '\'' && *in == '$')
 		{
 			out = string_join(s, out, string_sub(s, start, in - start));
-			in = params_replace(s, &out, in + 1) - 1;
+			in = params_replace(s, &out, in + 1, quote) - 1;
 			start = in + 1;
 		}
 		in++;
