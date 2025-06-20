@@ -1,5 +1,13 @@
 #include "../incl/minishell.h"
 
+static int	export_write_error(const char *var, int *status, int code)
+{
+	ft_fprintf(2, "minishell: export: `%s': not a valid identifier\n", var);
+	if (status)
+		*status = code;
+	return (0);
+}
+
 static int	export_print(char **envp, int fd)
 {
 	int		i;
@@ -25,39 +33,19 @@ static int	export_print(char **envp, int fd)
 	return (0);
 }
 
-static int	is_invalid_export_identifier(char *var, int *status)
-{
-	if (var && var[0] == '-')
-	{
-		ft_fprintf(2, "minishell: export: `%s': not a valid identifier\n", var);
-		*status = 2;
-		return (1);
-	}
-	return (0);
-}
-
 static int	is_valid_var(char *var, int *status)
 {
 	int	i;
 
-	if (is_invalid_export_identifier(var, status))
-		return (0);
+	if (var && var[0] == '-')
+		return (export_write_error(var, status, 2));
 	i = 1;
 	if (!var || !var[0] || (!ft_isalpha(var[0]) && var[0] != '_'))
-	{
-		ft_fprintf(2, "minishell: export: `%s': not a valid identifier\n", var);
-		*status = 1;
-		return (0);
-	}
+		return (export_write_error(var, status, 1));
 	while (var[i] && var[i] != '=')
 	{
 		if (!ft_isalnum(var[i]) && var[i] != '_')
-		{
-			ft_fprintf(2, "minishell: export: `%s': not a valid identifier\n",
-				var);
-			*status = 1;
-			return (0);
-		}
+			return (export_write_error(var, status, 1));
 		i++;
 	}
 	if (*status != 1)
