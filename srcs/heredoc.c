@@ -24,24 +24,46 @@ static int	setup_heredoc_fd(int *fd, const char *temp_path)
 
 static int	is_delim_quoted(char *delim)
 {
-	int	len;
+	int	i;
+	int	counter_single;
+	int	counter_double;
 
-	len = ft_strlen(delim);
-	if (len >= 2 && delim[0] == '\'' && delim[len - 1] == '\'')
-		return (1);
-	if (len >= 2 && delim[0] == '"' && delim[len - 1] == '"')
+	i = 0;
+	counter_single = 0;
+	counter_double = 0;
+	while (delim[i])
+	{
+		if (delim[i] == '"')
+			counter_double++;
+		if (delim[i] == '\'')
+			counter_single++;
+		i++;
+	}
+	if (counter_double > 1 || counter_single > 1)
 		return (1);
 	return (0);
 }
 
 static char	*get_clean_delim(t_shell *s, char *delim)
 {
-	int	len;
+	char	*new_delim;
+	int		i;
+	int		j;
 
-	len = ft_strlen(delim);
-	if (is_delim_quoted(delim))
-		return (string_sub(s, delim + 1, len - 2));
-	return (string_new(s, delim));
+	new_delim = shell_malloc(s, ft_strlen(delim) + 1);
+	i = 0;
+	j = 0;
+	while (delim[j])
+	{
+		if (delim[j] != '"' && delim[j] != '\'')
+		{
+			new_delim[i] = delim[j];
+			i++;
+		}
+		j++;
+	}
+	new_delim[i] = '\0';
+	return (new_delim);
 }
 
 static int	is_delimiter(char *line, char *delim)
@@ -53,48 +75,55 @@ static int	is_delimiter(char *line, char *delim)
 	return (0);
 }
 
-static void	read_heredoc_loop(int fd, char *clean_delim, t_shell *s, int expand)
+static int	read_heredoc_handle(t_heredoc *h, char *line)
+{
+	if (g_signal == SIGINT)
+		return (0);
+	if (is_delimiter(line, h->clean_delim))
+	{
+		if (!line)
+			ft_fprintf(2, "minishell: warning: heredoc"
+				" stopped by EOF (wanted `%s')\n", h->clean_delim);
+		return (0);
+	}
+	write_to_temp_file(h->fd, string_new(h->s, line), h->s, h->expand);
+	return (1);
+}
+
+static void	read_heredoc_loop(t_heredoc *h)
 {
 	char	*line;
 
 	while (1)
 	{
-		line = readline("> ");
-		if (g_signal == SIGINT)
+		if (isatty(STDIN_FILENO))
+			line = readline("> ");
+		else
+			line = shell_readline(h->s, INPUT_NONINTERACTIVE);
+		if (!read_heredoc_handle(h, line))
 		{
-			if (line)
+			if (isatty(STDIN_FILENO))
 				free(line);
-			return ;
+			break ;
 		}
-		if (is_delimiter(line, clean_delim))
-		{
-			if (!line)
-				ft_fprintf(2, "minishell: warning: heredoc"
-					" stopped by EOF (wanted `%s')\n", clean_delim);
-			else
-				free(line);
-			return ;
-		}
-		write_to_temp_file(fd, line, s, expand);
-		free(line);
+		if (isatty(STDIN_FILENO))
+			free(line);
 	}
 }
 
 char	*heredoc(char *delim, t_shell *s)
 {
+	t_heredoc	h;
 	const char	*temp_path = create_temp_file(s);
-	const char	*clean_delim = get_clean_delim(s, delim);
-	int			fd;
-	const int	expand = !is_delim_quoted(delim);
 
-	if (setup_heredoc_fd(&fd, temp_path) == -1)
+	h.clean_delim = get_clean_delim(s, delim);
+	h.expand = !is_delim_quoted(delim);
+	h.s = s;
+	if (setup_heredoc_fd(&h.fd, temp_path) == -1)
 		return (NULL);
-	read_heredoc_loop(fd, (char *)clean_delim, s, expand);
-	close(fd);
+	read_heredoc_loop(&h);
+	close(h.fd);
 	if (g_signal == SIGINT)
-	{
-		s->last_status = 130;
 		return (NULL);
-	}
 	return ((char *)temp_path);
 }

@@ -91,7 +91,7 @@ static int	check_heredoc_limit(t_shell *s, t_vec *tokens)
 	}
 	if (replace_heredoc(s, tokens))
 	{
-		s->last_status = 130 + (heredoc_count > 1) * 9;
+		s->last_status = 130;
 		return (1);
 	}
 	return (0);
