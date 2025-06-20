@@ -153,6 +153,22 @@ void	error(const char *message);
 void	safe_close(int *fd);
 t_bn	*get_builtin_by_name(char *name);
 void	debug_mode(t_shell *s, char *input, char **envp);
-char	*heredoc(char *delim, t_shell *sn);
+char	*heredoc(char *delim, t_shell *s);
+
+int		validate_redirections(t_vec *tokens, t_shell *s);
+
+/* Heredoc helpers */
+int		heredoc_delim_is_quoted(char *delim);
+char	*heredoc_strip_quotes(t_shell *s, char *delim);
+int		heredoc_is_delimiter(char *line, char *delim);
+int		heredoc_replace_tokens(t_shell *s, t_vec *tokens);
+int		heredoc_check_limit(t_shell *s, t_vec *tokens);
+
+/* Builtin helpers */
+void	sort_strings(char **sorted);
+void	insert_into_envp(char *var, t_shell *s, int var_len);
+int		echo_is_n_flag(const char *arg);
+int		is_numeric_string(const char *s);
+int		change_directory(char *path, t_shell *s);
 
 #endif
