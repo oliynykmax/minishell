@@ -3,7 +3,7 @@
 char	*create_temp_file(t_shell *s)
 {
 	char		*temp_name;
-	static int	file_counter = 0;
+	int	file_counter = 0;
 
 	temp_name = string_join(s, "/tmp/m_h_", string_itoa(s, file_counter));
 	while (access(temp_name, F_OK) == 0)
