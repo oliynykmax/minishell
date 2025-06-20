@@ -28,12 +28,12 @@ static char	*handle_null_input(t_shell *s, t_input_mode mode)
 
 static char	*read_noninteractive_line(t_shell *s)
 {
-	char	buffer[4096];
+	char	buffer[24096];
 	int		bytes_read;
 	int		i;
 
 	i = 0;
-	while (i < 4095)
+	while (i < 24095)
 	{
 		bytes_read = read(STDIN_FILENO, &buffer[i], 1);
 		if (bytes_read <= 0)

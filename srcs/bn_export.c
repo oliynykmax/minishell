@@ -75,10 +75,23 @@ void	insert_into_envp(char *var, t_shell *s, int var_len)
 	vector_push(s->envp, string_new(s, var));
 }
 
+static int	is_invalid_export_identifier(char *var, int *status)
+{
+	if (var && var[0] == '-')
+	{
+		ft_fprintf(2, "minishell: export: `%s': not a valid identifier\n", var);
+		*status = 2;
+		return (1);
+	}
+	return (0);
+}
+
 static int	is_valid_var(char *var, int *status)
 {
 	int	i;
 
+	if (is_invalid_export_identifier(var, status))
+		return (0);
 	i = 1;
 	if (!var || !var[0] || (!ft_isalpha(var[0]) && var[0] != '_'))
 	{
