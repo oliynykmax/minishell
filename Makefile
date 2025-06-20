@@ -7,29 +7,32 @@ CFLAGS  := -Wall -Wextra -Werror
 INCLUDES := -Iincl -Ilibft
 
 SRCS    := \
-	srcs/bn_exit_env.c \
-	srcs/bn_export.c \
-	srcs/bn_unset_echo_cd_pwd.c \
-	srcs/command_exec.c \
-	srcs/debug.c \
-	srcs/execution.c \
-	srcs/filename.c \
-	srcs/heredoc.c \
-	srcs/input_handling.c \
-	srcs/memory.c \
-	srcs/minishell.c \
-	srcs/params.c \
-	srcs/redirect.c \
-	srcs/shell_exec.c \
-	srcs/signals.c \
-	srcs/split_words.c \
-	srcs/string.c \
-	srcs/subprocess.c \
-	srcs/temp_files.c \
-	srcs/tokenize.c \
-	srcs/user_interface.c \
-	srcs/utils.c \
-	srcs/vector.c \
+ 	srcs/bn_exit_env.c \
+ 	srcs/bn_export.c \
+ 	srcs/bn_unset_echo_cd_pwd.c \
+ 	srcs/bn_helpers.c \
+ 	srcs/command_exec.c \
+ 	srcs/debug.c \
+ 	srcs/execution.c \
+ 	srcs/filename.c \
+ 	srcs/heredoc.c \
+ 	srcs/heredoc_utils.c \
+ 	srcs/input_handling.c \
+ 	srcs/memory.c \
+ 	srcs/minishell.c \
+ 	srcs/params.c \
+ 	srcs/redirect.c \
+ 	srcs/shell_exec.c \
+ 	srcs/signals.c \
+ 	srcs/split_words.c \
+ 	srcs/string.c \
+ 	srcs/subprocess.c \
+ 	srcs/temp_files.c \
+ 	srcs/tokenize.c \
+ 	srcs/user_interface.c \
+ 	srcs/utils.c \
+ 	srcs/validate_redirections.c \
+ 	srcs/vector.c \
 
 OBJS    := $(SRCS:srcs/%.c=objs/%.o)
 

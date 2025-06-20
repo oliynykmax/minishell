@@ -1,31 +1,5 @@
 #include "../incl/minishell.h"
 
-void	sort_strings(char **sorted)
-{
-	int		i;
-	int		j;
-	int		len;
-	char	*tmp;
-
-	len = 0;
-	while (sorted[len])
-		len++;
-	i = -1;
-	while (++i < len - 1)
-	{
-		j = i;
-		while (++j < len)
-		{
-			if (ft_strcmp(sorted[i], sorted[j]) > 0)
-			{
-				tmp = sorted[i];
-				sorted[i] = sorted[j];
-				sorted[j] = tmp;
-			}
-		}
-	}
-}
-
 static int	export_print(char **envp, int fd)
 {
 	int		i;
@@ -49,30 +23,6 @@ static int	export_print(char **envp, int fd)
 		i++;
 	}
 	return (0);
-}
-
-void	insert_into_envp(char *var, t_shell *s, int var_len)
-{
-	const char	**envp = (const char **)s->envp->data;
-	char		*equals_pos;
-	int			i;
-
-	if (!envp)
-		return (vector_push(s->envp, string_new(s, var)));
-	i = -1;
-	while (envp[++i])
-	{
-		equals_pos = ft_strchr(envp[i], '=');
-		if ((equals_pos && ft_strncmp(envp[i], var, var_len) == 0 && equals_pos
-				- envp[i] == var_len) || (!equals_pos && ft_strncmp(envp[i],
-					var, var_len) == 0 && (int)ft_strlen(envp[i]) == var_len))
-		{
-			if (ft_strchr(var, '=') != NULL)
-				s->envp->data[i] = string_new(s, var);
-			return ;
-		}
-	}
-	vector_push(s->envp, string_new(s, var));
 }
 
 static int	is_invalid_export_identifier(char *var, int *status)
