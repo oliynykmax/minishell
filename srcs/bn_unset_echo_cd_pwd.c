@@ -1,11 +1,10 @@
 #include "../incl/minishell.h"
 
-int	mini_unset(char **argv, int fd, t_shell *s)
+int	mini_unset(char **argv, t_shell *s)
 {
 	char	**envp;
 	int		j;
 
-	(void)fd;
 	if (!argv[1] || !s->envp->data)
 		return (0);
 	while (*(++argv))
@@ -27,7 +26,7 @@ int	mini_unset(char **argv, int fd, t_shell *s)
  * always returns 0
  * writes to the file descriptor passed as argument
  */
-int	mini_echo(char **argv, int fd, t_shell *s)
+int	mini_echo(char **argv, t_shell *s)
 {
 	int	i;
 	int	if_new_line;
@@ -41,13 +40,13 @@ int	mini_echo(char **argv, int fd, t_shell *s)
 	}
 	while (argv[i])
 	{
-		ft_fprintf(fd, "%s", argv[i]);
+		ft_fprintf(STDOUT_FILENO, "%s", argv[i]);
 		if (argv[i + 1])
-			ft_fprintf(fd, " ");
+			ft_fprintf(STDOUT_FILENO, " ");
 		i++;
 	}
 	if (if_new_line)
-		ft_fprintf(fd, "\n");
+		ft_fprintf(STDOUT_FILENO, "\n");
 	(void)s;
 	return (0);
 }
@@ -57,12 +56,11 @@ int	mini_echo(char **argv, int fd, t_shell *s)
  * accepts 0 or 1 argument, works with "cd -"
  */
 
-int	mini_cd(char **argv, int fd, t_shell *s)
+int	mini_cd(char **argv, t_shell *s)
 {
 	int		i;
 	char	*path;
 
-	(void)fd;
 	i = 0;
 	while (argv[i])
 		i++;
@@ -85,7 +83,7 @@ int	mini_cd(char **argv, int fd, t_shell *s)
 	return (change_directory(path, s));
 }
 
-int	mini_pwd(char **argv, int fd, t_shell *s)
+int	mini_pwd(char **argv, t_shell *s)
 {
 	char	*cwd;
 	int		i;
@@ -96,7 +94,7 @@ int	mini_pwd(char **argv, int fd, t_shell *s)
 	{
 		if (argv[i][0] == '-')
 		{
-			ft_putstr_fd("pwd: options are not supported\n", STDERR_FILENO);
+			ft_fprintf(STDERR_FILENO, "pwd: options are not supported\n");
 			return (2);
 		}
 		i++;
@@ -107,7 +105,7 @@ int	mini_pwd(char **argv, int fd, t_shell *s)
 		perror("pwd");
 		return (1);
 	}
-	ft_fprintf(fd, "%s\n", cwd);
+	ft_fprintf(STDOUT_FILENO, "%s\n", cwd);
 	free(cwd);
 	return (0);
 }

@@ -3,11 +3,10 @@
 /*
  * Exits the shell with the given status code.
  */
-int	mini_exit(char **args, int fd, t_shell *s)
+int	mini_exit(char **args, t_shell *s)
 {
 	int	has_second_arg;
 
-	(void)fd;
 	has_second_arg = (args[2] != NULL);
 	if (s->input_mode != INPUT_NONINTERACTIVE)
 		ft_fprintf(2, "exit\n");
@@ -33,7 +32,7 @@ int	mini_exit(char **args, int fd, t_shell *s)
  * prints out all the envp variables that has some value,
  * not just key
  */
-int	mini_env(char **argv, int fd, t_shell *s)
+int	mini_env(char **argv, t_shell *s)
 {
 	int		i;
 	char	**env;
@@ -51,8 +50,7 @@ int	mini_env(char **argv, int fd, t_shell *s)
 	{
 		if (ft_strchr(env[i], '='))
 		{
-			ft_putstr_fd(env[i], fd);
-			ft_putstr_fd("\n", fd);
+			ft_fprintf(STDOUT_FILENO, "%s\n", env[i]);
 		}
 		i++;
 	}

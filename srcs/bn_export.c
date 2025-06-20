@@ -8,7 +8,7 @@ static int	export_write_error(const char *var, int *status, int code)
 	return (0);
 }
 
-static int	export_print(char **envp, int fd)
+static int	export_print(char **envp)
 {
 	int		i;
 	char	*equals_pos;
@@ -23,11 +23,11 @@ static int	export_print(char **envp, int fd)
 		if (equals_pos)
 		{
 			*equals_pos = '\0';
-			ft_fprintf(fd, "declare -x %s=\"%s\"\n", envp[i], equals_pos + 1);
+			ft_fprintf(STDOUT_FILENO, "declare -x %s=\"%s\"\n", envp[i], equals_pos + 1);
 			*equals_pos = '=';
 		}
 		else
-			ft_fprintf(fd, "declare -x %s\n", envp[i]);
+			ft_fprintf(STDOUT_FILENO, "declare -x %s\n", envp[i]);
 		i++;
 	}
 	return (0);
@@ -53,7 +53,7 @@ static int	is_valid_var(char *var, int *status)
 	return (1);
 }
 
-int	mini_export(char **argv, int fd, t_shell *s)
+int	mini_export(char **argv, t_shell *s)
 {
 	char	*equals_pos;
 	int		var_len;
@@ -62,7 +62,7 @@ int	mini_export(char **argv, int fd, t_shell *s)
 
 	status = 0;
 	if (argv[1] == NULL)
-		return (export_print((char **)s->envp->data, fd));
+		return (export_print((char **)s->envp->data));
 	i = 1;
 	while (argv[i])
 	{
