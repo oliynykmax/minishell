@@ -6,12 +6,10 @@
 # include <errno.h>
 # include <fcntl.h>
 # include <signal.h>
-# include <stdatomic.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
-# include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
@@ -90,12 +88,9 @@ char	*create_temp_file(t_shell *s);
 /*-----------------signals & signal setup--------------------------- */
 void	handle_signals(int signum);
 void	setup_signals(int is_child);
-void	setup_parent_signals(void);
-void	setup_heredoc_signals_local(void);
 void	ignore_sigpipe(void);
 /*-----------------readline event hooks------------------------------ */
 int		my_rl_event_hook(void);
-int		heredoc_event_hook(void);
 /*------------------input-handling---------------------------------- */
 char	*shell_readline(t_shell *s, t_input_mode mode);
 char	*process_pipe_input(t_shell *s);
@@ -152,7 +147,6 @@ void	subprocess_run(t_shell *s, t_vec *command);
 void	error(const char *message);
 void	safe_close(int *fd);
 t_bn	*get_builtin_by_name(char *name);
-void	debug_mode(t_shell *s, char *input, char **envp);
 char	*heredoc(char *delim, t_shell *s);
 
 int		validate_redirections(t_vec *tokens, t_shell *s);
@@ -165,7 +159,6 @@ int		heredoc_replace_tokens(t_shell *s, t_vec *tokens);
 int		heredoc_check_limit(t_shell *s, t_vec *tokens);
 
 /* Builtin helpers */
-void	sort_strings(char **sorted);
 void	insert_into_envp(char *var, t_shell *s, int var_len);
 int		echo_is_n_flag(const char *arg);
 int		is_numeric_string(const char *s);
