@@ -1,7 +1,5 @@
 #include "../incl/minishell.h"
 
-static int	validate_redirections(t_vec *tokens, t_shell *s);
-
 static char	*tokenize_meta(t_shell *s, t_vec *tokens, char *i)
 {
 	const int	paired = i[0] == i[1] && (i[0] == '<' || i[0] == '>');
@@ -53,54 +51,6 @@ static bool	is_syntax_error(t_vec *tokens)
 	return (str[0][0] == '|');
 }
 
-/*we better be careful with the check for NULL in that loop */
-int	replace_heredoc(t_shell *s, t_vec *tokens)
-{
-	char			*delim;
-	size_t			i;
-	char **const	str = (char **)tokens->data;
-
-	i = 0;
-	while (i < tokens->size)
-	{
-		if (ft_strcmp(str[i], "<<") == 0 && str[i + 1] != NULL)
-		{
-			if (str[i + 1][0] == '<')
-				break ;
-			delim = heredoc(str[i + 1], s);
-			if (!delim)
-				return (1);
-			tokens->data[i + 1] = delim;
-		}
-		i++;
-	}
-	return (0);
-}
-
-static int	check_heredoc_limit(t_shell *s, t_vec *tokens)
-{
-	size_t	i;
-	int		heredoc_count;
-
-	heredoc_count = 0;
-	i = 0;
-	clear_temp_files(s);
-	while (i < tokens->size)
-		if (ft_strcmp(tokens->data[i++], "<<") == 0)
-			heredoc_count++;
-	if (heredoc_count > 16)
-	{
-		ft_printf("minishell: maximum here-document count exceeded\n");
-		shell_exit(s, 2, NULL);
-	}
-	if (replace_heredoc(s, tokens))
-	{
-		s->last_status = 130;
-		return (1);
-	}
-	return (0);
-}
-
 t_vec	*tokenize(t_shell *s, char *input)
 {
 	t_vec *const	tokens = vector_new(s, 0);
@@ -114,7 +64,7 @@ t_vec	*tokenize(t_shell *s, char *input)
 		else if (*input != '\0')
 			input = tokenize_word(s, tokens, input);
 	}
-	if (check_heredoc_limit(s, tokens))
+	if (heredoc_check_limit(s, tokens))
 		return (NULL);
 	if (is_syntax_error(tokens))
 	{
@@ -125,33 +75,4 @@ t_vec	*tokenize(t_shell *s, char *input)
 	if (!validate_redirections(tokens, s))
 		return (NULL);
 	return (tokens);
-}
-
-static int	is_bad_redir_pair(char *tok, t_vec *tokens, size_t i, t_shell *s)
-{
-	if (tok && (!ft_strcmp(tok, "<") || !ft_strcmp(tok, ">") || !ft_strcmp(tok,
-				"<<") || !ft_strcmp(tok, ">>")))
-	{
-		if (i + 1 >= tokens->size || is_meta(((char **)tokens->data)[i + 1][0]))
-		{
-			ft_fprintf(2, "minishell: syntax error\n");
-			s->last_status = 2;
-			return (1);
-		}
-	}
-	return (0);
-}
-
-static int	validate_redirections(t_vec *tokens, t_shell *s)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < tokens->size)
-	{
-		if (is_bad_redir_pair(tokens->data[i], tokens, i, s))
-			return (0);
-		i++;
-	}
-	return (1);
 }
