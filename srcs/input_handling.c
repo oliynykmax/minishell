@@ -1,6 +1,6 @@
 #include "../incl/minishell.h"
 
-static char	*handle_pipe_continuation(t_shell *s, char *input)
+static char	*read_multiline_pipeline(t_shell *s, char *input)
 {
 	char	*line;
 	int		cont;
@@ -40,6 +40,6 @@ char	*process_pipe_input(t_shell *s)
 		add_history(input);
 	if (s->tokens == NULL || s->tokens->size == 0)
 		return (input);
-	input = handle_pipe_continuation(s, input);
+	input = read_multiline_pipeline(s, input);
 	return (input);
 }

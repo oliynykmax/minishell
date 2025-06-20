@@ -9,10 +9,9 @@ INCLUDES := -Iincl -Ilibft
 SRCS    := \
  	srcs/bn_exit_env.c \
  	srcs/bn_export.c \
- 	srcs/bn_unset_echo_cd_pwd.c \
  	srcs/bn_helpers.c \
+ 	srcs/bn_unset_echo_cd_pwd.c \
  	srcs/command_exec.c \
- 	srcs/debug.c \
  	srcs/execution.c \
  	srcs/filename.c \
  	srcs/heredoc.c \
