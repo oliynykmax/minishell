@@ -67,7 +67,7 @@ void	insert_into_envp(char *var, t_shell *s, int var_len)
 				- envp[i] == var_len) || (!equals_pos && ft_strncmp(envp[i],
 					var, var_len) == 0 && (int)ft_strlen(envp[i]) == var_len))
 		{
-			if (ft_strchr(var, '=') && *(ft_strchr(var, '=') + 1) != '\0')
+			if (ft_strchr(var, '=') != NULL)
 				s->envp->data[i] = string_new(s, var);
 			return ;
 		}
