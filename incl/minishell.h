@@ -34,7 +34,7 @@ typedef volatile sig_atomic_t	t_signal;
 typedef struct s_arena			t_arena;
 typedef struct s_vec			t_vec;
 typedef struct s_shell			t_shell;
-typedef int						t_bn(char**, int, t_shell*);
+typedef int						t_bn(char**, t_shell*);
 
 typedef struct s_heredoc
 {
@@ -119,13 +119,13 @@ t_vec	*tokenize(t_shell *s, char *input);
 int		is_blank(char c);
 int		is_meta(char c);
 /*------------------builtins----------------------------------------*/
-int		mini_cd(char **argv, int fd, t_shell *s);
-int		mini_echo(char **argv, int fd, t_shell *s);
-int		mini_env(char **argv, int fd, t_shell *s);
-int		mini_exit(char **args, int fd, t_shell *s);
-int		mini_export(char **argv, int fd, t_shell *s);
-int		mini_pwd(char **argv, int fd, t_shell *s);
-int		mini_unset(char **argv, int fd, t_shell *s);
+int		mini_cd(char **argv, t_shell *s);
+int		mini_echo(char **argv, t_shell *s);
+int		mini_env(char **argv, t_shell *s);
+int		mini_exit(char **args, t_shell *s);
+int		mini_export(char **argv, t_shell *s);
+int		mini_pwd(char **argv, t_shell *s);
+int		mini_unset(char **argv, t_shell *s);
 void	insert_into_envp(char *var, t_shell *s, int var_len);
 /*------------------params----------------------------------------*/
 void	sort_strings(char **array);

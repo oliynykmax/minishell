@@ -122,7 +122,7 @@ void	tilde_expand_vector(t_vec *t)
 			home = string_join(t->shell, "/home/", user);
 		else
 		{
-			ft_putstr_fd("minishell: error: $HOME and $USER are unset\n", 2);
+			ft_fprintf(2, "minishell: error: $HOME and $USER are unset\n");
 			return ;
 		}
 	}

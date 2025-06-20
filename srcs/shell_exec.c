@@ -20,13 +20,13 @@ void	run_builtin(t_shell *s, t_vec *command, t_vec *redirs)
 		ignore_sigpipe();
 		init_subshell(s);
 		if (redirect(s, redirs))
-			s->last_status = builtin((char **) command->data, STDOUT_FILENO, s);
+			s->last_status = builtin((char **) command->data, s);
 		shell_exit(s, s->last_status, NULL);
 	}
 	s->fd_saved_in = dup(STDIN_FILENO);
 	s->fd_saved_out = dup(STDOUT_FILENO);
 	if (redirect(s, redirs))
-		s->last_status = builtin((char **) command->data, STDOUT_FILENO, s);
+		s->last_status = builtin((char **) command->data, s);
 	dup2(s->fd_saved_in, STDIN_FILENO);
 	dup2(s->fd_saved_out, STDOUT_FILENO);
 	safe_close(&s->fd_saved_in);
