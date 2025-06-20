@@ -38,6 +38,14 @@ typedef struct s_vec			t_vec;
 typedef struct s_shell			t_shell;
 typedef int						t_bn(char**, int, t_shell*);
 
+typedef struct s_heredoc
+{
+	int			fd;
+	t_shell		*s;
+	int			expand;
+	char		*clean_delim;
+}	t_heredoc;
+
 struct s_shell
 {
 	char			*input;
