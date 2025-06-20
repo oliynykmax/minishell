@@ -23,7 +23,8 @@ static int	export_print(char **envp)
 		if (equals_pos)
 		{
 			*equals_pos = '\0';
-			ft_fprintf(STDOUT_FILENO, "declare -x %s=\"%s\"\n", envp[i], equals_pos + 1);
+			ft_fprintf(STDOUT_FILENO, "declare -x %s=\"%s\"\n", envp[i],
+				equals_pos + 1);
 			*equals_pos = '=';
 		}
 		else
@@ -31,6 +32,24 @@ static int	export_print(char **envp)
 		i++;
 	}
 	return (0);
+}
+
+static int	export_print_sorted_copy(t_shell *s)
+{
+	t_vec	*old_envp;
+	t_vec	*copy_vec;
+	size_t	i;
+
+	old_envp = s->envp;
+	copy_vec = vector_new(s, old_envp->size);
+	i = 0;
+	while (i < old_envp->size)
+	{
+		vector_push(copy_vec, string_new(s, old_envp->data[i]));
+		i++;
+	}
+	vector_push(copy_vec, NULL);
+	return (export_print((char **)copy_vec->data));
 }
 
 static int	is_valid_var(char *var, int *status)
@@ -62,7 +81,7 @@ int	mini_export(char **argv, t_shell *s)
 
 	status = 0;
 	if (argv[1] == NULL)
-		return (export_print((char **)s->envp->data));
+		return (export_print_sorted_copy(s));
 	i = 1;
 	while (argv[i])
 	{
