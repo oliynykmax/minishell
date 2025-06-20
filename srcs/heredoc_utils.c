@@ -89,7 +89,7 @@ int	heredoc_check_limit(t_shell *s, t_vec *tokens)
 			heredoc_count++;
 	if (heredoc_count > 16)
 	{
-		ft_printf("minishell: maximum here-document count exceeded\n");
+		ft_fprintf(2, "minishell: maximum here-document count exceeded\n");
 		shell_exit(s, 2, NULL);
 	}
 	if (heredoc_replace_tokens(s, tokens))
