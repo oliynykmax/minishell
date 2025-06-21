@@ -22,6 +22,7 @@ void	shell_exit(t_shell *s, int exit_status, const char *message)
 	if (s->dirent != NULL)
 		closedir(s->dirent);
 	free(s->input);
+	rl_clear_history();
 	arena_free(s->arenas[0]);
 	arena_free(s->arenas[1]);
 	exit(exit_status);
