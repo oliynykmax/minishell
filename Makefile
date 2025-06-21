@@ -22,6 +22,7 @@ SRCS    := \
  	srcs/params.c \
  	srcs/redirect.c \
  	srcs/shell_exec.c \
+ 	srcs/shell_fork_utils.c \
  	srcs/signals.c \
  	srcs/split_words.c \
  	srcs/string.c \
