@@ -6,26 +6,22 @@
 // searched, and the first executable file matching the name of the command is
 // returned. Returns NULL if the command could not be found.
 
-static char	*get_command_filename(t_shell *s, char *command)
+// Helper: Search PATH for the command
+static char	*search_path_for_command(t_shell *s, char *command, char *path)
 {
-	char	*path;
+	char	*search;
 	char	*delimiter;
 	char	*directory;
 	char	*filename;
 
-	if (ft_strchr(command, '/') != NULL)
-		return (command);
-	path = get_env_variable(s, "PATH");
-	if (*path == '\0')
-		path = s->cwd;
-	command = string_join(s, "/", command);
-	while (*path != '\0')
+	search = string_join(s, "/", command);
+	while (*path)
 	{
 		delimiter = ft_strchr(path, ':');
-		if (delimiter == NULL)
+		if (!delimiter)
 			delimiter = ft_strchr(path, '\0');
 		directory = string_sub(s, path, delimiter - path);
-		filename = string_join(s, directory, command);
+		filename = string_join(s, directory, search);
 		if (access(filename, F_OK | X_OK) == 0)
 			return (filename);
 		path = delimiter + (*delimiter == ':');
@@ -33,17 +29,37 @@ static char	*get_command_filename(t_shell *s, char *command)
 	return (NULL);
 }
 
+static char	*get_command_filename(t_shell *s, char *command)
+{
+	char	*path;
+
+	if (ft_strchr(command, '/'))
+		return (command);
+	path = get_env_variable(s, "PATH");
+	if (!path || !*path)
+	{
+		if (access(command, F_OK) == 0)
+			return (command);
+		return (NULL);
+	}
+	return (search_path_for_command(s, command, path));
+}
+
 void	subprocess_run(t_shell *s, t_vec *command)
 {
 	char *const	name = command->data[0];
 	char *const	filename = get_command_filename(s, name);
-	char		*error_msg;
+	struct stat	st;
 
-	if (filename == NULL || access(filename, F_OK) != 0)
-	{
-		error_msg = string_join(s, name, ": command not found");
-		shell_exit(s, 127, error_msg);
-	}
-	execve(filename, (char **) command->data, (char **) s->envp->data);
+	if (ft_strcmp(name, ".") == 0 || ft_strcmp(name, "..") == 0
+		|| name[0] == '\0')
+		exit_with_msg(s, name, ": command not found", 127);
+	if (filename == NULL)
+		handle_not_found(s, name);
+	if (stat(filename, &st) == 0)
+		handle_stat_cases(s, filename, &st);
+	else
+		handle_not_found(s, name);
+	execve(filename, (char **)command->data, (char **)s->envp->data);
 	shell_exit(s, 126, strerror(errno));
 }

@@ -10,6 +10,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
@@ -118,6 +119,10 @@ char	*string_itoa(t_shell *s, int value);
 t_vec	*tokenize(t_shell *s, char *input);
 int		is_blank(char c);
 int		is_meta(char c);
+/*------------------subprocess helpers------------------------------- */
+void	exit_with_msg(t_shell *s, const char *name, const char *msg, int code);
+void	handle_not_found(t_shell *s, const char *name);
+void	handle_stat_cases(t_shell *s, const char *filename, struct stat *st);
 /*------------------builtins----------------------------------------*/
 int		mini_cd(char **argv, t_shell *s);
 int		mini_echo(char **argv, t_shell *s);
