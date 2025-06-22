@@ -148,7 +148,7 @@ void	error(const char *message);
 void	safe_close(int *fd);
 t_bn	*get_builtin_by_name(char *name);
 char	*heredoc(char *delim, t_shell *s);
-int		validate_redirections(t_vec *tokens, t_shell *s);
+
 /*------------------fork/wait/subshell helpers-------------------*/
 void	init_subshell(t_shell *s);
 void	command_fork(t_shell *s, pid_t *pid);

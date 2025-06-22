@@ -1,4 +1,4 @@
-#include "../incl/minishell.h"
+#include "minishell.h"
 
 static int	export_write_error(const char *var, int *status, int code)
 {

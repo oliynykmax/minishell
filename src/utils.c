@@ -1,4 +1,4 @@
-#include "../incl/minishell.h"
+#include "minishell.h"
 
 char	*get_prompt(t_shell *s)
 {

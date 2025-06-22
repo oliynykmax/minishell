@@ -1,4 +1,4 @@
-#include "../incl/minishell.h"
+#include "minishell.h"
 
 static void	heredoc_write_line(int fd, char *line, t_shell *s, int expand)
 {

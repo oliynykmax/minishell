@@ -1,4 +1,4 @@
-#include "../incl/minishell.h"
+#include "minishell.h"
 
 // Create a new empty vector, optionally with an initial capacity.
 

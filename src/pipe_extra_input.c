@@ -1,4 +1,4 @@
-#include "../incl/minishell.h"
+#include "minishell.h"
 
 static char	*read_multiline_pipeline(t_shell *s, char *input)
 {
