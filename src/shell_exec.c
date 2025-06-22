@@ -2,15 +2,20 @@
 
 void	run_builtin(t_shell *s, t_vec *command, t_vec *redirs)
 {
-	t_bn *const	builtin = get_builtin_by_name(command->data[0]);
 	const bool	pipelined = s->fd_in != 0 || s->fd_out != 1;
+	t_bn		*builtin;
 
+	if (command->size == 0)
+		builtin = get_builtin_by_name(NULL);
+	else
+		builtin = get_builtin_by_name(command->data[0]);
 	if (pipelined)
 	{
 		ignore_sigpipe();
 		init_subshell(s);
 		if (redirect(s, redirs))
 			s->last_status = builtin((char **) command->data, s);
+		safe_close(&s->fd_unused);
 		shell_exit(s, s->last_status, NULL);
 	}
 	s->fd_saved_in = dup(STDIN_FILENO);
@@ -39,8 +44,9 @@ void	run_command(t_shell *s, t_vec *command, t_vec *redirs)
 	params_expand_vector(command);
 	params_expand_vector(redirs);
 	if (command->size == 0)
-		return ;
-	builtin = get_builtin_by_name(command->data[0]);
+		builtin = get_builtin_by_name(NULL);
+	else
+		builtin = get_builtin_by_name(command->data[0]);
 	pid = -1;
 	if (builtin == NULL || s->fd_in != 0 || s->fd_out != 1)
 	{
