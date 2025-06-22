@@ -1,4 +1,4 @@
-#include "../incl/minishell.h"
+#include "minishell.h"
 
 // Create a new arena with a given capacity. If memory allocation fails, cleans
 // up all resources and exits with an error message.

@@ -1,4 +1,4 @@
-#include "../incl/minishell.h"
+#include "minishell.h"
 
 char	*create_temp_file(t_shell *s)
 {

@@ -1,4 +1,4 @@
-#include "../incl/minishell.h"
+#include "minishell.h"
 
 /*
  * Sorts an array of strings lexicographically.

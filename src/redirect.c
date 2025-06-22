@@ -1,4 +1,4 @@
-#include "../incl/minishell.h"
+#include "minishell.h"
 
 // Apply a file-based redirection (covers "<", ">", and ">>"). Opens the given
 // file with the provided flags, and redirects it to a target file descriptor
