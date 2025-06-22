@@ -40,6 +40,5 @@ void	execute_command_pipeline(t_shell *s, char **tokens)
 		tokens++;
 	}
 	s->fd_out = STDOUT_FILENO;
-	if (command->size != 0)
-		run_command(s, command, redirs);
+	run_command(s, command, redirs);
 }
