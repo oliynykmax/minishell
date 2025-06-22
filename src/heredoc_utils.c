@@ -62,7 +62,8 @@ int	heredoc_replace_tokens(t_shell *s, t_vec *tokens)
 	i = 0;
 	while (i < tokens->size)
 	{
-		if (ft_strcmp(str[i], "<<") == 0 && str[i + 1] != NULL)
+		if (ft_strcmp(str[i], "<<") == 0 && str[i + 1] != NULL
+			&& !is_meta(str[i + 1][0]))
 		{
 			if (str[i + 1][0] == '<')
 				break ;
