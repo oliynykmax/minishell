@@ -1,4 +1,4 @@
-#include "../incl/minishell.h"
+#include "minishell.h"
 
 // Given a command (like "ls"), get the program filename for that command (like
 // "/usr/bin/ls"). If the command contains a slash, it's returned directly.

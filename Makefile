@@ -4,44 +4,47 @@ NAME    := minishell
 CC      := cc
 CFLAGS  := -Wall -Wextra -Werror
 
-INCLUDES := -Iincl -Ilibft
+INCLUDES := -Ilibft
 
 SRCS    := \
- 	srcs/bn_exit_env.c \
- 	srcs/bn_export.c \
- 	srcs/bn_helpers.c \
- 	srcs/bn_unset_echo_cd_pwd.c \
- 	srcs/command_exec.c \
- 	srcs/execution.c \
- 	srcs/filename.c \
- 	srcs/heredoc.c \
- 	srcs/heredoc_utils.c \
- 	srcs/input_handling.c \
- 	srcs/memory.c \
- 	srcs/minishell.c \
- 	srcs/params.c \
- 	srcs/redirect.c \
- 	srcs/shell_exec.c \
- 	srcs/shell_fork_utils.c \
- 	srcs/signals.c \
- 	srcs/split_words.c \
- 	srcs/string.c \
- 	srcs/subprocess.c \
- 	srcs/temp_files.c \
- 	srcs/tokenize.c \
- 	srcs/user_interface.c \
- 	srcs/utils.c \
- 	srcs/validate_redirections.c \
- 	srcs/vector.c \
+ 	src/builtin_echo.c \
+ 	src/builtin_cd.c \
+ 	src/builtin_pwd.c \
+ 	src/builtin_export.c \
+ 	src/builtin_unset.c \
+ 	src/builtin_env.c \
+ 	src/builtin_exit.c \
+ 	src/bn_helpers.c \
+ 	src/command_exec.c \
+ 	src/execution.c \
+ 	src/filename.c \
+ 	src/heredoc.c \
+ 	src/heredoc_utils.c \
+ 	src/pipe_extra_input.c \
+ 	src/memory.c \
+ 	src/minishell.c \
+ 	src/params.c \
+ 	src/redirect.c \
+ 	src/shell_exec.c \
+ 	src/shell_fork_utils.c \
+ 	src/signals.c \
+ 	src/split_words.c \
+ 	src/string.c \
+ 	src/subprocess.c \
+ 	src/temp_files.c \
+ 	src/tokenize.c \
+ 	src/user_interface.c \
+ 	src/utils.c \
+ 	src/vector.c \
 
-OBJS    := $(SRCS:srcs/%.c=objs/%.o)
+OBJS    := $(SRCS:src/%.c=obj/%.o)
 
 LIBFT_DIR := libft
 LIBFT_A   := $(LIBFT_DIR)/libft.a
 
-.PHONY: all clean fclean re norm
+.PHONY: all clean fclean re
 .SECONDARY : $(OBJS)
-.SILENT : objs
+.SILENT : obj
 
 all: $(NAME)
 	@echo "🎉 Build complete!"
@@ -50,21 +53,19 @@ $(NAME): $(OBJS) $(LIBFT_A)
 	@echo "🔗 Linking $(NAME)..."
 	@$(CC) $(CFLAGS) $(OBJS) -lreadline $(LIBFT_A) -o $(NAME)
 
-objs/%.o: srcs/%.c incl/minishell.h | objs
+obj/%.o: src/%.c src/minishell.h | obj
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(LIBFT_A):
 	@echo "📚 Building libft..."
 	@$(MAKE) --no-print-directory -C $(LIBFT_DIR)
 
-objs:
-	@mkdir -p objs
-
-
+obj:
+	@mkdir -p obj
 
 clean:
 	@echo "🧹 Cleaning..."
-	@rm -rf objs
+	@rm -rf obj
 	@$(MAKE) --no-print-directory -C $(LIBFT_DIR) clean
 
 fclean: clean
@@ -76,15 +77,3 @@ re:
 	@echo "🔄 Rebuilding..."
 	@$(MAKE) --no-print-directory fclean
 	@$(MAKE) --no-print-directory all
-
-norm:
-	@norminette | awk '\
-		/^.*: Error!/ { file = $$1; seen = 0; next } \
-		/Error:/ && $$0 !~ /INVALID_HEADER/ { \
-			if (!seen) { print file ": Error!"; seen = 1 } \
-			print \
-		} \
-	'
-
-valgrind:
-	@valgrind --leak-check=full --show-leak-kinds=all --suppressions=mini.supp ./minishell

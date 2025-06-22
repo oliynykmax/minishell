@@ -1,4 +1,4 @@
-#include "../incl/minishell.h"
+#include "minishell.h"
 
 static int	split_word(t_vec *t, int i)
 {

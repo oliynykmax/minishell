@@ -1,4 +1,4 @@
-#include "../incl/minishell.h"
+#include "minishell.h"
 
 void	run_builtin(t_shell *s, t_vec *command, t_vec *redirs)
 {
