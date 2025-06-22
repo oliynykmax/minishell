@@ -16,6 +16,8 @@ static char	*get_command_filename(t_shell *s, char *command)
 	if (ft_strchr(command, '/') != NULL)
 		return (command);
 	path = get_env_variable(s, "PATH");
+	if (*path == '\0')
+		path = s->cwd;
 	command = string_join(s, "/", command);
 	while (*path != '\0')
 	{
