@@ -31,6 +31,7 @@ SRCS    := \
  	src/split_words.c \
  	src/string.c \
  	src/subprocess.c \
+    src/subprocess_helpers.c \
  	src/temp_files.c \
  	src/tokenize.c \
  	src/user_interface.c \

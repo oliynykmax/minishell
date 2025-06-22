@@ -6,13 +6,15 @@
 
 bool	redirect_file(t_shell *s, char *filename, int open_flags, int target)
 {
+	int	file;
+
 	if (!filename)
 	{
 		ft_fprintf(2, "minishell: ambiguous redirect\n");
 		s->last_status = 1;
 		return (false);
 	}
-	const int	file = open(filename, open_flags, 0644);
+	file = open(filename, open_flags, 0644);
 	if (file == -1)
 	{
 		ft_fprintf(2, "minishell: %s: %s\n", filename, strerror(errno));
