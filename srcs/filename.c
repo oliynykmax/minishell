@@ -103,8 +103,8 @@ void	filename_expand(t_vec *tokens)
 // Apply tilde expansion to all words in a vector. Replaces the `~` character
 // with the value of $HOME if it appears at the beginning of a word, and either
 // appears on its own, or is immediately followed by a slash. If $HOME is unset,
-// the path /home/$USER is used instead. If $USER is also unset, an error
-// message is printed, and no tilde expansion is done.
+// the path /home/$USER is used instead. If $USER is also unset, no tilde
+// expansion is done.
 
 void	tilde_expand_vector(t_vec *t)
 {
@@ -121,10 +121,7 @@ void	tilde_expand_vector(t_vec *t)
 		if (*user != '\0')
 			home = string_join(t->shell, "/home/", user);
 		else
-		{
-			ft_fprintf(2, "minishell: error: $HOME and $USER are unset\n");
 			return ;
-		}
 	}
 	str = (char **) t->data;
 	while (*str != NULL)
