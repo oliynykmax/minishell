@@ -10,7 +10,7 @@ static void	handle_pipe_token(t_shell *s, t_vec *command, t_vec *redirs)
 	run_command(s, command, redirs);
 	s->fd_in = pipe_fd[0];
 	s->fd_out = STDOUT_FILENO;
-	s->fd_unused = -1;
+	s->fd_unused = pipe_fd[1];
 	command->size = 0;
 	redirs->size = 0;
 }
