@@ -1,7 +1,16 @@
 #include "minishell.h"
 
+static int nothing(char **argv, t_shell *s)
+{
+	(void) argv;
+	(void) s;
+	return 0;
+}
+
 t_bn	*get_builtin_by_name(char *name)
 {
+	if (name == NULL)
+		return (nothing);
 	if (ft_strcmp(name, "echo") == 0)
 		return (mini_echo);
 	if (ft_strcmp(name, "cd") == 0)
