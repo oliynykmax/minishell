@@ -1,4 +1,4 @@
-#include "../incl/minishell.h"
+#include "minishell.h"
 
 static void	handle_pipe_token(t_shell *s, t_vec *command, t_vec *redirs)
 {

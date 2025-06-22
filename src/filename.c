@@ -1,4 +1,4 @@
-#include "../incl/minishell.h"
+#include "minishell.h"
 
 // Find the first unquoted occurrence of a wildcard character in a string, or
 // NULL if none was found.

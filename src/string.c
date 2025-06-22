@@ -1,4 +1,4 @@
-#include "../incl/minishell.h"
+#include "minishell.h"
 
 char	*string_new(t_shell *s, const char *string)
 {

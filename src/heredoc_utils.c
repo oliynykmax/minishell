@@ -1,4 +1,4 @@
-#include "../incl/minishell.h"
+#include "minishell.h"
 
 int	heredoc_delim_is_quoted(char *delim)
 {
