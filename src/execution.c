@@ -1,10 +1,10 @@
 #include "minishell.h"
 
-static int nothing(char **argv, t_shell *s)
+static int	nothing(char **argv, t_shell *s)
 {
 	(void) argv;
 	(void) s;
-	return 0;
+	return (0);
 }
 
 t_bn	*get_builtin_by_name(char *name)
