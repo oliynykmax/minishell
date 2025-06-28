@@ -44,7 +44,7 @@ static char	*params_replace(t_shell *s, char **out, char *in, char quote)
 	return (in);
 }
 
-char	*params_expand_string(t_shell *s, char *in)
+char	*params_expand_string(t_shell *s, char *in, bool is_heredoc)
 {
 	char	*out;
 	char	*start;
@@ -61,7 +61,7 @@ char	*params_expand_string(t_shell *s, char *in)
 			quote = *in;
 		else if (quote && *in == quote)
 			quote = 0;
-		else if (quote != '\'' && *in == '$')
+		else if ((quote != '\'' + is_heredoc) && *in == '$')
 		{
 			out = string_join(s, out, string_sub(s, start, in - start));
 			in = params_replace(s, &out, in + 1, quote) - 1;
@@ -109,7 +109,8 @@ void	params_expand_vector(t_vec *tokens)
 	tilde_expand_vector(tokens);
 	i = -1;
 	while (++i < tokens->size)
-		tokens->data[i] = params_expand_string(tokens->shell, tokens->data[i]);
+		tokens->data[i] = params_expand_string(tokens->shell,
+				tokens->data[i], false);
 	split_words(tokens);
 	filename_expand(tokens);
 	remove_quotes(tokens);

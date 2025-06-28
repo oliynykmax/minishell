@@ -27,12 +27,17 @@ void	command_fork(t_shell *s, pid_t *pid)
 	}
 }
 
-static void	handle_signal_termination(int status, int *last_status)
+static void	handle_signal_termination(int status, int *last_status,
+		bool *printed)
 {
-	if (WTERMSIG(status) == SIGINT)
-		write(STDERR_FILENO, "\n", 1);
-	else if (WTERMSIG(status) == SIGQUIT)
-		ft_fprintf(STDERR_FILENO, "Quit (core dumped)\n");
+	if (!*printed)
+	{
+		if (WTERMSIG(status) == SIGINT)
+			write(STDERR_FILENO, "\n", 1);
+		else if (WTERMSIG(status) == SIGQUIT)
+			ft_fprintf(STDERR_FILENO, "Quit (core dumped)\n");
+		*printed = true;
+	}
 	*last_status = 128 + WTERMSIG(status);
 }
 
@@ -41,18 +46,20 @@ void	wait_for_all(t_shell *s, t_vec *pids)
 	size_t	i;
 	int		status;
 	int		last_status;
+	bool	printed;
 
 	i = 0;
 	last_status = 0;
+	printed = false;
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 	while (i < pids->size)
 	{
-		waitpid((pid_t)(intptr_t) pids->data[i++], &status, 0);
+		waitpid((pid_t)(intptr_t)pids->data[i++], &status, 0);
 		if (WIFEXITED(status))
 			last_status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
-			handle_signal_termination(status, &last_status);
+			handle_signal_termination(status, &last_status, &printed);
 		s->last_status = last_status;
 	}
 	setup_signals(0);
