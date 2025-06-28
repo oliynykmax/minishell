@@ -64,5 +64,4 @@ void	shell_execute(t_shell *s, char **tokens)
 {
 	execute_command_pipeline(s, tokens);
 	wait_for_all(s, s->pids);
-	clear_temp_files(s);
 }
