@@ -121,7 +121,7 @@ int	change_directory(char *path, t_shell *s)
 	pwd = get_working_dir(s);
 	if (chdir(path) != 0)
 	{
-		ft_fprintf(2, "minishell: cd: %s: \n", path);
+		ft_fprintf(2, "minishell: cd: %s: ", path);
 		perror(NULL);
 		return (1);
 	}

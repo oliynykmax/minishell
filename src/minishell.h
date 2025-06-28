@@ -22,7 +22,7 @@
 
 # define ANSI_COLOR_GREEN "\1\e[1;32m\2" // Set text color to bright green.
 # define ANSI_COLOR_RESET "\1\e[0m\2" // Reset text color.
-# define MINISHELL_PROMPT "🐚> " // Shown after current working directory.
+# define MINISHELL_PROMPT " > " // Shown after current working directory.
 
 typedef enum e_input_mode
 {
@@ -135,7 +135,7 @@ void	insert_into_envp(char *var, t_shell *s, int var_len);
 /*------------------params----------------------------------------*/
 void	sort_strings(char **array);
 char	*get_env_variable(t_shell *s, char *name);
-char	*params_expand_string(t_shell *s, char *string);
+char	*params_expand_string(t_shell *s, char *string, bool is_heredoc);
 void	params_expand_vector(t_vec *tokens);
 void	filename_expand(t_vec *tokens);
 void	tilde_expand_vector(t_vec *t);

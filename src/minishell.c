@@ -39,6 +39,7 @@ void	shell_new_prompt(t_shell *s)
 	s->cwd = string_new(s, s->cwd);
 	s->cwd = get_working_dir(s);
 	g_signal = 0;
+	clear_temp_files(s);
 }
 
 int	main(int argc, char **argv, char **envp)

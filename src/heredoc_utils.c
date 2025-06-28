@@ -84,7 +84,6 @@ int	heredoc_check_limit(t_shell *s, t_vec *tokens)
 
 	heredoc_count = 0;
 	i = 0;
-	clear_temp_files(s);
 	while (i < tokens->size)
 		if (ft_strcmp(tokens->data[i++], "<<") == 0)
 			heredoc_count++;
@@ -95,6 +94,7 @@ int	heredoc_check_limit(t_shell *s, t_vec *tokens)
 	}
 	if (heredoc_replace_tokens(s, tokens))
 	{
+		clear_temp_files(s);
 		s->last_status = 130;
 		return (1);
 	}

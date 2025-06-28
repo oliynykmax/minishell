@@ -6,7 +6,7 @@ static void	heredoc_write_line(int fd, char *line, t_shell *s, int expand)
 
 	content = string_new(s, line);
 	if (expand && ft_strchr(content, '$'))
-		content = params_expand_string(s, content);
+		content = params_expand_string(s, content, true);
 	write(fd, content, ft_strlen(content));
 	write(fd, "\n", 1);
 }
